@@ -1,4 +1,7 @@
-﻿namespace Toyer.Data.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Toyer.Data.Entities;
 
 public class Address
 {
@@ -8,5 +11,7 @@ public class Address
     public string State { get; set; }
     public string PostalCode { get; set; }
     public string Country { get; set; }
-    public Guid PersonalInfoId { get; set; }
+
+    public Guid PersonalInfoId { get; set; } 
+    public PersonalInfo PersonalInfo { get; set; }
 }

@@ -1,10 +1,14 @@
-﻿namespace Toyer.Data.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Toyer.Data.Entities;
 
 public class User
 {
-    public Guid Guid { get; set; }
+    public Guid Id { get; set; }
     public string Login { get; set; }
-    public BinaryData Password { get; set; }
+    public string Password { get; set; }
     public DateTime AccCreationDate { get; set; }
-    public Guid PersonalInfoId { get; set; }
+    public ICollection<Device> Devices { get; set; } 
+
+    public PersonalInfo? PersonalInfo { get; set; }
 }

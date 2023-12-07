@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Any;
+﻿
+using System.ComponentModel.DataAnnotations;
 
 namespace Toyer.Data.Entities;
 
@@ -8,11 +9,13 @@ public class Device
     public string? Name { get; set; }
     public DateTime? CreationDate { get; set; }
     public DateTime? LastRegistrationDate { get; set; }
-    public int TypeId { get; set; }
-    public Guid? UserId { get; set; }
     public string? StaSsid { get; set; }
-    public BinaryData? StaPass { get; set; }
+    public string? StaPass { get; set; }
     public string? ApSsid { get; set; }
-    public BinaryData? ApPass { get; set; }
+    public string? ApPass { get; set; }
+
+
+    public User? User { get; set; }
+    public DeviceType? DeviceType { get; set; }
 
 }

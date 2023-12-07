@@ -1,22 +1,14 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Toyer.Data.Entities;
 
-namespace Toyer.Data.dbContext;
+namespace Toyer.Data.Context;
 
-public class ToyerDbContext : DbContext
+public class ToyerDbContext(DbContextOptions<ToyerDbContext> options) : DbContext(options)
 {
-    public ToyerDbContext(DbContextOptions connectionOptions) : base(connectionOptions)
-    {
-    }
-
     public DbSet<Device> Devices { get; set; }
     public DbSet<DeviceType> DeviceTypes { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<PersonalInfo> PersonalInfos { get; set; }
-
-
 
 }

@@ -3,5 +3,5 @@
 public class DeviceStaConnectionDto
 {
     public string StaSsid { get; set; }
-    public BinaryData StaPass { get; set; }
+    public string StaPass { get; set; }
 }

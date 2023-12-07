@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toyer.API", "Toyer.API\Toyer.API.csproj", "{C040ECCD-9C15-4A1F-BFF8-17FE15DB5521}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toyer.Data", "Toyer.Data\Toyer.Data.csproj", "{3E42AF38-C7B9-48B4-8A70-CD9E98013937}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toyer.Data", "Toyer.Data\Toyer.Data.csproj", "{3E42AF38-C7B9-48B4-8A70-CD9E98013937}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toyer.Logic", "Toyer.Logic\Toyer.Logic.csproj", "{076EFC56-4C50-4CED-9F36-ECE5D5FBCAE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toyer.Logic", "Toyer.Logic\Toyer.Logic.csproj", "{076EFC56-4C50-4CED-9F36-ECE5D5FBCAE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toyer.API", "Toyer.API\Toyer.API.csproj", "{EDD77DB1-E7FE-474D-8FBE-FABF0A46BF00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C040ECCD-9C15-4A1F-BFF8-17FE15DB5521}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C040ECCD-9C15-4A1F-BFF8-17FE15DB5521}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C040ECCD-9C15-4A1F-BFF8-17FE15DB5521}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C040ECCD-9C15-4A1F-BFF8-17FE15DB5521}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E42AF38-C7B9-48B4-8A70-CD9E98013937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E42AF38-C7B9-48B4-8A70-CD9E98013937}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E42AF38-C7B9-48B4-8A70-CD9E98013937}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{076EFC56-4C50-4CED-9F36-ECE5D5FBCAE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{076EFC56-4C50-4CED-9F36-ECE5D5FBCAE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{076EFC56-4C50-4CED-9F36-ECE5D5FBCAE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDD77DB1-E7FE-474D-8FBE-FABF0A46BF00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDD77DB1-E7FE-474D-8FBE-FABF0A46BF00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDD77DB1-E7FE-474D-8FBE-FABF0A46BF00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDD77DB1-E7FE-474D-8FBE-FABF0A46BF00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
