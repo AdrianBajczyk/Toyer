@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Toyer.Data\Toyer.Data.csproj" />
+  </ItemGroup>
+
 </Project>
