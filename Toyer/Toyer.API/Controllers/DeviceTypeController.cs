@@ -6,17 +6,14 @@ namespace Toyer.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DeviceController : ControllerBase
+public class DeviceTypeController : ControllerBase
 {
     private readonly IMapper _mapper;
-    private readonly IDeviceRepository _deviceRepository;
+    private readonly IDeviceTypeRepository _deviceTypeRepository;
 
-    public DeviceController(IMapper mapper, IDeviceRepository deviceRepository)
+    public DeviceTypeController(IDeviceTypeRepository deviceTypeRepository, IMapper mapper)
     {
+        _deviceTypeRepository = deviceTypeRepository;
         _mapper = mapper;
-        _deviceRepository = deviceRepository;
     }
-
-
-
 }
