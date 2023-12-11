@@ -36,6 +36,7 @@ public class UserCreateDto
 
     [Required(ErrorMessage = "Birth date is required")]
     [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     public DateOnly BirthDate { get; set; }
 
     [Required(ErrorMessage = "Street is required")]

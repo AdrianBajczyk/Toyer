@@ -15,33 +15,42 @@ public class SqlUserRepository : IUserRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<User?> GetAsync(Guid Id)
+    public async Task<User?> GetByIdAsync(Guid Id)
     {
-        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == Id);
+        return await _dbContext.Users
+            .Include(u => u.PersonalInfo)
+            .ThenInclude(p => p.Address)
+            .FirstOrDefaultAsync(u => u.Id == Id);
     }
-    public async Task<User?> CreateAsync(User userCreationInfo)
+    public async Task<User?> CreateAsync(User newUser, PersonalInfo newPersonalInfo, Address newAddress)
     {
-        await _dbContext.Users.AddAsync(userCreationInfo);
+        newPersonalInfo.Address = newAddress;
+        newUser.PersonalInfo = newPersonalInfo;
+        await _dbContext.Users.AddAsync(newUser);
         await _dbContext.SaveChangesAsync();
 
-        return userCreationInfo;
+        return newUser;
     }
     public async Task<User?> UpdateAsync(User userUpdateInfo, Guid Id)
     {
         var userToUpdate = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == Id);
 
-        if (userToUpdate != null)
-        {
+        if (userToUpdate == null) return null;
 
-        }
+        userToUpdate = userUpdateInfo;
+
+        await _dbContext.SaveChangesAsync();
+
+        return userToUpdate;
+
     }
 
-    public async Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserLogin userLogin)
+    public async Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<User?> UnassociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserLogin userLogin)
+    public async Task<User?> UnassociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin)
     {
         throw new NotImplementedException();
     }

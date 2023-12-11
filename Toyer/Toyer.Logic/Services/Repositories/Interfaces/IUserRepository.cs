@@ -4,11 +4,11 @@ using Toyer.Logic.Dtos.User;
 
 namespace Toyer.Logic.Services.Repositories.Interfaces;
 
-interface IUserRepository
+public interface IUserRepository
 {
-    Task<User?> CreateAsync(User userCreationInfo);
-    Task<User?> GetAsync(Guid Id);
-    Task<User?> UpdateAsync(User userUpdateInfo, Guid Id);
-    Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserLogin userLogin);
-    Task<User?> UnassociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserLogin userLogin);
+   public Task<User?> CreateAsync(User newUser, PersonalInfo newPersonalInfo, Address newAddress);
+   public Task<User?> GetByIdAsync(Guid Id);
+   public Task<User?> UpdateAsync(User userUpdateInfo, Guid Id);
+   public Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin);
+   public Task<User?> UnassociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin);
 }

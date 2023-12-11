@@ -11,4 +11,22 @@ public class ToyerDbContext(DbContextOptions<ToyerDbContext> options) : DbContex
     public DbSet<Address> Addresses { get; set; }
     public DbSet<PersonalInfo> PersonalInfos { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.PersonalInfo)
+            .WithOne(pi => pi.User)
+            .HasForeignKey<PersonalInfo>(pi => pi.UserId);
+
+        modelBuilder.Entity<PersonalInfo>()
+            .HasOne(pi => pi.Address)
+            .WithOne(a => a.PersonalInfo)
+            .HasForeignKey<Address>(a => a.PersonalInfoId);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Devices)
+            .WithOne(d => d.User)
+            .HasForeignKey(d => d.UserId);
+
+    }
 }

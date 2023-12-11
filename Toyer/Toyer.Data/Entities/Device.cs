@@ -15,7 +15,8 @@ public class Device
     public string? ApPass { get; set; }
 
 
-    public User? User { get; set; }
+    public Guid UserId { get; set; }
+    public User User { get; set; }
     public DeviceType? DeviceType { get; set; }
 
 }
