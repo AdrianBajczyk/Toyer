@@ -13,7 +13,7 @@ public class AutoMapperProfiles : Profile
         CreateMap<UserCreateDto, User>().ReverseMap();
         CreateMap<PersonalInfo, UserPersonalInfoDto>().ReverseMap();
         CreateMap<UserCreateDto, PersonalInfo >().ReverseMap();
-        CreateMap<UserCreateDto, AddressDto>().ReverseMap();
-        CreateMap<UserAddressDto, AddressDto>().ReverseMap();
+        CreateMap<UserCreateDto, Address>().ReverseMap();
+        CreateMap<Address, UserAddressDto>().ReverseMap();
     }
 }

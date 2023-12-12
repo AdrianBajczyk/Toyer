@@ -12,5 +12,5 @@ public class PersonalInfo
     public Guid UserId { get; set; }
     public User User { get; set; }
 
-    public AddressDto? Address { get; set; }
+    public Address? Address { get; set; }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Toyer.Data.Entities;
 
-public class AddressDto
+public class Address
 {
     public Guid Id { get; set; }
     public string Street { get; set; }

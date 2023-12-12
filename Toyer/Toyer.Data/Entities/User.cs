@@ -6,6 +6,7 @@ public class User
     public string Login { get; set; }
     public string Password { get; set; }
     public DateTime AccCreationDate { get; set; } = DateTime.Now;
+
     public ICollection<Device> Devices { get; set; } = new HashSet<Device>();
 
     public PersonalInfo? PersonalInfo { get; set; }

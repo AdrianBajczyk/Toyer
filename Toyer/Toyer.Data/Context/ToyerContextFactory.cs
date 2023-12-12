@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace Toyer.Data.Context;
 
 public class ToyerContextFactory : IDesignTimeDbContextFactory<ToyerDbContext>
 {
+
     public ToyerDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<ToyerDbContext>();

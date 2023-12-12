@@ -8,7 +8,7 @@ public class ToyerDbContext(DbContextOptions<ToyerDbContext> options) : DbContex
     public DbSet<Device> Devices { get; set; }
     public DbSet<DeviceType> DeviceTypes { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<AddressDto> Addresses { get; set; }
+    public DbSet<Address> Addresses { get; set; }
     public DbSet<PersonalInfo> PersonalInfos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ public class ToyerDbContext(DbContextOptions<ToyerDbContext> options) : DbContex
         modelBuilder.Entity<PersonalInfo>()
             .HasOne(pi => pi.Address)
             .WithOne(a => a.PersonalInfo)
-            .HasForeignKey<AddressDto>(a => a.PersonalInfoId);
+            .HasForeignKey<Address>(a => a.PersonalInfoId);
 
         modelBuilder.Entity<User>()
             .HasMany(u => u.Devices)
