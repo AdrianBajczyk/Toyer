@@ -61,3 +61,6 @@ public class UserCreateDto
     [RegularExpression(@"^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$", ErrorMessage = "Invalid phone number format")]
     public string? PhoneNumber { get; set; }
 }
+
+//partialupdate - asp.net patch mechanics (readabout)
+//

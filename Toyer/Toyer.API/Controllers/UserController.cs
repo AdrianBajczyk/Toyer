@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.User;
+using Toyer.Logic.Exceptions;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.API.Controllers;
@@ -23,7 +25,7 @@ public class UserController : ControllerBase
     [Route("/short/{userId:Guid}")]
     public async Task<IActionResult> GetShortById([FromRoute] Guid userId)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetUserByIdAsync(userId);
 
         if (user == null) return NotFound("User not found.");
 
@@ -38,7 +40,7 @@ public class UserController : ControllerBase
     [Route("/extended/{userId:Guid}")]
     public async Task<IActionResult> GetExtendedById([FromRoute] Guid userId)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetUserByIdAsync(userId);
 
         if (user == null) return NotFound("User not found.");
 
@@ -56,16 +58,33 @@ public class UserController : ControllerBase
     {
         var userToDb = _mapper.Map<User>(newUser);
         var personalInfoToDb = _mapper.Map<PersonalInfo>(newUser);
-        var addressToDb = _mapper.Map<Address>(newUser);
+        var addressToDb = _mapper.Map<AddressDto>(newUser);
 
-        var createdUser = await _userRepository.CreateAsync(userToDb, personalInfoToDb, addressToDb);
+        var createdUser = await _userRepository.CreateNewUserAsync(userToDb, personalInfoToDb, addressToDb);
 
+        UserPresentLongDto userLongDto = MapUserDataToLongDto(createdUser);
+
+        return CreatedAtAction(nameof(CreateNewUser), userLongDto);
+    }
+
+    private UserPresentLongDto MapUserDataToLongDto(User? createdUser)
+    {
         var userLongDto = _mapper.Map<UserPresentLongDto>(createdUser);
         userLongDto.UserPersonalInfo = _mapper.Map<UserPersonalInfoDto>(createdUser.PersonalInfo);
         userLongDto.UserAddress = _mapper.Map<UserAddressDto>(createdUser.PersonalInfo.Address);
         userLongDto.UserPresentShort = _mapper.Map<UserPresentShortDto>(createdUser);
+        return userLongDto;
+    }
 
-        return CreatedAtAction(nameof(CreateNewUser), userLongDto);
+    [HttpPatch]
+    [Route("/updateAddress/{userId:Guid}")]
+    public async Task<IActionResult> UpdateAddressById([FromRoute] Guid userId,[FromBody] JsonPatchDocument<AddressDto> addressUpdatesFromUser)
+    {
+            var updatedAddress = await _userRepository.UpdateAddressPatchAsync(userId, addressUpdatesFromUser);
+
+            var updatedAddressDto = _mapper.Map<UserAddressDto>(updatedAddress);
+
+            return Ok(updatedAddressDto);
     }
 
 }

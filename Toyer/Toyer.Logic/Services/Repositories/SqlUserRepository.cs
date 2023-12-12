@@ -1,13 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.ComponentModel.DataAnnotations;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Dtos.User;
+using Toyer.Logic.Exceptions;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories;
 
 public class SqlUserRepository : IUserRepository
+
 {
     private readonly ToyerDbContext _dbContext;
 
@@ -15,14 +20,14 @@ public class SqlUserRepository : IUserRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<User?> GetByIdAsync(Guid Id)
+    public async Task<User?> GetUserByIdAsync(Guid Id)
     {
         return await _dbContext.Users
             .Include(u => u.PersonalInfo)
             .ThenInclude(p => p.Address)
             .FirstOrDefaultAsync(u => u.Id == Id);
     }
-    public async Task<User?> CreateAsync(User newUser, PersonalInfo newPersonalInfo, Address newAddress)
+    public async Task<User?> CreateNewUserAsync(User newUser, PersonalInfo newPersonalInfo, AddressDto newAddress)
     {
         newPersonalInfo.Address = newAddress;
         newUser.PersonalInfo = newPersonalInfo;
@@ -31,18 +36,24 @@ public class SqlUserRepository : IUserRepository
 
         return newUser;
     }
-    public async Task<User?> UpdateAsync(User userUpdateInfo, Guid Id)
+    public async Task<AddressDto?> UpdateAddressPatchAsync(Guid userId, JsonPatchDocument<AddressDto> updatesFromUserDocument)
     {
-        var userToUpdate = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == Id);
+            var userData = await GetUserByIdAsync(userId);
 
-        if (userToUpdate == null) return null;
+            if (userData == null) throw new NotFound($"User with ID {userId} not found.");
 
-        userToUpdate = userUpdateInfo;
+            var addressToUpdate = userData.PersonalInfo.Address;
 
-        await _dbContext.SaveChangesAsync();
+            updatesFromUserDocument.ApplyTo(addressToUpdate);
 
-        return userToUpdate;
+            await _dbContext.SaveChangesAsync();
 
+            return addressToUpdate;
+    }
+
+    public Task<AddressDto> UpdatePersonalInfoPatchAsync(Guid userId, JsonPatchDocument<UserPersonalInfoDto> updatesFromUserDocument)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin)
