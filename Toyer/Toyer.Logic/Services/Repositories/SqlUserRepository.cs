@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Device;
@@ -61,11 +59,11 @@ public class SqlUserRepository : IUserRepository
 
         var personalInfoToUpdate = userToUpdate.PersonalInfo;
 
-        if (updatesFromUser.Name != null) updatesFromUser.Name = personalInfoToUpdate.Name;
-        if (updatesFromUser.Surname != null) updatesFromUser.Surname = personalInfoToUpdate.Surname;
-        if (updatesFromUser.PhoneNumber != null) updatesFromUser.PhoneNumber = personalInfoToUpdate.PhoneNumber;
-        if (updatesFromUser.Email != null) updatesFromUser.Email = personalInfoToUpdate.Email;
-        if (updatesFromUser.BirthDate != null) updatesFromUser.BirthDate = personalInfoToUpdate.BirthDate;
+        if (updatesFromUser.Name != null) personalInfoToUpdate.Name = updatesFromUser.Name;
+        if (updatesFromUser.Surname != null) personalInfoToUpdate.Surname = updatesFromUser.Surname;  
+        if (updatesFromUser.PhoneNumber != null) personalInfoToUpdate.PhoneNumber = updatesFromUser.PhoneNumber; 
+        if (updatesFromUser.Email != null) personalInfoToUpdate.Email = updatesFromUser.Email; 
+        if (updatesFromUser.BirthDate != default(DateOnly)) personalInfoToUpdate.BirthDate =updatesFromUser.BirthDate; 
 
         await _dbContext.SaveChangesAsync();
 

@@ -66,9 +66,9 @@ public class UserController : ControllerBase
 
     [HttpPut]
     [Route("/updateAddress/{userId:Guid}")]
-    public async Task<IActionResult> UpdateAddressById([FromRoute] Guid userId, [FromForm] UserAddressDto addressUpdatesFromUserDto)
+    public async Task<IActionResult> UpdateAddressById([FromRoute] Guid userId, [FromForm] UserAddressDto addressUpdatesDtoFromUser)
     {
-        var addressUpdatesFromUser = _mapper.Map<Address>(addressUpdatesFromUserDto);
+        var addressUpdatesFromUser = _mapper.Map<Address>(addressUpdatesDtoFromUser);
 
         var updatedAddress = await _userRepository.UpdateAddressPatchAsync(userId, addressUpdatesFromUser);
 
@@ -79,7 +79,20 @@ public class UserController : ControllerBase
         return Ok(updatedAddressDto);
     }
 
-    []
+    [HttpPut]
+    [Route("/updatePersonalInfo/{userId:guid}")]
+    public async Task<IActionResult> UpdatePersonalInfoById([FromRoute] Guid userId, [FromForm] UserPersonalInfoDto personalInfoDtoFromUser)
+    {
+        var personalInfoUpdatesFromUser = _mapper.Map<PersonalInfo>(personalInfoDtoFromUser);
+
+        var updatedPersonalInfo = await _userRepository.UpdatePersonalInfoPatchAsync(userId, personalInfoUpdatesFromUser);
+
+        if (updatedPersonalInfo == null) return NotFound("User not found.");
+
+        var updatedPersonalInfoDto = _mapper.Map<UserPersonalInfoDto>(updatedPersonalInfo);
+
+        return Ok(updatedPersonalInfoDto);
+    }
 
 
     private UserPresentLongDto MapUserDataToLongDto(User? createdUser)
