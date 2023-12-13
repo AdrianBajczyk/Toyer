@@ -1,4 +1,6 @@
-﻿namespace Toyer.Data.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace Toyer.Data.Entities;
 
 public class PersonalInfo
 {
@@ -10,6 +12,8 @@ public class PersonalInfo
     public DateOnly BirthDate { get; set; }
 
     public Guid UserId { get; set; }
+
+    [JsonIgnore]
     public User User { get; set; }
 
     public Address? Address { get; set; }

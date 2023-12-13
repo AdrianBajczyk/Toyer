@@ -22,15 +22,15 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+app.ConfigureExceptionHandler(logger);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-app.ConfigureExceptionHandler(logger);
 
 app.UseHttpsRedirection();
 

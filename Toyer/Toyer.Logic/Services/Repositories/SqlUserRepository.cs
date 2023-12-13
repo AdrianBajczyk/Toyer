@@ -35,36 +35,42 @@ public class SqlUserRepository : IUserRepository
 
         return newUser;
     }
-    public async Task<Address?> UpdateAddressPatchAsync(Guid userId, JsonPatchDocument<Address> updatesFromUserDocument)
+    public async Task<Address?> UpdateAddressPatchAsync(Guid userId, Address updatesFromUser)
     {
-        var userData = await GetUserByIdAsync(userId);
+        var userToUpdate = await GetUserByIdAsync(userId);
 
-        if (userData == null) return null;
+        if (userToUpdate == null) return null;
 
-        var addressToUpdate = userData.PersonalInfo.Address;
+        var addressToUpdate = userToUpdate.PersonalInfo.Address;
 
-
-        updatesFromUserDocument.ApplyTo(addressToUpdate);
-
+        if (updatesFromUser.State != null) addressToUpdate.State = updatesFromUser.State;
+        if (updatesFromUser.Street != null) addressToUpdate.Street = updatesFromUser.Street;
+        if (updatesFromUser.City != null) addressToUpdate.City = updatesFromUser.City;
+        if (updatesFromUser.Country != null) addressToUpdate.Country = updatesFromUser.Country;
+        if (updatesFromUser.PostalCode != null) addressToUpdate.PostalCode = updatesFromUser.PostalCode;
+       
         await _dbContext.SaveChangesAsync();
 
         return addressToUpdate;
     }
+    public async Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(Guid userId, PersonalInfo updatesFromUser)
+    {
+        var userToUpdate = await GetUserByIdAsync(userId);
 
-    //public async Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(Guid userId, JsonPatchDocument updatesFromUserDocument)
-    //{
-    //    var userData = await GetUserByIdAsync(userId);
+        if (userToUpdate == null) return null;
 
-    //    if (userData == null) return null;
+        var personalInfoToUpdate = userToUpdate.PersonalInfo;
 
-    //    var personalInfoToUpdate = userData.PersonalInfo;
+        if (updatesFromUser.Name != null) updatesFromUser.Name = personalInfoToUpdate.Name;
+        if (updatesFromUser.Surname != null) updatesFromUser.Surname = personalInfoToUpdate.Surname;
+        if (updatesFromUser.PhoneNumber != null) updatesFromUser.PhoneNumber = personalInfoToUpdate.PhoneNumber;
+        if (updatesFromUser.Email != null) updatesFromUser.Email = personalInfoToUpdate.Email;
+        if (updatesFromUser.BirthDate != null) updatesFromUser.BirthDate = personalInfoToUpdate.BirthDate;
 
-    //    updatesFromUserDocument.ApplyTo(personalInfoToUpdate);
+        await _dbContext.SaveChangesAsync();
 
-    //    await _dbContext.SaveChangesAsync();
-
-    //    throw new NotImplementedException();
-    //}
+        return personalInfoToUpdate;
+    }
 
     public async Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin)
     {

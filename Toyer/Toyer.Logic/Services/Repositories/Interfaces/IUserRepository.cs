@@ -9,8 +9,8 @@ public interface IUserRepository
 {
    public Task<User?> CreateNewUserAsync(User newUser, PersonalInfo newPersonalInfo, Address newAddress);
    public Task<User?> GetUserByIdAsync(Guid Id);
-   public Task<Address?> UpdateAddressPatchAsync(Guid userId, JsonPatchDocument<Address> updatesFromUserDocument);
-   //public Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(Guid userId, JsonPatchDocument updatesFromUserDocument);
+   public Task<Address?> UpdateAddressPatchAsync(Guid userId, Address updatesFromUserDocument);
+   public Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(Guid userId, PersonalInfo updatesFromUser);
    public Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin);
    public Task<User?> UnassociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin);
 }
