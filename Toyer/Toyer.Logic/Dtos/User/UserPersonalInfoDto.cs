@@ -20,5 +20,6 @@ public class UserPersonalInfoDto
     public DateOnly? BirthDate { get; set; }
 
     [RegularExpression(@"^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$", ErrorMessage = "Invalid phone number format")]
+    [DisplayFormat(DataFormatString = "{0:###-###-####}", ApplyFormatInEditMode = true)]
     public string? PhoneNumber { get; set; }
 }
