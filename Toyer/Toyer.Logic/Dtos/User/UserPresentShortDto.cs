@@ -1,6 +1,6 @@
 ﻿namespace Toyer.Logic.Dtos.User;
 
-public class UserPresentShortDto
+public record UserPresentShortDto
 {
     public string Login { get; set; }
 }

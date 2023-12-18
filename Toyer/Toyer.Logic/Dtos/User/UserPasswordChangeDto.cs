@@ -2,7 +2,7 @@
 
 namespace Toyer.Logic.Dtos.User
 {
-    public class UserPasswordChangeDto
+    public record UserPasswordChangeDto
     {
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters long")]
         [MaxLength(20, ErrorMessage = "Password cannot exceed 20 characters")]

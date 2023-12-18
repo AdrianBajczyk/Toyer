@@ -2,7 +2,7 @@
 
 namespace Toyer.Logic.Dtos.User;
 
-public class UserCreateDto
+public record UserCreateDto
 {
     [Required(ErrorMessage = "Login is required")]
     [StringLength(20, ErrorMessage = "Login cannot exceed 20 characters")]

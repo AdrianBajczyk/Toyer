@@ -2,7 +2,7 @@
 
 namespace Toyer.Logic.Dtos.Device;
 
-public class DeviceCreateDto
+public record DeviceCreateDto
 {
     public string Name { get; set; }
     public DeviceTypeDto DeviceTypeDto{ get; set; }

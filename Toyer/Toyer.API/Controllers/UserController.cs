@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Toyer.API.Exceptions;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.User;
+using Toyer.Logic.Exceptions;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.API.Controllers;
@@ -10,7 +11,6 @@ namespace Toyer.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
-[Consumes("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class UserController : ControllerBase
 {
@@ -31,12 +31,12 @@ public class UserController : ControllerBase
     [HttpGet]
     [Route("{userId:Guid}")]
     [ProducesResponseType(typeof(UserPresentShortDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetShortById([FromRoute] Guid userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
-        if (user == null) return NotFound(new ErrorResponse { Message = "User not found" });
+        if (user == null) return NotFound(new ErrorDetails { Message = "User not found" });
 
         var userShortDto = _mapper.Map<UserPresentShortDto>(user);
 
@@ -49,12 +49,12 @@ public class UserController : ControllerBase
     [HttpGet]
     [Route("extended/{userId:Guid}")]
     [ProducesResponseType(typeof(UserPresentLongDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExtendedById([FromRoute] Guid userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
-        if (user == null) return NotFound(new ErrorResponse { Message = "User not found" });
+        if (user == null) return NotFound(new ErrorDetails { Message = "User not found" });
 
         var userLongDto = _mappings.MapUserDataToLongDto(user);
 
@@ -65,7 +65,6 @@ public class UserController : ControllerBase
     /// Create account for new user
     /// </summary>
     [HttpPost]
-    [Route("{userId:Guid}")]
     [ProducesResponseType(typeof(UserPresentLongDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateNewUser([FromForm] UserCreateDto newUserDto)
     {
@@ -84,7 +83,7 @@ public class UserController : ControllerBase
     [HttpPut]
     [Route("Address/{userId:Guid}")]
     [ProducesResponseType(typeof(UserAddressDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
 
     public async Task<IActionResult> UpdateAddressById([FromRoute] Guid userId, [FromForm] UserAddressDto addressUpdatesDtoFromUser)
     {
@@ -92,7 +91,7 @@ public class UserController : ControllerBase
 
         var updatedAddress = await _userRepository.UpdateAddressPatchAsync(userId, addressUpdatesFromUser);
 
-        if (updatedAddress == null) return NotFound(new ErrorResponse { Message = "User not found"});
+        if (updatedAddress == null) return NotFound(new ErrorDetails { Message = "User not found"});
 
         var updatedAddressDto = _mapper.Map<UserAddressDto>(updatedAddress);
 
@@ -105,14 +104,14 @@ public class UserController : ControllerBase
     [HttpPut]
     [Route("PersonalInfo/{userId:guid}")]
     [ProducesResponseType(typeof(UserPersonalInfoDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePersonalInfoById([FromRoute] Guid userId, [FromForm] UserPersonalInfoDto personalInfoDtoFromUser)
     {
         var personalInfoUpdatesFromUser = _mapper.Map<PersonalInfo>(personalInfoDtoFromUser);
 
         var updatedPersonalInfo = await _userRepository.UpdatePersonalInfoPatchAsync(userId, personalInfoUpdatesFromUser);
 
-        if (updatedPersonalInfo == null) return NotFound(new ErrorResponse { Message = "User not found" });
+        if (updatedPersonalInfo == null) return NotFound(new ErrorDetails { Message = "User not found" });
 
         var updatedPersonalInfoDto = _mapper.Map<UserPersonalInfoDto>(updatedPersonalInfo);
 

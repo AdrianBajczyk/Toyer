@@ -1,6 +1,6 @@
 ﻿namespace Toyer.Logic.Dtos.DeviceType;
 
-public class DeviceTypeDto
+public record DeviceTypeDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
