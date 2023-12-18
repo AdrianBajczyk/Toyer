@@ -1,10 +1,9 @@
 ﻿namespace Toyer.Data.Entities;
 
-public class DeviceType
+public class Orders
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public List<Device> Devices { get; set; } = new();
-    public List<Orders> Orders { get; set; } = new();
+    public List<DeviceType> DeviceTypes { get; set; } = new();
 }

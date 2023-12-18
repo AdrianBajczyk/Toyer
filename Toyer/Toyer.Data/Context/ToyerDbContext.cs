@@ -26,7 +26,8 @@ public class ToyerDbContext(DbContextOptions<ToyerDbContext> options) : DbContex
         modelBuilder.Entity<User>()
             .HasMany(u => u.Devices)
             .WithOne(d => d.User)
-            .HasForeignKey(d => d.UserId);
+            .HasForeignKey(d => d.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
 
     }
 }

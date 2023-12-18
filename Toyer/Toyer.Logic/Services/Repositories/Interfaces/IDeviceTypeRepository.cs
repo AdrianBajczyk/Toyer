@@ -4,9 +4,9 @@ namespace Toyer.Logic.Services.Repositories.Interfaces;
 
 public interface IDeviceTypeRepository
 {
-    public Task<DeviceType?> GetAllAsync();
-    public Task<DeviceType?> GetByIdAsync(Guid Id);
-    public Task<DeviceType?> CreateAsync(DeviceType newDevice);
-    public Task<DeviceType?> DeleteAsync(Guid Id);
-    public Task<DeviceType?> UpdateAsync(User deviceTypeUpdateInfo, Guid Id);
+    public Task<DeviceType?> GetAllDeviceTypesAsync();
+    public Task<DeviceType?> GetDeviceTypeByIdAsync(Guid Id);
+    public Task<DeviceType?> CreateDeviceTypeAsync(DeviceType newDevice);
+    public Task<DeviceType?> DeleteDeviceTypeAsync(Guid Id);
+    public Task<DeviceType?> UpdateDeviceTypeAsync(User deviceTypeUpdateInfo, Guid Id);
 }
