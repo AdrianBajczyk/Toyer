@@ -23,7 +23,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/short/{userId:Guid}")]
+    [Route("{userId:Guid}")]
     public async Task<IActionResult> GetShortById([FromRoute] Guid userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
@@ -36,7 +36,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/extended/{userId:Guid}")]
+    [Route("extended/{userId:Guid}")]
     public async Task<IActionResult> GetExtendedById([FromRoute] Guid userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
@@ -49,7 +49,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/createNew")]
+    [Route("{userId:Guid}")]
     public async Task<IActionResult> CreateNewUser([FromForm] UserCreateDto newUserDto)
     {
         var userToDb = _mappings.MapUserCreateDtoToUser(newUserDto);
@@ -63,7 +63,7 @@ public class UserController : ControllerBase
 
 
     [HttpPut]
-    [Route("/updateAddress/{userId:Guid}")]
+    [Route("Address/{userId:Guid}")]
     public async Task<IActionResult> UpdateAddressById([FromRoute] Guid userId, [FromForm] UserAddressDto addressUpdatesDtoFromUser)
     {
         var addressUpdatesFromUser = _mapper.Map<Address>(addressUpdatesDtoFromUser);
@@ -78,7 +78,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/updatePersonalInfo/{userId:guid}")]
+    [Route("PersonalInfo/{userId:guid}")]
     public async Task<IActionResult> UpdatePersonalInfoById([FromRoute] Guid userId, [FromForm] UserPersonalInfoDto personalInfoDtoFromUser)
     {
         var personalInfoUpdatesFromUser = _mapper.Map<PersonalInfo>(personalInfoDtoFromUser);
