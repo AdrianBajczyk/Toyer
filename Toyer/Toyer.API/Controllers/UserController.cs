@@ -11,12 +11,14 @@ namespace Toyer.API.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
+    private readonly IUserControllerMapings _mappings;
     private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
 
-    public UserController(IUserRepository userRepository, IMapper mapper)
+    public UserController(IUserRepository userRepository, IUserControllerMapings mappings, IMapper mapper)
     {
         _userRepository = userRepository;
+        _mappings = mappings;
         _mapper = mapper;
     }
 
@@ -27,8 +29,6 @@ public class UserController : ControllerBase
         var user = await _userRepository.GetUserByIdAsync(userId);
 
         if (user == null) return NotFound("User not found.");
-
-
 
         var userShortDto = _mapper.Map<UserPresentShortDto>(user);
 
@@ -43,22 +43,20 @@ public class UserController : ControllerBase
 
         if (user == null) return NotFound("User not found.");
 
-        UserPresentLongDto userLongDto = MapUserDataToLongDto(user);
+        var userLongDto = _mappings.MapUserDataToLongDto(user);
 
         return Ok(userLongDto);
     }
 
     [HttpPost]
     [Route("/createNew")]
-    public async Task<IActionResult> CreateNewUser([FromForm] UserCreateDto newUser)
+    public async Task<IActionResult> CreateNewUser([FromForm] UserCreateDto newUserDto)
     {
-        var userToDb = _mapper.Map<User>(newUser);
-        var personalInfoToDb = _mapper.Map<PersonalInfo>(newUser);
-        var addressToDb = _mapper.Map<Address>(newUser);
+        var userToDb = _mappings.MapUserCreateDtoToUser(newUserDto);
 
-        var createdUser = await _userRepository.CreateNewUserAsync(userToDb, personalInfoToDb, addressToDb);
+        var createdUser = await _userRepository.CreateNewUserAsync(userToDb);
 
-        UserPresentLongDto userLongDto = MapUserDataToLongDto(createdUser);
+        var userLongDto = _mappings.MapUserDataToLongDto(createdUser);
 
         return CreatedAtAction(nameof(CreateNewUser), userLongDto);
     }
@@ -95,14 +93,7 @@ public class UserController : ControllerBase
     }
 
 
-    private UserPresentLongDto MapUserDataToLongDto(User? createdUser)
-    {
-        var userLongDto = _mapper.Map<UserPresentLongDto>(createdUser);
-        userLongDto.UserPersonalInfo = _mapper.Map<UserPersonalInfoDto>(createdUser.PersonalInfo);
-        userLongDto.UserAddress = _mapper.Map<UserAddressDto>(createdUser.PersonalInfo.Address);
-        userLongDto.UserPresentShort = _mapper.Map<UserPresentShortDto>(createdUser);
-        return userLongDto;
-    }
+    
 
 }
 

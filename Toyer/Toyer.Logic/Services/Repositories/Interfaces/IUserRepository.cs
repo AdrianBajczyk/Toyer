@@ -7,7 +7,7 @@ namespace Toyer.Logic.Services.Repositories.Interfaces;
 
 public interface IUserRepository
 {
-   public Task<User?> CreateNewUserAsync(User newUser, PersonalInfo newPersonalInfo, Address newAddress);
+   public Task<User?> CreateNewUserAsync(User newUser);
    public Task<User?> GetUserByIdAsync(Guid Id);
    public Task<Address?> UpdateAddressPatchAsync(Guid userId, Address updatesFromUserDocument);
    public Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(Guid userId, PersonalInfo updatesFromUser);

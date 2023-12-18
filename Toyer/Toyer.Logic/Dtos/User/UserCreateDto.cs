@@ -36,6 +36,7 @@ public class UserCreateDto
 
     [Required(ErrorMessage = "Birth date is required")]
     [DataType(DataType.Date)]
+    [Display(Name = "Birth Date")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     public DateOnly BirthDate { get; set; }
 
@@ -51,6 +52,7 @@ public class UserCreateDto
     public string State { get; set; }
 
     [Required(ErrorMessage = "Postal code is required")]
+    [Display(Name = "Postal Code")]
     [StringLength(6, ErrorMessage = "Postal code cannot exceed 10 characters")]
     public string PostalCode { get; set; }
 

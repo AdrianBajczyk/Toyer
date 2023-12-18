@@ -5,7 +5,7 @@ using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
-namespace Toyer.Logic.Services.Repositories;
+namespace Toyer.Logic.Services.Repositories.Classes;
 
 public class SqlUserRepository : IUserRepository
 
@@ -24,10 +24,9 @@ public class SqlUserRepository : IUserRepository
             .ThenInclude(p => p.Address)
             .FirstOrDefaultAsync(u => u.Id == Id);
     }
-    public async Task<User?> CreateNewUserAsync(User newUser, PersonalInfo newPersonalInfo, Address newAddress)
+    public async Task<User?> CreateNewUserAsync(User newUser)
     {
-        newPersonalInfo.Address = newAddress;
-        newUser.PersonalInfo = newPersonalInfo;
+
         await _dbContext.Users.AddAsync(newUser);
         await _dbContext.SaveChangesAsync();
 
@@ -46,7 +45,7 @@ public class SqlUserRepository : IUserRepository
         if (updatesFromUser.City != null) addressToUpdate.City = updatesFromUser.City;
         if (updatesFromUser.Country != null) addressToUpdate.Country = updatesFromUser.Country;
         if (updatesFromUser.PostalCode != null) addressToUpdate.PostalCode = updatesFromUser.PostalCode;
-       
+
         await _dbContext.SaveChangesAsync();
 
         return addressToUpdate;
@@ -60,10 +59,10 @@ public class SqlUserRepository : IUserRepository
         var personalInfoToUpdate = userToUpdate.PersonalInfo;
 
         if (updatesFromUser.Name != null) personalInfoToUpdate.Name = updatesFromUser.Name;
-        if (updatesFromUser.Surname != null) personalInfoToUpdate.Surname = updatesFromUser.Surname;  
-        if (updatesFromUser.PhoneNumber != null) personalInfoToUpdate.PhoneNumber = updatesFromUser.PhoneNumber; 
-        if (updatesFromUser.Email != null) personalInfoToUpdate.Email = updatesFromUser.Email; 
-        if (updatesFromUser.BirthDate != default(DateOnly)) personalInfoToUpdate.BirthDate =updatesFromUser.BirthDate; 
+        if (updatesFromUser.Surname != null) personalInfoToUpdate.Surname = updatesFromUser.Surname;
+        if (updatesFromUser.PhoneNumber != null) personalInfoToUpdate.PhoneNumber = updatesFromUser.PhoneNumber;
+        if (updatesFromUser.Email != null) personalInfoToUpdate.Email = updatesFromUser.Email;
+        if (updatesFromUser.BirthDate != default) personalInfoToUpdate.BirthDate = updatesFromUser.BirthDate;
 
         await _dbContext.SaveChangesAsync();
 

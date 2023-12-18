@@ -2,7 +2,7 @@
 using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
-namespace Toyer.Logic.Services.Repositories;
+namespace Toyer.Logic.Services.Repositories.Classes;
 
 public class SqlDeviceRepository : IDeviceRepository
 {
