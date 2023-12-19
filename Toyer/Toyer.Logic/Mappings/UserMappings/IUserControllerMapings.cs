@@ -5,6 +5,11 @@ using Toyer.Logic.Dtos.User;
 
 public interface IUserControllerMapings
 {
-    User MapUserCreateDtoToUser(UserCreateDto newUserDto);
-    UserPresentLongDto MapUserDataToLongDto(User? createdUser);
+    User UserCreateDtoToUser(UserCreateDto newUserDto);
+    UserPresentLongDto UserToUserPresentLongDto(User createdUser);
+    UserPresentShortDto UserToUserPresentShortDto(User user);
+    AddressDto AddressToAddressDto(Address address);
+    Address AddressDtoToAddress(AddressDto addressDto);
+    PersonalInfoDto PersonalInfoToPersonalInfoDto(PersonalInfo personalInfo);
+    PersonalInfo PersonalInfoDtoToPersonalInfo(PersonalInfoDto personalInfoDto);
 }

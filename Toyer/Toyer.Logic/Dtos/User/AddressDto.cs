@@ -2,7 +2,7 @@
 
 namespace Toyer.Logic.Dtos.User;
 
-public record UserAddressDto
+public record AddressDto
 {
     [StringLength(30, ErrorMessage = "Street cannot exceed 30 characters")]
     public string? Street { get; set; }

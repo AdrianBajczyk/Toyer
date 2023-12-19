@@ -11,10 +11,10 @@ public class AutoMapperProfiles : Profile
         CreateMap<User, UserPresentShortDto>().ReverseMap();
         CreateMap<User, UserPresentLongDto>().ReverseMap();
         CreateMap<UserCreateDto, User>().ReverseMap();
-        CreateMap<PersonalInfo, UserPersonalInfoDto>().ReverseMap();
+        CreateMap<PersonalInfo, PersonalInfoDto>().ReverseMap();
         CreateMap<UserCreateDto, PersonalInfo >().ReverseMap();
         CreateMap<UserCreateDto, Address>().ReverseMap();
-        CreateMap<Address, UserAddressDto>().ReverseMap();
+        CreateMap<Address, AddressDto>().ReverseMap();
 
     }
 }

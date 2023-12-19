@@ -2,7 +2,7 @@
 
 namespace Toyer.Logic.Dtos.User;
 
-public record UserPersonalInfoDto
+public record PersonalInfoDto
 {
     [StringLength(20, ErrorMessage = "First name cannot exceed 20 characters")]
     public string? Name { get; set; }

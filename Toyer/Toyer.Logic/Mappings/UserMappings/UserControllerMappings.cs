@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Net;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.User;
 
@@ -13,7 +14,7 @@ public class UserControllerMappings : IUserControllerMapings
         _mapper = mapper;
     }
 
-    public User MapUserCreateDtoToUser(UserCreateDto newUserDto)
+    public User UserCreateDtoToUser(UserCreateDto newUserDto)
     {
         var userToCreate = _mapper.Map<User>(newUserDto);
         var personalInfoTo = _mapper.Map<PersonalInfo>(newUserDto);
@@ -25,13 +26,36 @@ public class UserControllerMappings : IUserControllerMapings
         return userToCreate;
     }
 
-    public UserPresentLongDto MapUserDataToLongDto(User? createdUser)
+    public UserPresentLongDto UserToUserPresentLongDto(User? createdUser)
     {
         var userLongDto = _mapper.Map<UserPresentLongDto>(createdUser);
-        userLongDto.UserPersonalInfo = _mapper.Map<UserPersonalInfoDto>(createdUser.PersonalInfo);
-        userLongDto.UserAddress = _mapper.Map<UserAddressDto>(createdUser.PersonalInfo.Address);
+        userLongDto.UserPersonalInfo = _mapper.Map<PersonalInfoDto>(createdUser.PersonalInfo);
+        userLongDto.UserAddress = _mapper.Map<AddressDto>(createdUser.PersonalInfo.Address);
         userLongDto.UserPresentShort = _mapper.Map<UserPresentShortDto>(createdUser);
         return userLongDto;
     }
 
+    public UserPresentShortDto UserToUserPresentShortDto(User user)
+    {
+        return _mapper.Map<UserPresentShortDto>(user);
+    }
+
+    public AddressDto AddressToAddressDto(Address address)
+    {
+        return _mapper.Map<AddressDto>(address);
+    }
+    public Address AddressDtoToAddress(AddressDto addressDto)
+    {
+        return _mapper.Map<Address>(addressDto);
+    }
+
+    public PersonalInfoDto PersonalInfoToPersonalInfoDto(PersonalInfo personalInfo)
+    {
+        return _mapper.Map<PersonalInfoDto>(personalInfo);
+    }
+
+    public PersonalInfo PersonalInfoDtoToPersonalInfo(PersonalInfoDto personalInfoDto)
+    {
+        return _mapper.Map<PersonalInfo>(personalInfoDto);
+    }
 }
