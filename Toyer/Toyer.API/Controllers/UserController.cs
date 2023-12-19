@@ -23,8 +23,7 @@ public class UserController : ControllerBase
     /// <summary>
     /// Gets login of specific user.
     /// </summary>
-    [HttpGet]
-    [Route("{userId:Guid}")]
+    [HttpGet("{userId:Guid}")]
     [ProducesResponseType(typeof(UserPresentShortDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetShortById([FromRoute] Guid userId)
@@ -39,8 +38,7 @@ public class UserController : ControllerBase
     /// <summary>
     /// Gets account info for authorized user.
     /// </summary>
-    [HttpGet]
-    [Route("extended/{userId:Guid}")]
+    [HttpGet("extended/{userId:Guid}")]
     [ProducesResponseType(typeof(UserPresentLongDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExtendedById([FromRoute] Guid userId)
@@ -67,8 +65,7 @@ public class UserController : ControllerBase
     /// <summary>
     /// Updates account address by applying changes from non-null properties.
     /// </summary>
-    [HttpPut]
-    [Route("Address/{userId:Guid}")]
+    [HttpPut("Address/{userId:Guid}")]
     [ProducesResponseType(typeof(AddressDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateAddressById([FromRoute] Guid userId, [FromForm] AddressDto addressUpdatesDtoFromUser)
@@ -83,8 +80,7 @@ public class UserController : ControllerBase
     /// <summary>
     /// Updates account personal information by applying changes from non-null properties.
     /// </summary>
-    [HttpPut]
-    [Route("PersonalInfo/{userId:guid}")]
+    [HttpPut("PersonalInfo/{userId:guid}")]
     [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePersonalInfoById([FromRoute] Guid userId, [FromForm] PersonalInfoDto personalInfoDtoFromUser)
