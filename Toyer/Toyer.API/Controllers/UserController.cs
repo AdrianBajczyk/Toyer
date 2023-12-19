@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Exceptions;
 using Toyer.Logic.Services.Repositories.Interfaces;
@@ -90,6 +91,19 @@ public class UserController : ControllerBase
         return updatedPersonalInfo is null
             ? NotFound(new ErrorDetails { Message = "User not found" })
             : Ok(_mappings.PersonalInfoToPersonalInfoDto(updatedPersonalInfo));
+    }
+
+    /// <summary>
+    /// Deletes account of existing user
+    /// </summary>
+    [HttpDelete("{userId:Guid}")]
+    public async Task<ActionResult> DeleteUserById([FromRoute] Guid userId)
+    {
+        var deletedUser = await _userRepository.DeleteUserAsync(userId);
+
+        return deletedUser is null
+            ? NotFound(new ErrorDetails { Message = "User not found."})
+            : Ok(_mappings.UserToUserPresentShortDto(deletedUser));
     }
 
 }

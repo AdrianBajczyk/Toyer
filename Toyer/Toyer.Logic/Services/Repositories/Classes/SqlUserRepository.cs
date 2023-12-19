@@ -26,7 +26,6 @@ public class SqlUserRepository : IUserRepository
     }
     public async Task<User?> CreateNewUserAsync(User newUser)
     {
-
         await _dbContext.Users.AddAsync(newUser);
         await _dbContext.SaveChangesAsync();
 
@@ -67,6 +66,17 @@ public class SqlUserRepository : IUserRepository
         await _dbContext.SaveChangesAsync();
 
         return personalInfoToUpdate;
+    }
+    public async Task<User?> DeleteUserAsync(Guid Id)
+    {
+        var userToDelete = await GetUserByIdAsync(Id);
+
+        if(userToDelete == null) return null;
+
+        _dbContext.Users.Remove(userToDelete);
+        await _dbContext.SaveChangesAsync();
+
+        return userToDelete;
     }
 
     public async Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin)
