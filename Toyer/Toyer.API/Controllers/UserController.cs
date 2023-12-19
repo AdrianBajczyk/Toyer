@@ -36,11 +36,9 @@ public class UserController : ControllerBase
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
-        if (user == null) return NotFound(new ErrorDetails { Message = "User not found" });
-
-        var userShortDto = _mapper.Map<UserPresentShortDto>(user);
-
-        return Ok(userShortDto);
+        return user is null
+            ? NotFound(new ErrorDetails { Message = "User not found" })
+            : Ok(_mapper.Map<UserPresentShortDto>(user));
     }
 
     /// <summary>
@@ -54,11 +52,9 @@ public class UserController : ControllerBase
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
-        if (user == null) return NotFound(new ErrorDetails { Message = "User not found" });
-
-        var userLongDto = _mappings.MapUserDataToLongDto(user);
-
-        return Ok(userLongDto);
+        return user is null 
+            ? NotFound(new ErrorDetails { Message = "User not found" })
+            : Ok(_mappings.MapUserDataToLongDto(user));
     }
 
     /// <summary>
@@ -68,13 +64,9 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(UserPresentLongDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateNewUser([FromForm] UserCreateDto newUserDto)
     {
-        var userToDb = _mappings.MapUserCreateDtoToUser(newUserDto);
+        var createdUser = await _userRepository.CreateNewUserAsync(_mappings.MapUserCreateDtoToUser(newUserDto));
 
-        var createdUser = await _userRepository.CreateNewUserAsync(userToDb);
-
-        var userLongDto = _mappings.MapUserDataToLongDto(createdUser);
-
-        return CreatedAtAction(nameof(CreateNewUser), userLongDto);
+        return CreatedAtAction(nameof(CreateNewUser), _mappings.MapUserDataToLongDto(createdUser));
     }
 
     /// <summary>
@@ -84,18 +76,13 @@ public class UserController : ControllerBase
     [Route("Address/{userId:Guid}")]
     [ProducesResponseType(typeof(UserAddressDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-
     public async Task<IActionResult> UpdateAddressById([FromRoute] Guid userId, [FromForm] UserAddressDto addressUpdatesDtoFromUser)
     {
-        var addressUpdatesFromUser = _mapper.Map<Address>(addressUpdatesDtoFromUser);
+        var updatedAddress = await _userRepository.UpdateAddressPatchAsync(userId, _mapper.Map<Address>(addressUpdatesDtoFromUser));
 
-        var updatedAddress = await _userRepository.UpdateAddressPatchAsync(userId, addressUpdatesFromUser);
-
-        if (updatedAddress == null) return NotFound(new ErrorDetails { Message = "User not found"});
-
-        var updatedAddressDto = _mapper.Map<UserAddressDto>(updatedAddress);
-
-        return Ok(updatedAddressDto);
+        return updatedAddress is null
+            ? NotFound(new ErrorDetails { Message = "User not found" })
+            : Ok(_mapper.Map<UserAddressDto>(updatedAddress));
     }
 
     /// <summary>
@@ -107,19 +94,12 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePersonalInfoById([FromRoute] Guid userId, [FromForm] UserPersonalInfoDto personalInfoDtoFromUser)
     {
-        var personalInfoUpdatesFromUser = _mapper.Map<PersonalInfo>(personalInfoDtoFromUser);
+        var updatedPersonalInfo = await _userRepository.UpdatePersonalInfoPatchAsync(userId, _mapper.Map<PersonalInfo>(personalInfoDtoFromUser));
 
-        var updatedPersonalInfo = await _userRepository.UpdatePersonalInfoPatchAsync(userId, personalInfoUpdatesFromUser);
-
-        if (updatedPersonalInfo == null) return NotFound(new ErrorDetails { Message = "User not found" });
-
-        var updatedPersonalInfoDto = _mapper.Map<UserPersonalInfoDto>(updatedPersonalInfo);
-
-        return Ok(updatedPersonalInfoDto);
+        return updatedPersonalInfo is null
+            ? NotFound(new ErrorDetails { Message = "User not found" })
+            : Ok(_mapper.Map<UserPersonalInfoDto>(updatedPersonalInfo));
     }
-
-
-    
 
 }
 
