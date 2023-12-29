@@ -23,9 +23,16 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
         return newDevice;
     }
 
-    public Task<DeviceType?> DeleteDeviceTypeAsync(int id)
+    public async Task<DeviceType?> DeleteDeviceTypeAsync(int id)
     {
-        throw new NotImplementedException();
+        var deviceToDelete = await GetDeviceTypeByIdAsync(id);
+
+        if (deviceToDelete == null) return null;
+
+        _dbContext.DeviceTypes.Remove(deviceToDelete);
+        await _dbContext.SaveChangesAsync();
+
+        return deviceToDelete;
     }
 
     public async Task<ICollection<DeviceType>?> GetAllDeviceTypesAsync()
@@ -38,8 +45,16 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
         return await _dbContext.DeviceTypes.FirstOrDefaultAsync(d => d.Id == id);
     }
 
-    public Task<DeviceType?> UpdateDeviceTypeAsync(DeviceType deviceTypeUpdateInfo, int id)
+    public async Task<DeviceType?> UpdateDeviceTypeAsync(int id, DeviceType deviceTypeUpdateInfo)
     {
-        throw new NotImplementedException();
+        var deviceToUpdate = await GetDeviceTypeByIdAsync(id);
+
+        if (deviceToUpdate == null) return null;
+        if (deviceToUpdate.Name != null) deviceToUpdate.Name = deviceTypeUpdateInfo.Name;
+        if (deviceToUpdate.Description != null) deviceToUpdate.Description = deviceTypeUpdateInfo.Description;
+
+        await _dbContext.SaveChangesAsync();
+
+        return deviceToUpdate;
     }
 }

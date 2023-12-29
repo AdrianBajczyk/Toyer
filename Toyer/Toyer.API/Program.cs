@@ -50,6 +50,13 @@ builder.Services.AddScoped<IDeviceTypeMappings, DeviceTypeMappings>();
 builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["AZURE_SQL_CONNECTIONSTRING"]));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
+
+//  ASP.NET Core MVC trims the suffix Async from action names by default
+builder.Services.AddMvc(options =>
+{
+    options.SuppressAsyncSuffixInActionNames = false;
+});
+
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILogger<Program>>();

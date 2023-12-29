@@ -5,5 +5,5 @@ public class Orders
     public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public ICollection<User> DeviceTypes { get; set; } = new HashSet<User>();
+    public ICollection<DeviceType> DeviceTypes { get; set; } = new HashSet<DeviceType>();
 }

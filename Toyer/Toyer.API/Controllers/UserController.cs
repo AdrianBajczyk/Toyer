@@ -32,7 +32,7 @@ public class UserController : ControllerBase
         var user = await _userRepository.GetUserByIdAsync(userId);
 
         return user is null
-            ? NotFound(new ErrorDetails { Message = "User not found" })
+            ? NotFound(new ErrorDetails { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.UserToUserPresentShortDto(user));
     }
 
@@ -47,7 +47,7 @@ public class UserController : ControllerBase
         var user = await _userRepository.GetUserByIdAsync(userId);
 
         return user is null 
-            ? NotFound(new ErrorDetails { Message = "User not found" })
+            ? NotFound(new ErrorDetails { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.UserToUserPresentLongDto(user));
     }
 
@@ -74,7 +74,7 @@ public class UserController : ControllerBase
         var updatedAddress = await _userRepository.UpdateAddressPatchAsync(userId, _mappings.AddressDtoToAddress(addressUpdatesDtoFromUser));
 
         return updatedAddress is null
-            ? NotFound(new ErrorDetails { Message = "User not found" })
+            ? NotFound(new ErrorDetails { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.AddressToAddressDto(updatedAddress));
     }
 
@@ -89,7 +89,7 @@ public class UserController : ControllerBase
         var updatedPersonalInfo = await _userRepository.UpdatePersonalInfoPatchAsync(userId, _mappings.PersonalInfoDtoToPersonalInfo(personalInfoDtoFromUser));
 
         return updatedPersonalInfo is null
-            ? NotFound(new ErrorDetails { Message = "User not found" })
+            ? NotFound(new ErrorDetails { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.PersonalInfoToPersonalInfoDto(updatedPersonalInfo));
     }
 
@@ -102,7 +102,7 @@ public class UserController : ControllerBase
         var deletedUser = await _userRepository.DeleteUserAsync(userId);
 
         return deletedUser is null
-            ? NotFound(new ErrorDetails { Message = "User not found."})
+            ? NotFound(new ErrorDetails { Message = "User not found.", StatusCode = 404 })
             : Ok(_mappings.UserToUserPresentShortDto(deletedUser));
     }
 

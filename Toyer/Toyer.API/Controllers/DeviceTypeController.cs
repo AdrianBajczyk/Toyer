@@ -28,8 +28,9 @@ public class DeviceTypeController : ControllerBase
     public async Task<IActionResult> CreateNewDeviceTypeAsync([FromForm] DeviceTypeCreateDto newDeviceType)
     {
         var createdDeviceType = await _deviceTypeRepository.CreateDeviceTypeAsync(_mappings.DeviceTypeCreateDtoToDeviceType(newDeviceType));
+        var result = _mappings.DeviceTypeToDeviceTypePresentDto(createdDeviceType!);
 
-        return CreatedAtAction(nameof(createdDeviceType), _mappings.DeviceTypeToDeviceTypePresentDto(createdDeviceType));
+        return CreatedAtAction(nameof(CreateNewDeviceTypeAsync), result);
     }
 
     /// <summary>
@@ -43,7 +44,7 @@ public class DeviceTypeController : ControllerBase
         var deviceType = await _deviceTypeRepository.GetDeviceTypeByIdAsync(deviceTypeId);
 
         return deviceType is null
-            ? NotFound(new ErrorDetails { Message = "Device type not found" })
+            ? NotFound(new ErrorDetails { Message = "Device type not found", StatusCode = 404 })
             : Ok(_mappings.DeviceTypeToDeviceTypePresentDto(deviceType));
     }
 
@@ -58,7 +59,37 @@ public class DeviceTypeController : ControllerBase
         var deviceTypes = await _deviceTypeRepository.GetAllDeviceTypesAsync();
 
         return deviceTypes is null
-            ? NotFound(new ErrorDetails { Message = "Device type not found" })
+            ? NotFound(new ErrorDetails { Message = "Device type not found", StatusCode = 404 })
             : Ok(_mappings.DeviceTypesToDeviceTypePresentDtos(deviceTypes));
+    }
+
+    ///<summary>
+    /// Updates name of device type info by id.
+    /// </summary>
+    [HttpPut("{deviceTypeId:int}")]
+    [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateDeviceTypeInfoAsync([FromRoute]int deviceTypeId, [FromForm]DeviceTypeCreateDto deviceUpdateDto)
+    {
+        var updatedDeviceType = await _deviceTypeRepository.UpdateDeviceTypeAsync(deviceTypeId, _mappings.DeviceTypeCreateDtoToDeviceType(deviceUpdateDto));
+
+        return updatedDeviceType is null
+            ? NotFound(new ErrorDetails { Message = "Device type not found", StatusCode = 404 })
+            : Ok(_mappings.DeviceTypeToDeviceTypePresentDto(updatedDeviceType));
+    }
+
+    ///<summary>
+    /// Deletes device type selected by id.
+    /// </summary>
+    [HttpDelete("{deviceTypeId:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteDeviceTypeByIdAsync([FromRoute] int deviceTypeId)
+    {
+        var deletedDevice = await _deviceTypeRepository.DeleteDeviceTypeAsync(deviceTypeId);
+
+        return deletedDevice is null
+            ? NotFound(new ErrorDetails { Message = "Device type not found", StatusCode = 404 })
+            : Ok();
     }
 }
