@@ -5,6 +5,6 @@ public class DeviceType
     public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public List<Device> Devices { get; set; } = new();
-    public List<Orders> Orders { get; set; } = new();
+    public ICollection<Device> Devices { get; set; } = new HashSet<Device>();
+    public ICollection<Orders> Orders { get; set; } = new HashSet<Orders>();
 }

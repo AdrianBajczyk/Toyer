@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Toyer.Logic.Dtos.Order;
+namespace Toyer.Logic.Dtos.DeviceType;
 
-public record OrderCreateDto
+public record DeviceTypeCreateDto
 {
     [Required(ErrorMessage = "The name is required.")]
     [StringLength(20, ErrorMessage = "Login cannot exceed 20 characters.")]
@@ -13,8 +13,4 @@ public record OrderCreateDto
     [StringLength(60, ErrorMessage = "Description cannot exceed 60 characters.")]
     [RegularExpression(@"(?:^[A-Z]|[.!?]\s+[A-Z])", ErrorMessage = "Check if every beginning of sentence is followed by capital letter.")]
     public string Description { get; set; }
-
-    [Required(ErrorMessage = "The device type is required.")]
-    [Display(Name = "Device Type IDs")]
-    public List<int> DeviceTypeId { get; set; } 
 }

@@ -8,5 +8,6 @@ public record DevicePresentDto
     public string Name { get; set; }
     public DateOnly DateOfCreation { get; set; }
     public DateTime DateOfLastRegistration { get; set; }
-    public DeviceTypeDto DeviceTypeDto { get; set; }
+    public DeviceTypePresentDto DeviceTypeDto { get; set; }
+
 }
