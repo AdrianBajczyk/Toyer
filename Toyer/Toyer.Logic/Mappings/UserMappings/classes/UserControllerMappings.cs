@@ -3,7 +3,7 @@ using System.Net;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.User;
 
-namespace Toyer.Logic.Mappings.UserMappings;
+namespace Toyer.Logic.Mappings.UserMappings.classes;
 
 public class UserControllerMappings : IUserControllerMapings
 {

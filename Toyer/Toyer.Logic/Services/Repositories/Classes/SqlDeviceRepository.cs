@@ -17,18 +17,10 @@ public class SqlDeviceRepository : IDeviceRepository
         throw new NotImplementedException();
     }
 
-    public Task<DevicePresentDto> UpdateApStrings(DeviceAPConnectionDto oldApStrings, DeviceAPConnectionDto newApStrings)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<DevicePresentDto> UpdateDeviceName(DeviceNameUpdateDto nameUpdateDto)
     {
         throw new NotImplementedException();
     }
 
-    public Task<DevicePresentDto> UpdateStaStrings(DeviceStaConnectionDto oldStaStrings, DeviceStaConnectionDto newStaStrings)
-    {
-        throw new NotImplementedException();
-    }
+
 }

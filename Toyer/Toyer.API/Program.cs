@@ -5,7 +5,7 @@ using System.Reflection;
 using Toyer.API.Extensions;
 using Toyer.Data.Context;
 using Toyer.Data.Mappings;
-using Toyer.Logic.Mappings.UserMappings;
+using Toyer.Logic.Mappings.UserMappings.classes;
 using Toyer.Logic.Services.Repositories.Classes;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
@@ -44,7 +44,9 @@ builder.Services.AddSwaggerGen(options =>
 
 
 builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
+builder.Services.AddScoped<IDeviceTypeRepository, SqlDeviceTypeRepository>();
 builder.Services.AddScoped<IUserControllerMapings, UserControllerMappings>();
+builder.Services.AddScoped<IDeviceTypeMappings, DeviceTypeMappings>();
 builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["AZURE_SQL_CONNECTIONSTRING"]));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

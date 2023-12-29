@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Toyer.Data.Entities;
+using Toyer.Logic.Dtos.DeviceType;
 using Toyer.Logic.Dtos.User;
 
 namespace Toyer.Data.Mappings;
@@ -16,5 +17,7 @@ public class AutoMapperProfiles : Profile
         CreateMap<UserCreateDto, Address>().ReverseMap();
         CreateMap<Address, AddressDto>().ReverseMap();
 
+        CreateMap<DeviceType, DeviceTypeCreateDto>().ReverseMap();
+        CreateMap<DeviceType, DeviceTypePresentDto>().ReverseMap();
     }
 }

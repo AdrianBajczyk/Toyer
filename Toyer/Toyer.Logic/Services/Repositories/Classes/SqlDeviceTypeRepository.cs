@@ -14,12 +14,15 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
         _dbContext = dbContext;
     }
 
-    public Task<DeviceType?> CreateDeviceTypeAsync(DeviceType newDevice)
+    public async Task<DeviceType?> CreateDeviceTypeAsync(DeviceType newDevice)
     {
-        throw new NotImplementedException();
+        await _dbContext.AddAsync(newDevice);
+        await _dbContext.SaveChangesAsync();
+
+        return newDevice;
     }
 
-    public Task<DeviceType?> DeleteDeviceTypeAsync(Guid Id)
+    public Task<DeviceType?> DeleteDeviceTypeAsync(int Id)
     {
         throw new NotImplementedException();
     }
@@ -29,12 +32,12 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
         throw new NotImplementedException();
     }
 
-    public Task<DeviceType?> GetDeviceTypeByIdAsync(Guid Id)
+    public Task<DeviceType?> GetDeviceTypeByIdAsync(int Id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<DeviceType?> UpdateDeviceTypeAsync(User deviceTypeUpdateInfo, Guid Id)
+    public Task<DeviceType?> UpdateDeviceTypeAsync(DeviceType deviceTypeUpdateInfo, Guid Id)
     {
         throw new NotImplementedException();
     }

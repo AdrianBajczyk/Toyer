@@ -79,14 +79,5 @@ public class SqlUserRepository : IUserRepository
         return userToDelete;
     }
 
-    public async Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<User?> UnassociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin)
-    {
-        throw new NotImplementedException();
-    }
 
 }

@@ -11,6 +11,5 @@ public interface IUserRepository
    Task<Address?> UpdateAddressPatchAsync(Guid userId, Address updatesFromUserDocument);
    Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(Guid userId, PersonalInfo updatesFromUser);
    Task<User?> DeleteUserAsync(Guid Id);
-   Task<User?> AssociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin);
-   Task<User?> UnassociateDeviceWithAccAsync(DeviceAPConnectionDto deviceAp, UserPasswordChangeDto userLogin);
+
 }
