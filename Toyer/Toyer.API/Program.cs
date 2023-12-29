@@ -9,6 +9,7 @@ using Toyer.Logic.Mappings.UserMappings;
 using Toyer.Logic.Services.Repositories.Classes;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();

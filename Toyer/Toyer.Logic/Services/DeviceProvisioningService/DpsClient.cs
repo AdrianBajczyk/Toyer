@@ -2,6 +2,7 @@
 using Microsoft.Azure.Devices.Provisioning.Client;
 using Microsoft.Azure.Devices.Provisioning.Client.Transport;
 using Microsoft.Azure.Devices.Shared;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,24 +11,24 @@ namespace Toyer.Logic.Services.DeviceProvisioningService;
 
 public class DpsClient : IDpsClient
 {
-    // zapytaj jak ukryć te klucze oraz co z historią w repozytorium
-    const string PRIMARY_KEY = @"C90S9vkT8XptudZY7bk/W1p0WQP0gZ5oYILnyQQEFdY7vm1o0Ozt9uoBckkDTW4gBJzs8k5m970yamZQ9vTNlQ==";
-    const string ID_SCOPE = "0ne00BAD41A";
-    const string GLOBAL_ENDPOINT = "global.azure-devices-provisioning.net";
+
+    private readonly IConfiguration _configuration;
     private readonly ILogger _logger;
 
-    public DpsClient(ILogger logger)
+    public DpsClient(ILogger logger, IConfiguration configuration)
     {
         _logger = logger;
+        _configuration = configuration;
     }
 
-    public async Task RegisterDevice(Guid id)
+    public async Task RegisterDevice(Guid id, string subsectionKeyName)
     {
         _logger.LogInformation("Initializing the device provisioning client...");
 
         string DESIRED_DEVICE_ID = id.ToString();
+        string DPS_ENROLLMENT_CONNECTION_STRING = _configuration.GetRequiredSection($"DPS_CONFIG:PRIMARY_KEY:{subsectionKeyName}").Value!;
 
-        var derivedKey = ComputeDerivedSymmetricKey(Convert.FromBase64String(PRIMARY_KEY), DESIRED_DEVICE_ID);
+        var derivedKey = ComputeDerivedSymmetricKey(Convert.FromBase64String(DPS_ENROLLMENT_CONNECTION_STRING), DESIRED_DEVICE_ID);
 
         using var security = new SecurityProviderSymmetricKey(
             DESIRED_DEVICE_ID,
@@ -37,8 +38,8 @@ public class DpsClient : IDpsClient
         using var transportHandler = GetTransportHandler();
 
         ProvisioningDeviceClient provClient = ProvisioningDeviceClient.Create(
-            GLOBAL_ENDPOINT,
-            ID_SCOPE,
+            _configuration["GLOBAL_ENDPOINT"],
+            _configuration["ID_SCOPE"],
             security,
             transportHandler);
 
