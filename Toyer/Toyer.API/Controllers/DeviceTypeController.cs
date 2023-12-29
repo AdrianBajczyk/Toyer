@@ -25,11 +25,11 @@ public class DeviceTypeController : ControllerBase
     /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateNewDeviceType([FromForm] DeviceTypeCreateDto newDeviceType)
+    public async Task<IActionResult> CreateNewDeviceTypeAsync([FromForm] DeviceTypeCreateDto newDeviceType)
     {
-        var createDeviceType = await _deviceTypeRepository.CreateDeviceTypeAsync(_mappings.DeviceTypeCreateDtoToDeviceType(newDeviceType));
+        var createdDeviceType = await _deviceTypeRepository.CreateDeviceTypeAsync(_mappings.DeviceTypeCreateDtoToDeviceType(newDeviceType));
 
-        return CreatedAtAction(nameof(CreateNewDeviceType), _mappings.DeviceTypeToDeviceTypePresentDto(createDeviceType));
+        return CreatedAtAction(nameof(createdDeviceType), _mappings.DeviceTypeToDeviceTypePresentDto(createdDeviceType));
     }
 
     /// <summary>
@@ -38,12 +38,27 @@ public class DeviceTypeController : ControllerBase
     [HttpGet("{deviceTypeId:int}")]
     [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetShortById([FromRoute] int deviceTypeId)
+    public async Task<IActionResult> GetDeviceTypeByIdAsync([FromRoute] int deviceTypeId)
     {
         var deviceType = await _deviceTypeRepository.GetDeviceTypeByIdAsync(deviceTypeId);
 
         return deviceType is null
             ? NotFound(new ErrorDetails { Message = "Device type not found" })
             : Ok(_mappings.DeviceTypeToDeviceTypePresentDto(deviceType));
+    }
+
+    /// <summary>
+    /// Gets info of all devices.
+    /// </summary>
+    [HttpGet]
+    [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllDeviceTypesAsync()
+    {
+        var deviceTypes = await _deviceTypeRepository.GetAllDeviceTypesAsync();
+
+        return deviceTypes is null
+            ? NotFound(new ErrorDetails { Message = "Device type not found" })
+            : Ok(_mappings.DeviceTypesToDeviceTypePresentDtos(deviceTypes));
     }
 }

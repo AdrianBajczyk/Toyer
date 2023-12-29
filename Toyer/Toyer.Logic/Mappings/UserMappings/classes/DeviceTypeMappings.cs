@@ -27,4 +27,9 @@ public class DeviceTypeMappings : IDeviceTypeMappings
     {
         return _mapper.Map<DeviceTypePresentDto>(deviceType);
     }
+    public IEnumerable<DeviceTypePresentDto> DeviceTypesToDeviceTypePresentDtos(IEnumerable<DeviceType> deviceTypes)
+    {
+        return _mapper.Map<IEnumerable<DeviceTypePresentDto>>(deviceTypes);
+    }
+
 }

@@ -17,7 +17,7 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
 
     public async Task<DeviceType?> CreateDeviceTypeAsync(DeviceType newDevice)
     {
-        await _dbContext.AddAsync(newDevice);
+        await _dbContext.DeviceTypes.AddAsync(newDevice);
         await _dbContext.SaveChangesAsync();
 
         return newDevice;
@@ -28,9 +28,9 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
         throw new NotImplementedException();
     }
 
-    public Task<DeviceType?> GetAllDeviceTypesAsync()
+    public async Task<ICollection<DeviceType>?> GetAllDeviceTypesAsync()
     {
-        throw new NotImplementedException();
+        return await _dbContext.DeviceTypes.ToListAsync();
     }
 
     public async Task<DeviceType?> GetDeviceTypeByIdAsync(int id)
