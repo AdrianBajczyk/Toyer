@@ -1,7 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Dtos.DeviceType;
-using Toyer.Logic.Dtos.User;
+using Toyer.Logic.Exceptions;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.API.Controllers;
@@ -22,7 +21,7 @@ public class DeviceTypeController : ControllerBase
     }
 
     /// <summary>
-    /// Creates account for new user
+    /// Creates new device type which ultimately is container for availble orders for speiffic device
     /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status201Created)]
@@ -31,5 +30,20 @@ public class DeviceTypeController : ControllerBase
         var createDeviceType = await _deviceTypeRepository.CreateDeviceTypeAsync(_mappings.DeviceTypeCreateDtoToDeviceType(newDeviceType));
 
         return CreatedAtAction(nameof(CreateNewDeviceType), _mappings.DeviceTypeToDeviceTypePresentDto(createDeviceType));
+    }
+
+    /// <summary>
+    /// Gets info of speciffic device type.
+    /// </summary>
+    [HttpGet("{deviceTypeId:int}")]
+    [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetShortById([FromRoute] int deviceTypeId)
+    {
+        var deviceType = await _deviceTypeRepository.GetDeviceTypeByIdAsync(deviceTypeId);
+
+        return deviceType is null
+            ? NotFound(new ErrorDetails { Message = "Device type not found" })
+            : Ok(_mappings.DeviceTypeToDeviceTypePresentDto(deviceType));
     }
 }

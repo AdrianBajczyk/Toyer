@@ -6,7 +6,6 @@ public record DeviceTypeCreateDto
 {
     [Required(ErrorMessage = "The name is required.")]
     [StringLength(20, ErrorMessage = "Login cannot exceed 20 characters.")]
-    [RegularExpression("^[A-Z][a-z]*$", ErrorMessage = "First letter has to be uppercase, the rest have to be lower case.")]
     public string Name { get; set; }
 
     [Required(ErrorMessage = "The description is required.")]

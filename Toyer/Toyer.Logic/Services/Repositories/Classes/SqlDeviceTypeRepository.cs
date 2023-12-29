@@ -1,4 +1,5 @@
-﻿using Toyer.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Toyer.Data.Context;
 using Toyer.Data.Entities;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
@@ -22,7 +23,7 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
         return newDevice;
     }
 
-    public Task<DeviceType?> DeleteDeviceTypeAsync(int Id)
+    public Task<DeviceType?> DeleteDeviceTypeAsync(int id)
     {
         throw new NotImplementedException();
     }
@@ -32,12 +33,12 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
         throw new NotImplementedException();
     }
 
-    public Task<DeviceType?> GetDeviceTypeByIdAsync(int Id)
+    public async Task<DeviceType?> GetDeviceTypeByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.DeviceTypes.FirstOrDefaultAsync(d => d.Id == id);
     }
 
-    public Task<DeviceType?> UpdateDeviceTypeAsync(DeviceType deviceTypeUpdateInfo, Guid Id)
+    public Task<DeviceType?> UpdateDeviceTypeAsync(DeviceType deviceTypeUpdateInfo, int id)
     {
         throw new NotImplementedException();
     }
