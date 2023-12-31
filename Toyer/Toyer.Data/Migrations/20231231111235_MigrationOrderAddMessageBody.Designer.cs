@@ -12,8 +12,8 @@ using Toyer.Data.Context;
 namespace Toyer.Data.Migrations
 {
     [DbContext(typeof(ToyerDbContext))]
-    [Migration("20231207102252_test")]
-    partial class test
+    [Migration("20231231111235_MigrationOrderAddMessageBody")]
+    partial class MigrationOrderAddMessageBody
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Toyer.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DeviceTypeOrder", b =>
+                {
+                    b.Property<int>("DeviceTypesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrdersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DeviceTypesId", "OrdersId");
+
+                    b.HasIndex("OrdersId");
+
+                    b.ToTable("DeviceTypeOrder");
+                });
 
             modelBuilder.Entity("Toyer.Data.Entities.Address", b =>
                 {
@@ -68,28 +83,17 @@ namespace Toyer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ApPass")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateOnly>("CreationDate")
+                        .HasColumnType("date");
 
-                    b.Property<string>("ApSsid")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeviceTypeId")
+                    b.Property<int>("DeviceTypeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastRegistrationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaPass")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaSsid")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("UserId")
@@ -123,6 +127,31 @@ namespace Toyer.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeviceTypes");
+                });
+
+            modelBuilder.Entity("Toyer.Data.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MessageBody")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.PersonalInfo", b =>
@@ -182,6 +211,21 @@ namespace Toyer.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("DeviceTypeOrder", b =>
+                {
+                    b.HasOne("Toyer.Data.Entities.DeviceType", null)
+                        .WithMany()
+                        .HasForeignKey("DeviceTypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Toyer.Data.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Toyer.Data.Entities.Address", b =>
                 {
                     b.HasOne("Toyer.Data.Entities.PersonalInfo", "PersonalInfo")
@@ -197,11 +241,14 @@ namespace Toyer.Data.Migrations
                 {
                     b.HasOne("Toyer.Data.Entities.DeviceType", "DeviceType")
                         .WithMany("Devices")
-                        .HasForeignKey("DeviceTypeId");
+                        .HasForeignKey("DeviceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Toyer.Data.Entities.User", "User")
                         .WithMany("Devices")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("DeviceType");
 

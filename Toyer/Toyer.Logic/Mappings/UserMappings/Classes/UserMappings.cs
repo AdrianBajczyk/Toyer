@@ -5,11 +5,11 @@ using Toyer.Logic.Dtos.User;
 
 namespace Toyer.Logic.Mappings.UserMappings.classes;
 
-public class UserControllerMappings : IUserControllerMapings
+public class UserMappings : IUserMapings
 {
     private readonly IMapper _mapper;
 
-    public UserControllerMappings(IMapper mapper)
+    public UserMappings(IMapper mapper)
     {
         _mapper = mapper;
     }

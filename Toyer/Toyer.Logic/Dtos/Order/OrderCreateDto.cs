@@ -14,7 +14,8 @@ public record OrderCreateDto
     [RegularExpression(@"(?:^[A-Z]|[.!?]\s+[A-Z])", ErrorMessage = "Check if every beginning of sentence is followed by capital letter.")]
     public string Description { get; set; }
 
-    [Required(ErrorMessage = "The device type/types are required.")]
-    [Display(Name = "Device Type IDs")]
-    public List<int> DeviceTypeId { get; set; } 
+    [Required(ErrorMessage = "The description is required.")]
+    [StringLength(60, ErrorMessage = "Message body cannot exceed 50 characters.")]
+    [Display(Name = "Message body")]
+    public string MessageBody { get; set; }
 }

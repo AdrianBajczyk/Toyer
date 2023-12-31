@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Toyer.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class MigrationOrderAddMessageBody : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,6 +26,21 @@ namespace Toyer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MessageBody = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -40,19 +55,39 @@ namespace Toyer.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DeviceTypeOrder",
+                columns: table => new
+                {
+                    DeviceTypesId = table.Column<int>(type: "int", nullable: false),
+                    OrdersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeviceTypeOrder", x => new { x.DeviceTypesId, x.OrdersId });
+                    table.ForeignKey(
+                        name: "FK_DeviceTypeOrder_DeviceTypes_DeviceTypesId",
+                        column: x => x.DeviceTypesId,
+                        principalTable: "DeviceTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DeviceTypeOrder_Order_OrdersId",
+                        column: x => x.OrdersId,
+                        principalTable: "Order",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Devices",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateOnly>(type: "date", nullable: false),
                     LastRegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    StaSsid = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StaPass = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApSsid = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApPass = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeviceTypeId = table.Column<int>(type: "int", nullable: true)
+                    DeviceTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,12 +96,14 @@ namespace Toyer.Data.Migrations
                         name: "FK_Devices_DeviceTypes_DeviceTypeId",
                         column: x => x.DeviceTypeId,
                         principalTable: "DeviceTypes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Devices_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,6 +169,11 @@ namespace Toyer.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DeviceTypeOrder_OrdersId",
+                table: "DeviceTypeOrder",
+                column: "OrdersId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersonalInfos_UserId",
                 table: "PersonalInfos",
                 column: "UserId",
@@ -148,10 +190,16 @@ namespace Toyer.Data.Migrations
                 name: "Devices");
 
             migrationBuilder.DropTable(
+                name: "DeviceTypeOrder");
+
+            migrationBuilder.DropTable(
                 name: "PersonalInfos");
 
             migrationBuilder.DropTable(
                 name: "DeviceTypes");
+
+            migrationBuilder.DropTable(
+                name: "Order");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -22,5 +22,7 @@ public static class ModelBuilderExtension
             .WithOne(d => d.User)
             .HasForeignKey(d => d.UserId)
             .OnDelete(DeleteBehavior.SetNull);
+
+
     }
 }

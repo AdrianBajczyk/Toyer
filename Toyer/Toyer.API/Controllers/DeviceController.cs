@@ -17,6 +17,8 @@ public class DeviceController : ControllerBase
         _deviceRepository = deviceRepository;
     }
 
-
+    ///<summary>
+    /// Create a new device and enroll it in Azure IoT hub. 
+    /// </summary>
 
 }

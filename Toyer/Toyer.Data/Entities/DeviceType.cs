@@ -6,5 +6,5 @@ public class DeviceType
     public string Name { get; set; }
     public string Description { get; set; }
     public ICollection<Device> Devices { get; set; } = new HashSet<Device>();
-    public ICollection<Orders> Orders { get; set; } = new HashSet<Orders>();
+    public ICollection<Order> Orders { get; set; } = new HashSet<Order>();
 }

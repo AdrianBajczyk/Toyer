@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Toyer.API.Controllers;
 using Toyer.API.Extensions;
 using Toyer.Data.Context;
 using Toyer.Data.Mappings;
 using Toyer.Logic.Mappings.UserMappings.classes;
+using Toyer.Logic.Services.DeviceMessaging;
 using Toyer.Logic.Services.Repositories.Classes;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
@@ -22,7 +24,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Toyer API",
-        Description = "Training project summarizing a year of learning in the CodeCool company course. " +
+        Description = "This is a training project summarizing a year of learning in the CodeCool company course. " +
         "Here you will find a ready-made API that supports remote control of toys powered by a microcontroller with a built-in Wi-Fi module. " +
         "Each user who has access to the aforementioned device with a unique serial code can create an account and register the device to be able to control it.",
         TermsOfService = new Uri("https://example.com/terms"),
@@ -45,8 +47,14 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
 builder.Services.AddScoped<IDeviceTypeRepository, SqlDeviceTypeRepository>();
-builder.Services.AddScoped<IUserControllerMapings, UserControllerMappings>();
+//builder.Services.AddScoped<IOrdersRepository, >();
+
+builder.Services.AddScoped<IUserMapings, UserMappings>();
 builder.Services.AddScoped<IDeviceTypeMappings, DeviceTypeMappings>();
+//builder.Services.AddScoped<IOrderMapper, >();
+
+builder.Services.AddSingleton<IDeviceMessageService, DeviceMessageService>();
+
 builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["AZURE_SQL_CONNECTIONSTRING"]));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
@@ -59,8 +67,7 @@ builder.Services.AddMvc(options =>
 
 var app = builder.Build();
 
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-app.ConfigureExceptionHandler(logger);
+app.ConfigureExceptionHandler(app.Services.GetRequiredService<ILogger<Program>>());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

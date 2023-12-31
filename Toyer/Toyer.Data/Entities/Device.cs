@@ -11,6 +11,6 @@ public class Device
     public Guid? UserId { get; set; }
     public User User { get; set; }
     public int DeviceTypeId { get; set; }
-    public User DeviceType { get; set; }
+    public DeviceType DeviceType { get; set; }
 
 }

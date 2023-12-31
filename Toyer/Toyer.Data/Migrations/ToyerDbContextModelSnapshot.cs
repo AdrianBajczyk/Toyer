@@ -22,6 +22,21 @@ namespace Toyer.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DeviceTypeOrder", b =>
+                {
+                    b.Property<int>("DeviceTypesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrdersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DeviceTypesId", "OrdersId");
+
+                    b.HasIndex("OrdersId");
+
+                    b.ToTable("DeviceTypeOrder");
+                });
+
             modelBuilder.Entity("Toyer.Data.Entities.Address", b =>
                 {
                     b.Property<Guid>("Id")
@@ -65,14 +80,8 @@ namespace Toyer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ApPass")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApSsid")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("CreationDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("DeviceTypeId")
                         .HasColumnType("int");
@@ -81,14 +90,6 @@ namespace Toyer.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaPass")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaSsid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -123,6 +124,31 @@ namespace Toyer.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeviceTypes");
+                });
+
+            modelBuilder.Entity("Toyer.Data.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MessageBody")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.PersonalInfo", b =>
@@ -180,6 +206,21 @@ namespace Toyer.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("DeviceTypeOrder", b =>
+                {
+                    b.HasOne("Toyer.Data.Entities.DeviceType", null)
+                        .WithMany()
+                        .HasForeignKey("DeviceTypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Toyer.Data.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.Address", b =>

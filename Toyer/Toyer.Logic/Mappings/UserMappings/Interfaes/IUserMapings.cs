@@ -3,7 +3,7 @@ using Toyer.Logic.Dtos.User;
 
 
 
-public interface IUserControllerMapings
+public interface IUserMapings
 {
     User UserCreateDtoToUser(UserCreateDto newUserDto);
     UserPresentLongDto UserToUserPresentLongDto(User createdUser);

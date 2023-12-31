@@ -12,10 +12,10 @@ namespace Toyer.API.Controllers;
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class UserController : ControllerBase
 {
-    private readonly IUserControllerMapings _mappings;
+    private readonly IUserMapings _mappings;
     private readonly IUserRepository _userRepository;
 
-    public UserController(IUserRepository userRepository, IUserControllerMapings mappings)
+    public UserController(IUserRepository userRepository, IUserMapings mappings)
     {
         _userRepository = userRepository;
         _mappings = mappings;
