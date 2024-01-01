@@ -7,5 +7,6 @@ namespace Toyer.API.Controllers
     {
         Order OrderCreateDtoToOrder(OrderCreateDto orderCreateDto);
         OrderPresentDto OrderToOrderPresentDto(Order createdOrder);
+        IEnumerable<OrderPresentDto> OrdersToOrderPresentDtos(IEnumerable<Order> orders);
     }
 }

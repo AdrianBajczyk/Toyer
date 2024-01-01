@@ -1,4 +1,5 @@
-﻿using Toyer.API.Controllers;
+﻿using Microsoft.EntityFrameworkCore;
+using Toyer.API.Controllers;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
 
@@ -19,4 +20,6 @@ public class SqlOrderRepository : IOrderRepository
 
         return order;
     }
+
+    public async Task<ICollection<Order>?> GetAllOrdersAsync() => await _dbContext.Orders.ToListAsync();
 }

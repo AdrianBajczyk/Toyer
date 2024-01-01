@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Dtos.Order;
+using Toyer.Logic.Exceptions;
 
 namespace Toyer.API.Controllers;
 
@@ -28,6 +29,21 @@ public class OrderController : ControllerBase
         var createdOrder = await _ordersRepository.CreateNewOrderAsync(_mappings.OrderCreateDtoToOrder(orderCreateDto));
 
         return CreatedAtAction(nameof(CreateOrderAsync), _mappings.OrderToOrderPresentDto(createdOrder));
+    }
+
+    ///<summary>
+    /// Gets all orders for all devices
+    /// </summary>
+    [HttpGet]
+    [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllOrdersAsync()
+    {
+        var allOrders = await _ordersRepository.GetAllOrdersAsync();
+
+        return allOrders is null
+            ? Accepted(new CustomResponse() { Message = "There are no orders in database yet.", StatusCode = 202 })
+            : Ok(_mappings.OrdersToOrderPresentDtos(allOrders));
     }
 
 }

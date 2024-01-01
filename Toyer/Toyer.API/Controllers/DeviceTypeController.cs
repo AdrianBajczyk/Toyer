@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Devices;
 using Toyer.Logic.Dtos.DeviceType;
 using Toyer.Logic.Exceptions;
 using Toyer.Logic.Services.Repositories.Interfaces;
@@ -38,28 +39,28 @@ public class DeviceTypeController : ControllerBase
     /// </summary>
     [HttpGet("{deviceTypeId:int}")]
     [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeviceTypeByIdAsync([FromRoute] int deviceTypeId)
     {
         var deviceType = await _deviceTypeRepository.GetDeviceTypeByIdAsync(deviceTypeId);
 
         return deviceType is null
-            ? NotFound(new ErrorDetails { Message = "Device type not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "Device type not found", StatusCode = 404 })
             : Ok(_mappings.DeviceTypeToDeviceTypePresentDto(deviceType));
     }
 
     /// <summary>
-    /// Gets info of all devices.
+    /// Gets info of all device types.
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status202Accepted)]
     public async Task<IActionResult> GetAllDeviceTypesAsync()
     {
         var deviceTypes = await _deviceTypeRepository.GetAllDeviceTypesAsync();
 
         return deviceTypes is null
-            ? NotFound(new ErrorDetails { Message = "Device type not found", StatusCode = 404 })
+            ? Accepted(new CustomResponse() { Message = "There are no device types in data base yet", StatusCode = 202 })
             : Ok(_mappings.DeviceTypesToDeviceTypePresentDtos(deviceTypes));
     }
 
@@ -68,13 +69,13 @@ public class DeviceTypeController : ControllerBase
     /// </summary>
     [HttpPut("{deviceTypeId:int}")]
     [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateDeviceTypeInfoAsync([FromRoute]int deviceTypeId, [FromForm]DeviceTypeCreateDto deviceUpdateDto)
     {
         var updatedDeviceType = await _deviceTypeRepository.UpdateDeviceTypeAsync(deviceTypeId, _mappings.DeviceTypeCreateDtoToDeviceType(deviceUpdateDto));
 
         return updatedDeviceType is null
-            ? NotFound(new ErrorDetails { Message = "Device type not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "Device type not found", StatusCode = 404 })
             : Ok(_mappings.DeviceTypeToDeviceTypePresentDto(updatedDeviceType));
     }
 
@@ -83,13 +84,13 @@ public class DeviceTypeController : ControllerBase
     /// </summary>
     [HttpDelete("{deviceTypeId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteDeviceTypeByIdAsync([FromRoute] int deviceTypeId)
     {
         var deletedDevice = await _deviceTypeRepository.DeleteDeviceTypeAsync(deviceTypeId);
 
         return deletedDevice is null
-            ? NotFound(new ErrorDetails { Message = "Device type not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "Device type not found", StatusCode = 404 })
             : Ok();
     }
 }

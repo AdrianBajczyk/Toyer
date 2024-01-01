@@ -26,13 +26,13 @@ public class UserController : ControllerBase
     /// </summary>
     [HttpGet("{userId:Guid}")]
     [ProducesResponseType(typeof(UserPresentShortDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetShortById([FromRoute] Guid userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
         return user is null
-            ? NotFound(new ErrorDetails { Message = "User not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.UserToUserPresentShortDto(user));
     }
 
@@ -41,13 +41,13 @@ public class UserController : ControllerBase
     /// </summary>
     [HttpGet("extended/{userId:Guid}")]
     [ProducesResponseType(typeof(UserPresentLongDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExtendedById([FromRoute] Guid userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
         return user is null 
-            ? NotFound(new ErrorDetails { Message = "User not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.UserToUserPresentLongDto(user));
     }
 
@@ -68,13 +68,13 @@ public class UserController : ControllerBase
     /// </summary>
     [HttpPut("Address/{userId:Guid}")]
     [ProducesResponseType(typeof(AddressDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateAddressById([FromRoute] Guid userId, [FromForm] AddressDto addressUpdatesDtoFromUser)
     {
         var updatedAddress = await _userRepository.UpdateAddressPatchAsync(userId, _mappings.AddressDtoToAddress(addressUpdatesDtoFromUser));
 
         return updatedAddress is null
-            ? NotFound(new ErrorDetails { Message = "User not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.AddressToAddressDto(updatedAddress));
     }
 
@@ -83,13 +83,13 @@ public class UserController : ControllerBase
     /// </summary>
     [HttpPut("PersonalInfo/{userId:guid}")]
     [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePersonalInfoById([FromRoute] Guid userId, [FromForm] PersonalInfoDto personalInfoDtoFromUser)
     {
         var updatedPersonalInfo = await _userRepository.UpdatePersonalInfoPatchAsync(userId, _mappings.PersonalInfoDtoToPersonalInfo(personalInfoDtoFromUser));
 
         return updatedPersonalInfo is null
-            ? NotFound(new ErrorDetails { Message = "User not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.PersonalInfoToPersonalInfoDto(updatedPersonalInfo));
     }
 
@@ -102,7 +102,7 @@ public class UserController : ControllerBase
         var deletedUser = await _userRepository.DeleteUserAsync(userId);
 
         return deletedUser is null
-            ? NotFound(new ErrorDetails { Message = "User not found.", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "User not found.", StatusCode = 404 })
             : Ok(_mappings.UserToUserPresentShortDto(deletedUser));
     }
 

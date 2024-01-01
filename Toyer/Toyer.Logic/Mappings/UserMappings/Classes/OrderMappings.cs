@@ -11,5 +11,6 @@ public class OrderMappings : IOrderMappings
 
     public OrderMappings(IMapper mapper) => _mapper = mapper;
     public Order OrderCreateDtoToOrder(OrderCreateDto orderCreateDto) => _mapper.Map<Order>(orderCreateDto);
+    public IEnumerable<OrderPresentDto> OrdersToOrderPresentDtos(IEnumerable<Order> orders) => _mapper.Map<IEnumerable<OrderPresentDto>>(orders);
     public OrderPresentDto OrderToOrderPresentDto(Order createdOrder) => _mapper.Map<OrderPresentDto>(createdOrder);
 }

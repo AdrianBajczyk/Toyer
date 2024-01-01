@@ -10,10 +10,7 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
 
     private readonly ToyerDbContext _dbContext;
 
-    public SqlDeviceTypeRepository(ToyerDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public SqlDeviceTypeRepository(ToyerDbContext dbContext) => _dbContext = dbContext;
 
     public async Task<DeviceType?> CreateDeviceTypeAsync(DeviceType newDevice)
     {
@@ -35,15 +32,9 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
         return deviceToDelete;
     }
 
-    public async Task<ICollection<DeviceType>?> GetAllDeviceTypesAsync()
-    {
-        return await _dbContext.DeviceTypes.ToListAsync();
-    }
+    public async Task<ICollection<DeviceType>?> GetAllDeviceTypesAsync() => await _dbContext.DeviceTypes.ToListAsync();
 
-    public async Task<DeviceType?> GetDeviceTypeByIdAsync(int id)
-    {
-        return await _dbContext.DeviceTypes.FirstOrDefaultAsync(d => d.Id == id);
-    }
+    public async Task<DeviceType?> GetDeviceTypeByIdAsync(int id) => await _dbContext.DeviceTypes.FirstOrDefaultAsync(d => d.Id == id);
 
     public async Task<DeviceType?> UpdateDeviceTypeAsync(int id, DeviceType deviceTypeUpdateInfo)
     {

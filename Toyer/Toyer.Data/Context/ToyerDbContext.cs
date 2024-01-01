@@ -11,6 +11,7 @@ public class ToyerDbContext(DbContextOptions<ToyerDbContext> options) : DbContex
     public DbSet<User> Users { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<PersonalInfo> PersonalInfos { get; set; }
+    public DbSet<Order> Orders { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
