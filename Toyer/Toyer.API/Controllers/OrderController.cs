@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Order;
 using Toyer.Logic.Exceptions;
 
@@ -31,12 +32,12 @@ public class OrderController : ControllerBase
         return CreatedAtAction(nameof(CreateOrderAsync), _mappings.OrderToOrderPresentDto(createdOrder));
     }
 
-    ///<summary>
+    /// <summary>
     /// Gets all orders for all devices
     /// </summary>
     [HttpGet]
-    [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(IEnumerable<OrderPresentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status202Accepted)]
     public async Task<IActionResult> GetAllOrdersAsync()
     {
         var allOrders = await _ordersRepository.GetAllOrdersAsync();
@@ -46,4 +47,33 @@ public class OrderController : ControllerBase
             : Ok(_mappings.OrdersToOrderPresentDtos(allOrders));
     }
 
+    /// <summary>
+    /// Gets order by id.
+    /// </summary>
+    [HttpGet("{orderId:int}")]
+    [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetOrderByIdAsync([FromRoute]int orderId)
+    {
+        var order = await _ordersRepository.GetOrderByIdAsync(orderId);
+
+        return order is null
+            ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = 404})
+            : Ok(_mappings.OrderToOrderPresentDto(order));
+    }
+
+    /// <summary>
+    /// Updates order by id.
+    /// </summary>
+    [HttpPut("{orderId:int}")]
+    [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateOrderByIdAsync([FromRoute] int orderId, [FromForm] OrderCreateDto orderUpdates)
+    {
+        var order = await _ordersRepository.UpdateOrderByIdAsync(orderId, orderUpdates);
+
+        return order is null
+            ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = 404 })
+            : Ok(_mappings.OrderToOrderPresentDto(order));
+    }
 }

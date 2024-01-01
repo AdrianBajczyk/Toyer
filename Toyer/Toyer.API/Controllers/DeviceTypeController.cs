@@ -53,7 +53,7 @@ public class DeviceTypeController : ControllerBase
     /// Gets info of all device types.
     /// </summary>
     [HttpGet]
-    [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<DeviceTypePresentDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status202Accepted)]
     public async Task<IActionResult> GetAllDeviceTypesAsync()
     {
