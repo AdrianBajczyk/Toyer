@@ -7,7 +7,9 @@ using Toyer.API.Extensions;
 using Toyer.Data.Context;
 using Toyer.Data.Mappings;
 using Toyer.Logic.Mappings.UserMappings.classes;
+using Toyer.Logic.Mappings.UserMappings.Classes;
 using Toyer.Logic.Services.DeviceMessaging;
+using Toyer.Logic.Services.DeviceProvisioningService;
 using Toyer.Logic.Services.Repositories.Classes;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
@@ -47,13 +49,14 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
 builder.Services.AddScoped<IDeviceTypeRepository, SqlDeviceTypeRepository>();
-//builder.Services.AddScoped<IOrdersRepository, >();
+builder.Services.AddScoped<IOrderRepository, SqlOrderRepository>();
 
 builder.Services.AddScoped<IUserMapings, UserMappings>();
 builder.Services.AddScoped<IDeviceTypeMappings, DeviceTypeMappings>();
-//builder.Services.AddScoped<IOrderMapper, >();
+builder.Services.AddScoped<IOrderMappings, OrderMappings>();
 
 builder.Services.AddSingleton<IDeviceMessageService, DeviceMessageService>();
+builder.Services.AddSingleton<IDpsClient, DpsClient>();
 
 builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["AZURE_SQL_CONNECTIONSTRING"]));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));

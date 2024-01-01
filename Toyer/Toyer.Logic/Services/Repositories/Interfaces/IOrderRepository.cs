@@ -2,7 +2,7 @@
 
 namespace Toyer.API.Controllers;
 
-public interface IOrdersRepository
+public interface IOrderRepository
 {
     Task<Order> CreateNewOrderAsync(Order order);
 }

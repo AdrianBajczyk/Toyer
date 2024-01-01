@@ -3,9 +3,9 @@ using Toyer.Logic.Dtos.Order;
 
 namespace Toyer.API.Controllers
 {
-    public interface IOrderMapper
+    public interface IOrderMappings
     {
-        Order OrderCreateDtoToOrder(OrderCreateDto orderPresentDto);
+        Order OrderCreateDtoToOrder(OrderCreateDto orderCreateDto);
         OrderPresentDto OrderToOrderPresentDto(Order createdOrder);
     }
 }

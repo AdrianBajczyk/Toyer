@@ -9,10 +9,10 @@ namespace Toyer.API.Controllers;
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class OrderController : ControllerBase
 {
-    private readonly IOrdersRepository _ordersRepository;
-    private readonly IOrderMapper _mappings;
+    private readonly IOrderRepository _ordersRepository;
+    private readonly IOrderMappings _mappings;
 
-    public OrderController(IOrdersRepository ordersRepository, IOrderMapper mapper)
+    public OrderController(IOrderRepository ordersRepository, IOrderMappings mapper)
     {
         _ordersRepository = ordersRepository;
         _mappings = mapper;
@@ -23,9 +23,9 @@ public class OrderController : ControllerBase
     /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateOrderAsync([FromForm] OrderCreateDto orderPresentDto)
+    public async Task<IActionResult> CreateOrderAsync([FromForm] OrderCreateDto orderCreateDto)
     {
-        var createdOrder = await _ordersRepository.CreateNewOrderAsync(_mappings.OrderCreateDtoToOrder(orderPresentDto));
+        var createdOrder = await _ordersRepository.CreateNewOrderAsync(_mappings.OrderCreateDtoToOrder(orderCreateDto));
 
         return CreatedAtAction(nameof(CreateOrderAsync), _mappings.OrderToOrderPresentDto(createdOrder));
     }

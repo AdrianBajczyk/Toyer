@@ -13,9 +13,9 @@ public class DpsClient : IDpsClient
 {
 
     private readonly IConfiguration _configuration;
-    private readonly ILogger _logger;
+    private readonly ILogger<DpsClient> _logger;
 
-    public DpsClient(ILogger logger, IConfiguration configuration)
+    public DpsClient(ILogger<DpsClient> logger, IConfiguration configuration)
     {
         _logger = logger;
         _configuration = configuration;

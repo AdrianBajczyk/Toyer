@@ -7,10 +7,10 @@ namespace Toyer.Logic.Services.DeviceMessaging;
 
 public class DeviceMessageService : IDeviceMessageService
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<DeviceMessageService> _logger;
     private readonly IConfiguration _configuration;
 
-    public DeviceMessageService(ILogger logger, IConfiguration configuration)
+    public DeviceMessageService(ILogger<DeviceMessageService> logger, IConfiguration configuration)
     {
         _logger = logger;
         _configuration = configuration;
