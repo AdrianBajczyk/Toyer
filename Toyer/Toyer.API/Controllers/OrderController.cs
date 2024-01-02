@@ -63,7 +63,7 @@ public class OrderController : ControllerBase
     }
 
     /// <summary>
-    /// Updates order by id.
+    /// Updates order credits by id.
     /// </summary>
     [HttpPut("{orderId:int}")]
     [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status200OK)]
@@ -76,4 +76,21 @@ public class OrderController : ControllerBase
             ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = 404 })
             : Ok(_mappings.OrderToOrderPresentDto(order));
     }
+
+    /// <summary>
+    /// Assigns order selected by id to device types listed by id.
+    /// </summary>
+    [HttpPut("assignment/{orderId:int}")]
+    [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AssignToDeviceTypes([FromRoute] int orderId, [FromForm] OrderAssignDto deviceTypeListIds)
+    {
+        var result = await _ordersRepository.AssignOrderToDeviceTypesAsync(orderId, deviceTypeListIds);
+
+        return !result.IsValid 
+            ? BadRequest(new CustomResponse { Message = result.ClientErrorMessage, StatusCode = 400 })
+            : Ok(_mappings.OrderToOrderPresentDto(result.Entity!));
+    }
+
+    
 }

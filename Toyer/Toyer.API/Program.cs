@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 using Toyer.API.Controllers;
 using Toyer.API.Extensions;
@@ -12,6 +13,7 @@ using Toyer.Logic.Services.DeviceMessaging;
 using Toyer.Logic.Services.DeviceProvisioningService;
 using Toyer.Logic.Services.Repositories.Classes;
 using Toyer.Logic.Services.Repositories.Interfaces;
+using Toyer.Logic.Services.Validations;
 
 
 var builder = WebApplication.CreateBuilder(args);

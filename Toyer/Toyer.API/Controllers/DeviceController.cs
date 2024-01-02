@@ -9,9 +9,9 @@ namespace Toyer.API.Controllers;
 public class DeviceController : ControllerBase
 {
     private readonly IMapper _mapper;
-    private readonly IDeviceRepository _deviceRepository;
+    private readonly IDeviceTypeRepository _deviceRepository;
 
-    public DeviceController(IMapper mapper, IDeviceRepository deviceRepository)
+    public DeviceController(IMapper mapper, IDeviceTypeRepository deviceRepository)
     {
         _mapper = mapper;
         _deviceRepository = deviceRepository;
