@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Toyer.Data.Entities;
+using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Dtos.DeviceType;
 using Toyer.Logic.Dtos.Order;
 using Toyer.Logic.Dtos.User;
@@ -24,5 +25,9 @@ public class AutoMapperProfiles : Profile
         CreateMap<Order, OrderCreateDto>().ReverseMap();
         CreateMap<Order, OrderPresentDto>().ReverseMap();
         CreateMap<Order, OrderAssignDto>().ReverseMap();
+
+        CreateMap<Device, DeviceCreateDto>().ReverseMap();
+        CreateMap<Device, DevicePresentDto>().ReverseMap();
+        CreateMap<Device, DeviceNameUpdateDto>().ReverseMap();
     }
 }
