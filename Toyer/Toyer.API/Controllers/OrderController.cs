@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Order;
 using Toyer.Logic.Exceptions;
 
@@ -92,5 +91,18 @@ public class OrderController : ControllerBase
             : Ok(_mappings.OrderToOrderPresentDto(result.Entity!));
     }
 
-    
+    /// <summary>
+    /// Deletes order selected by id.
+    /// </summary>
+    [HttpDelete("{orderId:int}")]
+    [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteOrderByIdAsync([FromRoute] int orderId)
+    {
+        var deletedOrder = await _ordersRepository.DeleteOrderByIdAsync(orderId);
+
+        return deletedOrder is null
+            ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = 404 })
+            : Ok(_mappings.OrderToOrderPresentDto(deletedOrder));
+    }
 }

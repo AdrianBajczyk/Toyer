@@ -37,6 +37,40 @@ public class SqlOrderRepository : IOrderRepository
         return new AssignmentResult<Order, int>(orderToAssign);
     }
 
+    public async Task<Order> CreateNewOrderAsync(Order order)
+    {
+        await _dbContext.AddAsync(order);
+        await _dbContext.SaveChangesAsync();
+
+        return order;
+    }
+    public async Task<ICollection<Order>?> GetAllOrdersAsync() => await _dbContext.Orders.Include(o => o.DeviceTypes).ToListAsync();
+    public async Task<Order?> GetOrderByIdAsync(int orderId) => await _dbContext.Orders.Include(o => o.DeviceTypes).FirstOrDefaultAsync(o => o.Id == orderId);
+    public async Task<Order?> UpdateOrderByIdAsync(int orderId, OrderCreateDto orderUpdates)
+    {
+        var orderToUpdate = await GetOrderByIdAsync(orderId);
+
+        if (orderToUpdate == null) return null;
+        if (orderUpdates.Name != null) orderToUpdate.Name = orderUpdates.Name;
+        if (orderUpdates.Description != null) orderToUpdate.Description = orderUpdates.Description;
+        if (orderUpdates.MessageBody != null) orderToUpdate.MessageBody = orderUpdates.MessageBody;
+
+        await _dbContext.SaveChangesAsync();
+
+        return orderToUpdate;
+    }
+
+    public async Task<Order?> DeleteOrderByIdAsync(int orderId)
+    {
+        var orderToDelete = await GetOrderByIdAsync(orderId);
+        if (orderToDelete == null) return null;
+
+        _dbContext.Orders.Remove(orderToDelete);
+        await _dbContext.SaveChangesAsync();
+
+        return orderToDelete;
+    }
+
     private static void PerformAssigment(List<int> deviceTypeIds, Order orderToAssign, ICollection<DeviceType> deviceTypes)
     {
         foreach (var deviceTypeId in deviceTypeIds)
@@ -59,7 +93,6 @@ public class SqlOrderRepository : IOrderRepository
 
         return nonExistentDeviceTypeIds.Count > 0 ? nonExistentDeviceTypeIds : null;
     }
-
     private static List<int>? CheckForDuplicatesInDb(List<int> deviceTypeIds, Order orderToAssign)
     {
         var duplicatedIds = new List<int>();
@@ -73,30 +106,5 @@ public class SqlOrderRepository : IOrderRepository
         }
 
         return duplicatedIds.Count > 0 ? duplicatedIds : null;
-    }
-
-    
-
-    public async Task<Order> CreateNewOrderAsync(Order order)
-    {
-        await _dbContext.AddAsync(order);
-        await _dbContext.SaveChangesAsync();
-
-        return order;
-    }
-    public async Task<ICollection<Order>?> GetAllOrdersAsync() => await _dbContext.Orders.Include(o => o.DeviceTypes).ToListAsync();
-    public async Task<Order?> GetOrderByIdAsync(int orderId) => await _dbContext.Orders.Include(o => o.DeviceTypes).FirstOrDefaultAsync(o => o.Id == orderId);
-    public async Task<Order?> UpdateOrderByIdAsync(int orderId, OrderCreateDto orderUpdates)
-    {
-        var orderToUpdate = await GetOrderByIdAsync(orderId);
-
-        if (orderToUpdate == null) return null;
-        if (orderUpdates.Name != null) orderToUpdate.Name = orderUpdates.Name;
-        if (orderUpdates.Description != null) orderToUpdate.Description = orderUpdates.Description;
-        if (orderUpdates.MessageBody != null) orderToUpdate.MessageBody = orderUpdates.MessageBody;
-
-        await _dbContext.SaveChangesAsync();
-
-        return orderToUpdate;
     }
 }

@@ -11,4 +11,5 @@ public interface IOrderRepository
     Task<ICollection<Order>?> GetAllOrdersAsync();
     Task<Order?> GetOrderByIdAsync(int orderId);
     Task<Order?> UpdateOrderByIdAsync(int orderId, OrderCreateDto orderUpdates);
+    Task<Order?> DeleteOrderByIdAsync(int orderId);
 }
