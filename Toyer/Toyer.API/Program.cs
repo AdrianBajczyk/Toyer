@@ -52,10 +52,12 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
 builder.Services.AddScoped<IDeviceTypeRepository, SqlDeviceTypeRepository>();
 builder.Services.AddScoped<IOrderRepository, SqlOrderRepository>();
+builder.Services.AddScoped<IDeviceRepository, SqlDeviceRepository>();
 
 builder.Services.AddScoped<IUserMapings, UserMappings>();
 builder.Services.AddScoped<IDeviceTypeMappings, DeviceTypeMappings>();
 builder.Services.AddScoped<IOrderMappings, OrderMappings>();
+builder.Services.AddScoped<IDeviceMappings, DeviceMappings>();
 
 builder.Services.AddSingleton<IDeviceMessageService, DeviceMessageService>();
 builder.Services.AddSingleton<IDpsClient, DpsClient>();

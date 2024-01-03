@@ -34,7 +34,7 @@ public class SqlDeviceTypeRepository : IDeviceTypeRepository
 
     public async Task<ICollection<DeviceType>?> GetAllDeviceTypesAsync() => await _dbContext.DeviceTypes.ToListAsync();
 
-    public async Task<DeviceType?> GetDeviceTypeByIdAsync(int id) => await _dbContext.DeviceTypes.FirstOrDefaultAsync(d => d.Id == id);
+    public async Task<DeviceType?> GetDeviceTypeByIdAsync(int id) => await _dbContext.DeviceTypes.Include(dt => dt.Orders).FirstOrDefaultAsync(d => d.Id == id);
 
     public async Task<DeviceType?> UpdateDeviceTypeAsync(int id, DeviceType deviceTypeUpdateInfo)
     {

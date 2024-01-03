@@ -29,9 +29,8 @@ public class DeviceTypeController : ControllerBase
     public async Task<IActionResult> CreateNewDeviceTypeAsync([FromForm] DeviceTypeCreateDto newDeviceType)
     {
         var createdDeviceType = await _deviceTypeRepository.CreateDeviceTypeAsync(_mappings.DeviceTypeCreateDtoToDeviceType(newDeviceType));
-        var result = _mappings.DeviceTypeToDeviceTypePresentDto(createdDeviceType!);
 
-        return CreatedAtAction(nameof(CreateNewDeviceTypeAsync), result);
+        return CreatedAtAction(nameof(CreateNewDeviceTypeAsync), _mappings.DeviceTypeToDeviceTypePresentDto(createdDeviceType!));
     }
 
     /// <summary>

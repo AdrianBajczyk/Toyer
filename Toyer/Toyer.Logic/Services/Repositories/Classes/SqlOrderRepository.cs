@@ -27,7 +27,7 @@ public class SqlOrderRepository : IOrderRepository
         var deviceTypeIds = deviceTypesToAssign.DeviceTypeIds;
         var exisitingDeviceTypes = await _deviceTypeRepository.GetAllDeviceTypesAsync();
 
-        var nonExistentDeviceTypeIds = CheckForNonExisitngIdsInDb(deviceTypeIds, exisitingDeviceTypes);
+        var nonExistentDeviceTypeIds = CheckForNonExisitngIds(deviceTypeIds, exisitingDeviceTypes);
         var duplicatedIds = CheckForDuplicatesInDb(deviceTypeIds, orderToAssign);
         if (duplicatedIds != null || nonExistentDeviceTypeIds != null) return new AssignmentResult<Order, int>(nonExistentDeviceTypeIds, duplicatedIds);
 
@@ -79,7 +79,7 @@ public class SqlOrderRepository : IOrderRepository
             orderToAssign.DeviceTypes.Add(deviceType!);
         }
     }
-    private static List<int>? CheckForNonExisitngIdsInDb(List<int> deviceTypeIds, ICollection<DeviceType>? deviceTypes)
+    private static List<int>? CheckForNonExisitngIds(List<int> deviceTypeIds, ICollection<DeviceType>? deviceTypes)
     {
         if (deviceTypes == null) return deviceTypeIds;
 
