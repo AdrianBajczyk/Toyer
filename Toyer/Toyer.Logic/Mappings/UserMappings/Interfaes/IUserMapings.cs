@@ -12,4 +12,5 @@ public interface IUserMapings
     Address AddressDtoToAddress(AddressDto addressDto);
     PersonalInfoDto PersonalInfoToPersonalInfoDto(PersonalInfo personalInfo);
     PersonalInfo PersonalInfoDtoToPersonalInfo(PersonalInfoDto personalInfoDto);
+    IEnumerable<UserPresentShortDto> UsersToUserPresentShortDtos(IEnumerable<User> users);
 }

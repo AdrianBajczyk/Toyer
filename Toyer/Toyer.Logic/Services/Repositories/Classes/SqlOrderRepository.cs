@@ -3,6 +3,7 @@ using Toyer.API.Controllers;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Order;
+using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Repositories.Interfaces;
 using Toyer.Logic.Services.Validations;
 
@@ -19,22 +20,30 @@ public class SqlOrderRepository : IOrderRepository
         _deviceTypeRepository = deviceTypeRepository;
     }
 
-    public async Task<AssignmentResult<Order, int>> AssignOrderToDeviceTypesAsync(int orderId, OrderAssignDto deviceTypesToAssign)
+    public async Task<CustomResponse> AssignOrderToDeviceTypesAsync(int orderId, OrderAssignDto deviceTypesToAssign)
     {
         var orderToAssign = await GetOrderByIdAsync(orderId);
-        if (orderToAssign == null) return new AssignmentResult<Order, int>();
+        if (orderToAssign == null) return new CustomResponse() { Message = "Order not found.", StatusCode = 404 };
 
         var deviceTypeIds = deviceTypesToAssign.DeviceTypeIds;
         var exisitingDeviceTypes = await _deviceTypeRepository.GetAllDeviceTypesAsync();
 
         var nonExistentDeviceTypeIds = CheckForNonExisitngIds(deviceTypeIds, exisitingDeviceTypes);
+        if (nonExistentDeviceTypeIds != null)
+        {
+            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", nonExistentDeviceTypeIds)}] to be assigned not found", StatusCode = 404 };
+        }
+
         var duplicatedIds = CheckForDuplicatesInDb(deviceTypeIds, orderToAssign);
-        if (duplicatedIds != null || nonExistentDeviceTypeIds != null) return new AssignmentResult<Order, int>(nonExistentDeviceTypeIds, duplicatedIds);
+        if (duplicatedIds != null )
+        {
+            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", duplicatedIds)}] has/have a member of given order" };
+        }
 
         PerformAssigment(deviceTypeIds, orderToAssign, exisitingDeviceTypes!);
         await _dbContext.SaveChangesAsync();
 
-        return new AssignmentResult<Order, int>(orderToAssign);
+        return new CustomResponse() { Message = $"Order has been assigned to: [{string.Join(",", deviceTypeIds)}] device type/s id/s", StatusCode = 200 };
     }
 
     public async Task<Order> CreateNewOrderAsync(Order order)

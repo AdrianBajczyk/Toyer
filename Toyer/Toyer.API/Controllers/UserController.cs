@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Toyer.Data.Entities;
+using Toyer.Logic.Dtos.Order;
 using Toyer.Logic.Dtos.User;
-using Toyer.Logic.Exceptions;
+using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Repositories.Interfaces;
+using Toyer.Logic.Services.Validations;
 
 namespace Toyer.API.Controllers;
 
@@ -35,6 +36,20 @@ public class UserController : ControllerBase
             ? NotFound(new CustomResponse { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.UserToUserPresentShortDto(user));
     }
+    /// <summary>
+    /// Gets all users.
+    /// </summary>
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<UserPresentShortDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status202Accepted)]
+    public async Task<IActionResult> GetUsersAsync()
+    {
+        var allUsers = await _userRepository.GetUsersAsync();
+
+        return !allUsers.Any()
+            ? Accepted(new CustomResponse() { Message = "No users in database yet.", StatusCode = 202 })
+            : Ok(_mappings.UsersToUserPresentShortDtos(allUsers));
+    }
 
     /// <summary>
     /// Gets account info for authorized user.
@@ -46,7 +61,7 @@ public class UserController : ControllerBase
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
-        return user is null 
+        return user is null
             ? NotFound(new CustomResponse { Message = "User not found", StatusCode = 404 })
             : Ok(_mappings.UserToUserPresentLongDto(user));
     }
@@ -97,6 +112,8 @@ public class UserController : ControllerBase
     /// Deletes account of existing user
     /// </summary>
     [HttpDelete("{userId:Guid}")]
+    [ProducesResponseType(typeof(UserPresentShortDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteUserById([FromRoute] Guid userId)
     {
         var deletedUser = await _userRepository.DeleteUserAsync(userId);
@@ -106,5 +123,20 @@ public class UserController : ControllerBase
             : Ok(_mappings.UserToUserPresentShortDto(deletedUser));
     }
 
-}
+    ///<summary>
+    /// Assigns device to user.
+    /// </summary>
+    [HttpPut("{userId:Guid}")]
+    [ProducesResponseType(typeof(UserPresentLongDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AssignDeviceToUserAsync([FromRoute] Guid userId, [FromForm] Guid deviceId)
+    {
+        var result = await _userRepository.AssignDeviceToUserAsync(userId, deviceId);
 
+        return result.StatusCode == 200
+            ? Ok(result)
+            : new ObjectResult(result);
+    }
+
+}

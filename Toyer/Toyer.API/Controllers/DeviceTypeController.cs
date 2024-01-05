@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Devices;
 using Toyer.Logic.Dtos.DeviceType;
-using Toyer.Logic.Exceptions;
+using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.API.Controllers;

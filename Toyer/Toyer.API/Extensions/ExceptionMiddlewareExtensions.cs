@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
-using Toyer.Logic.Exceptions;
+using Toyer.Logic.Responses;
 
 namespace Toyer.API.Extensions;
 

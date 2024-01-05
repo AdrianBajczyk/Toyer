@@ -21,29 +21,32 @@ public class DpsClient : IDpsClient
         _configuration = configuration;
     }
 
-    public async Task RegisterDevice(Guid id, string subsectionKeyName)
+    public async Task RegisterDevice(Guid id, string pkSubsection)
     {
         _logger.LogInformation("Initializing the device provisioning client...");
 
-        string DESIRED_DEVICE_ID = id.ToString();
-        string DPS_ENROLLMENT_CONNECTION_STRING = _configuration.GetRequiredSection($"DPS_CONFIG:PRIMARY_KEY:{subsectionKeyName}").Value!;
+        string desiredDeviceId = id.ToString();
+        string dpsEnrollmentPrimaryKey = _configuration[$"DpsConfig:PrimaryKey:{pkSubsection}"];
+        string dpsGlobalEndpoint = _configuration["DpsConfig:GlobalEndpoint"];
+        string dpsIdScope = _configuration["DpsConfig:IdScope"];
 
-        var derivedKey = ComputeDerivedSymmetricKey(Convert.FromBase64String(DPS_ENROLLMENT_CONNECTION_STRING), DESIRED_DEVICE_ID);
+        var derivedKey = ComputeDerivedSymmetricKey(Convert.FromBase64String(dpsEnrollmentPrimaryKey), desiredDeviceId);
 
         using var security = new SecurityProviderSymmetricKey(
-            DESIRED_DEVICE_ID,
+            desiredDeviceId,
             derivedKey,
             null);
 
         using var transportHandler = GetTransportHandler();
 
         ProvisioningDeviceClient provClient = ProvisioningDeviceClient.Create(
-            _configuration["GLOBAL_ENDPOINT"],
-            _configuration["ID_SCOPE"],
+            dpsGlobalEndpoint,
+            dpsIdScope,
             security,
             transportHandler);
 
         _logger.LogInformation($"Initialized for device Id {security.GetRegistrationID()}.");
+        _logger.LogInformation(security.GetPrimaryKey());
 
         _logger.LogInformation("Registering with the device provisioning service...");
         try
@@ -64,16 +67,14 @@ public class DpsClient : IDpsClient
                 result.DeviceId,
                 security.GetPrimaryKey());
 
+            
             _logger.LogInformation($"Testing the provisioned device with IoT Hub...");
             using DeviceClient iotClient = DeviceClient.Create(result.AssignedHub, auth, TransportType.Mqtt);
 
-            _logger.LogInformation("Sending a telemetry message...");
-            using var message = new Message(Encoding.UTF8.GetBytes("TestMessage"));
-            await iotClient.SendEventAsync(message);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex.ToString());
         }
 
         _logger.LogInformation("Finished...");

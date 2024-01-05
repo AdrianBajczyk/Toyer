@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Toyer.Logic.Exceptions;
+namespace Toyer.Logic.Responses;
 
 public class CustomResponse
 {

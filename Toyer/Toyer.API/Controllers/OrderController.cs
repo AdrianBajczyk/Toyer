@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Dtos.Order;
-using Toyer.Logic.Exceptions;
+using Toyer.Logic.Responses;
 
 namespace Toyer.API.Controllers;
 
@@ -77,18 +77,18 @@ public class OrderController : ControllerBase
     }
 
     /// <summary>
-    /// Assigns order selected by id to device types listed by id.
+    /// Assigns order to device types.
     /// </summary>
     [HttpPut("assignment/{orderId:int}")]
-    [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> AssignToDeviceTypes([FromRoute] int orderId, [FromForm] OrderAssignDto deviceTypeListIds)
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AssignToDeviceTypesAsync([FromRoute] int orderId, [FromForm] OrderAssignDto deviceTypeListIds)
     {
         var result = await _ordersRepository.AssignOrderToDeviceTypesAsync(orderId, deviceTypeListIds);
 
-        return !result.IsValid 
-            ? BadRequest(new CustomResponse { Message = result.ClientErrorMessage, StatusCode = 400 })
-            : Ok(_mappings.OrderToOrderPresentDto(result.Entity!));
+        return result.StatusCode == 200
+            ? Ok(result)
+            : NotFound(result);
     }
 
     /// <summary>

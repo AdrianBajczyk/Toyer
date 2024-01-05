@@ -40,4 +40,5 @@ public class UserMappings : IUserMapings
     public Address AddressDtoToAddress(AddressDto addressDto) => _mapper.Map<Address>(addressDto);
     public PersonalInfoDto PersonalInfoToPersonalInfoDto(PersonalInfo personalInfo) => _mapper.Map<PersonalInfoDto>(personalInfo);
     public PersonalInfo PersonalInfoDtoToPersonalInfo(PersonalInfoDto personalInfoDto) => _mapper.Map<PersonalInfo>(personalInfoDto);
+    public IEnumerable<UserPresentShortDto> UsersToUserPresentShortDtos(IEnumerable<User> users) => _mapper.Map<IEnumerable<UserPresentShortDto>>(users);
 }

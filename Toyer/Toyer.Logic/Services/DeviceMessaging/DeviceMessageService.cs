@@ -15,11 +15,14 @@ public class DeviceMessageService : IDeviceMessageService
         _logger = logger;
         _configuration = configuration;
     }
-    public async Task SendCloudToDeviceMessageAsync(Guid targetDevice, string message)
+    public async Task SendCloudToDeviceMessageAsync(Guid targetDeviceId, string message)
     {
-        ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(_configuration.GetConnectionString("AZURE_IOT_HUB_SERVICE_CONNECTIONSTRING"));
+        var azureIotHubServiceConnectionstring = _configuration["AzureIotHubServiceConnectionstring"];
+
+        ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(azureIotHubServiceConnectionstring);
         var commandMessage = new Message(Encoding.ASCII.GetBytes(message));
-        await serviceClient.SendAsync(targetDevice.ToString(), commandMessage);
+        await serviceClient.SendAsync(targetDeviceId.ToString(), commandMessage);
+        
     }
 
 
