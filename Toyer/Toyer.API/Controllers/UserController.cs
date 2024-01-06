@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Toyer.Logic.Dtos.Order;
 using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Repositories.Interfaces;
-using Toyer.Logic.Services.Validations;
 
 namespace Toyer.API.Controllers;
 

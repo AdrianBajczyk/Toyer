@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 using Toyer.API.Controllers;
 using Toyer.API.Extensions;
@@ -13,7 +11,6 @@ using Toyer.Logic.Services.DeviceMessaging;
 using Toyer.Logic.Services.DeviceProvisioningService;
 using Toyer.Logic.Services.Repositories.Classes;
 using Toyer.Logic.Services.Repositories.Interfaces;
-using Toyer.Logic.Services.Validations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,7 +59,7 @@ builder.Services.AddScoped<IDeviceMappings, DeviceMappings>();
 builder.Services.AddSingleton<IDeviceMessageService, DeviceMessageService>();
 builder.Services.AddSingleton<IDpsClient, DpsClient>();
 
-builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["AZURE_SQL_CONNECTIONSTRING"]));
+builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["AzureSqlConnectionstring"]));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 

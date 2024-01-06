@@ -1,8 +1,5 @@
 ﻿using Toyer.Data.Entities;
-using Toyer.Logic.Dtos.Device;
-using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Responses;
-using Toyer.Logic.Services.Validations;
 
 namespace Toyer.Logic.Services.Repositories.Interfaces;
 

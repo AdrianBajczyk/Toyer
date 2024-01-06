@@ -9,9 +9,15 @@ public class ToyerContextFactory : IDesignTimeDbContextFactory<ToyerDbContext>
 
     public ToyerDbContext CreateDbContext(string[] args)
     {
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddUserSecrets<ToyerContextFactory>() 
+                .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<ToyerDbContext>();
-        optionsBuilder.UseSqlServer("Server=tcp:adrianbajczyk.database.windows.net,1433;Initial Catalog=Toyer;Persist Security Info=False;User ID=Adrian_Bajczyk;Password=SkonfigurowanoNaAmen1221;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        var connectionString = configuration["AzureSqlConnectionstring"];
+        Console.WriteLine($"Connection String: {connectionString}");
+        optionsBuilder.UseSqlServer(connectionString);
 
         return new ToyerDbContext(optionsBuilder.Options);
     }

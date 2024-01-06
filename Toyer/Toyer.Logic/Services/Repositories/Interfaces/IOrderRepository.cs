@@ -1,7 +1,6 @@
 ﻿using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Order;
 using Toyer.Logic.Responses;
-using Toyer.Logic.Services.Validations;
 
 namespace Toyer.API.Controllers;
 
