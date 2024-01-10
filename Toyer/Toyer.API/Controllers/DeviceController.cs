@@ -41,7 +41,7 @@ public class DeviceController : ControllerBase
     /// Sends chosen order to the device
     /// </summary>
     [HttpPost("{deviceId:guid}/command/{orderId:int}")]
-    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status202Accepted)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SendOrderToDeviceById([FromRoute] Guid deviceId, [FromRoute] int orderId )
     {
@@ -49,7 +49,7 @@ public class DeviceController : ControllerBase
 
         return response.StatusCode != 202
             ? NotFound(new CustomResponse() { Message = response.Message, StatusCode = response.StatusCode })
-            : Accepted(response);
+            : Ok(response);
     }
 
     /// <summary>

@@ -1,13 +1,11 @@
-﻿namespace Toyer.Data.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class User
+namespace Toyer.Data.Entities;
+
+public class User : IdentityUser
 {
-    public Guid Id { get; set; }
-    public string Login { get; set; }
-    public string Password { get; set; }
     public DateTime AccCreationDate { get; set; } = DateTime.Now;
 
-    public ICollection<Device> Devices { get; set; } = new HashSet<Device>();
-
+    public ICollection<string> DevicesFKs { get; set; } = new HashSet<string>();
     public PersonalInfo? PersonalInfo { get; set; }
 }
