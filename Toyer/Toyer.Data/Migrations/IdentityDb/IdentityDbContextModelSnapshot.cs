@@ -221,7 +221,7 @@ namespace Toyer.Data.Migrations.IdentityDb
                     b.HasIndex("PersonalInfoId")
                         .IsUnique();
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.PersonalInfo", b =>
@@ -250,7 +250,7 @@ namespace Toyer.Data.Migrations.IdentityDb
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("PersonalInfos");
+                    b.ToTable("PersonalInfos", (string)null);
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.User", b =>

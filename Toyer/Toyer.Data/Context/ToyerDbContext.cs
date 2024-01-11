@@ -9,6 +9,7 @@ public class ToyerDbContext(DbContextOptions<ToyerDbContext> options) : DbContex
     public DbSet<Device> Devices { get; set; }
     public DbSet<DeviceType> DeviceTypes { get; set; }
     public DbSet<Order> Orders { get; set; }
+    public DbSet<UserDevices> UsersDevices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

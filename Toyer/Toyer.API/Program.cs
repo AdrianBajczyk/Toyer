@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 using Toyer.API.Controllers;
@@ -22,7 +21,6 @@ using Toyer.Logic.Services.Repositories.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
@@ -56,6 +54,7 @@ builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
 builder.Services.AddScoped<IDeviceTypeRepository, SqlDeviceTypeRepository>();
 builder.Services.AddScoped<IOrderRepository, SqlOrderRepository>();
 builder.Services.AddScoped<IDeviceRepository, SqlDeviceRepository>();
+builder.Services.AddScoped<IDeviceAssignRepository, SqlDeviceAssignRepository>();
 
 builder.Services.AddScoped<IUserMapings, UserMappings>();
 builder.Services.AddScoped<IDeviceTypeMappings, DeviceTypeMappings>();
@@ -66,17 +65,17 @@ builder.Services.AddSingleton<IDeviceMessageService, DeviceMessageService>();
 builder.Services.AddSingleton<IDpsClient, DpsClient>();
 
 builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["ToyerLocalConnectionstring"]));
-
 builder.Services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(builder.Configuration["ToyerIdentityLocalConnectionstring"]));
+
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
     options.User.RequireUniqueEmail = true;
-    options.Password.RequireDigit = false;
+    options.Password.RequireDigit = true;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
 })
     .AddEntityFrameworkStores<UsersDbContext>()
     .AddDefaultTokenProviders();
@@ -114,7 +113,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseDeveloperExceptionPage();
+    //app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();

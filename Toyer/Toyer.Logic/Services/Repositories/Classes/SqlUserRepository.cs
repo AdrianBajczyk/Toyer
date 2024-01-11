@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
-using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories.Classes;
@@ -14,7 +12,7 @@ public class SqlUserRepository : IUserRepository
     private readonly UsersDbContext _dbContext;
     private readonly UserManager<User> _userManager;
 
-    public SqlUserRepository(UsersDbContext usersDbContext,IDeviceRepository deviceRepository, UserManager<User> userManager)
+    public SqlUserRepository(UsersDbContext usersDbContext, UserManager<User> userManager)
     {
         _dbContext = usersDbContext;
         _userManager = userManager;

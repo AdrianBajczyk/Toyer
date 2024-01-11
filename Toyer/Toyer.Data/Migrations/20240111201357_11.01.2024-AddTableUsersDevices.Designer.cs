@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Toyer.Data.Context;
 
@@ -11,9 +12,11 @@ using Toyer.Data.Context;
 namespace Toyer.Data.Migrations
 {
     [DbContext(typeof(ToyerDbContext))]
-    partial class ToyerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240111201357_11.01.2024-AddTableUsersDevices")]
+    partial class _11012024AddTableUsersDevices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Toyer.Data.Migrations
 
                     b.HasIndex("OrdersId");
 
-                    b.ToTable("DeviceTypeOrder", (string)null);
+                    b.ToTable("DeviceTypeOrder");
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.Device", b =>
@@ -63,7 +66,7 @@ namespace Toyer.Data.Migrations
 
                     b.HasIndex("DeviceTypeId");
 
-                    b.ToTable("Devices", (string)null);
+                    b.ToTable("Devices");
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.DeviceType", b =>
@@ -84,7 +87,7 @@ namespace Toyer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeviceTypes", (string)null);
+                    b.ToTable("DeviceTypes");
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.Order", b =>
@@ -109,7 +112,7 @@ namespace Toyer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.UserDevices", b =>
@@ -123,7 +126,7 @@ namespace Toyer.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UsersDevices", (string)null);
+                    b.ToTable("UsersDevices");
                 });
 
             modelBuilder.Entity("DeviceTypeOrder", b =>

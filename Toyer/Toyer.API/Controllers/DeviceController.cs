@@ -43,7 +43,7 @@ public class DeviceController : ControllerBase
     [HttpPost("{deviceId:guid}/command/{orderId:int}")]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> SendOrderToDeviceById([FromRoute] Guid deviceId, [FromRoute] int orderId )
+    public async Task<IActionResult> SendOrderToDeviceById([FromRoute] string deviceId, [FromRoute] int orderId )
     {
         var response = await _deviceRepository.SendOrderToDevice(deviceId, orderId);
 
@@ -55,10 +55,10 @@ public class DeviceController : ControllerBase
     /// <summary>
     /// Get device by id.
     /// </summary>
-    [HttpGet("{deviceId:Guid}")]
+    [HttpGet("{deviceId}")]
     [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDeviceByIdAsync([FromRoute] Guid deviceId)
+    public async Task<IActionResult> GetDeviceByIdAsync([FromRoute] string deviceId)
     {
         var device = await _deviceRepository.GetDeviceByIdAsync(deviceId);
 
@@ -70,10 +70,10 @@ public class DeviceController : ControllerBase
     /// <summary>
     /// Updates device name by id.
     /// </summary>
-    [HttpPut("{deviceId:Guid}")]
+    [HttpPut("{deviceId}")]
     [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatedDeviceNameByIdAsync([FromRoute] Guid deviceId, [FromForm]DeviceNameUpdateDto nameUpdate)
+    public async Task<IActionResult> UpdatedDeviceNameByIdAsync([FromRoute] string deviceId, [FromForm]DeviceNameUpdateDto nameUpdate)
     {
         var updatedDevice = await _deviceRepository.UpdateDeviceNameAsync(deviceId, nameUpdate.Name);
 
@@ -85,10 +85,10 @@ public class DeviceController : ControllerBase
     /// <summary>
     /// Deletes device by id.
     /// </summary>
-    [HttpDelete("{deviceId:guid}")]
+    [HttpDelete("{deviceId}")]
     [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteDeviceByIdAsync([FromRoute] Guid deviceId)
+    public async Task<IActionResult> DeleteDeviceByIdAsync([FromRoute] string deviceId)
     {
         var deletedDevice = await _deviceRepository.DeleteDeviceByIdAsync(deviceId);
 

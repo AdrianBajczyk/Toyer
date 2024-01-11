@@ -40,13 +40,13 @@ public class SqlDeviceRepository : IDeviceRepository
 
         await _dbContext.Devices.AddAsync(newDevice);
 
-        await _dpsClient.RegisterDevice(newDevice.Id, newDevice.DeviceType.Name);
-        //await _dbContext.SaveChangesAsync();
+        await _dpsClient.RegisterDevice(newDevice.Id.ToString(), newDevice.DeviceType.Name);
+        await _dbContext.SaveChangesAsync();
 
         return newDevice;
     }
 
-    public async Task<Device?> DeleteDeviceByIdAsync(Guid deviceId)
+    public async Task<Device?> DeleteDeviceByIdAsync(string deviceId)
     {
         var deviceToDelete = await GetDeviceByIdAsync(deviceId);
         if (deviceToDelete == null) return null;
@@ -57,9 +57,9 @@ public class SqlDeviceRepository : IDeviceRepository
         return deviceToDelete;
     }
 
-    public async Task<Device?> GetDeviceByIdAsync(Guid deviceId) => await _dbContext.Devices.FirstOrDefaultAsync(d => d.Id == deviceId);
+    public async Task<Device?> GetDeviceByIdAsync(string deviceId) => await _dbContext.Devices.FirstOrDefaultAsync(d => d.Id.ToString() == deviceId);
 
-    public async Task<CustomResponse> SendOrderToDevice(Guid deviceId, int orderId)
+    public async Task<CustomResponse> SendOrderToDevice(string deviceId, int orderId)
     {
         var orderMessage = await _orderRepository.GetOrderByIdAsync(orderId);
         if (orderMessage == null) return new CustomResponse() { Message = "Order not found.", StatusCode = "404" };
@@ -72,7 +72,7 @@ public class SqlDeviceRepository : IDeviceRepository
     }
 
 
-    public async Task<Device?> UpdateDeviceNameAsync(Guid deviceId, string nameUpdateDto)
+    public async Task<Device?> UpdateDeviceNameAsync(string deviceId, string nameUpdateDto)
     {
         var device = await GetDeviceByIdAsync(deviceId);
         if (device == null) return null;

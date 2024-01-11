@@ -36,18 +36,18 @@ public class SqlOrderRepository : IOrderRepository
         var duplicatedIds = CheckForDuplicatesInDb(deviceTypeIds, orderToAssign);
         if (duplicatedIds != null )
         {
-            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", duplicatedIds)}] has/have a member of given order" };
+            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", duplicatedIds)}] has/have a member of given order", StatusCode = "400" };
         }
 
         PerformAssigment(deviceTypeIds, orderToAssign, exisitingDeviceTypes!);
         await _dbContext.SaveChangesAsync();
 
-        return new CustomResponse() { Message = $"Order has been assigned to: [{string.Join(",", deviceTypeIds)}] device type/s id/s", StatusCode = "404" };
+        return new CustomResponse() { Message = $"Order has been assigned to: [{string.Join(",", deviceTypeIds)}] device type/s id/s", StatusCode = "200" };
     }
 
     public async Task<Order> CreateNewOrderAsync(Order order)
     {
-        await _dbContext.AddAsync(order);
+        await _dbContext.Orders.AddAsync(order);
         await _dbContext.SaveChangesAsync();
 
         return order;
