@@ -6,6 +6,6 @@ public class User : IdentityUser
 {
     public DateTime AccCreationDate { get; set; } = DateTime.Now;
 
-    public ICollection<string> DevicesFKs { get; set; } = new HashSet<string>();
+    public List<string> DevicesFKs { get; set; } = new();
     public PersonalInfo? PersonalInfo { get; set; }
 }

@@ -62,13 +62,13 @@ public class SqlDeviceRepository : IDeviceRepository
     public async Task<CustomResponse> SendOrderToDevice(Guid deviceId, int orderId)
     {
         var orderMessage = await _orderRepository.GetOrderByIdAsync(orderId);
-        if (orderMessage == null) return new CustomResponse() { Message = "Order not found.", StatusCode = 404 };
+        if (orderMessage == null) return new CustomResponse() { Message = "Order not found.", StatusCode = "404" };
 
         var device = await GetDeviceByIdAsync(deviceId);
-        if (device == null) return new CustomResponse() { Message = "Device nont found.", StatusCode = 404 };
+        if (device == null) return new CustomResponse() { Message = "Device nont found.", StatusCode = "404" };
 
         await _messageService.SendCloudToDeviceMessageAsync(deviceId, orderMessage.MessageBody);
-        return new CustomResponse() { Message = "Accepted", StatusCode = 202 };
+        return new CustomResponse() { Message = "Order send.", StatusCode = "200" };
     }
 
 

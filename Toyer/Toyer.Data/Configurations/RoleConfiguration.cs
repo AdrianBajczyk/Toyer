@@ -27,7 +27,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
         new IdentityRole
         {
             Name = "RegisteredUser",
-            NormalizedName = "REGISTERED_USER"
+            NormalizedName = "REGISTEREDUSER"
         });
     }
 }

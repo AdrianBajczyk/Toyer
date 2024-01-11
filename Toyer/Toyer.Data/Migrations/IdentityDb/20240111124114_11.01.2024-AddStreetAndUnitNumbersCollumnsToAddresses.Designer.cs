@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Toyer.Data.Context;
 
@@ -11,9 +12,11 @@ using Toyer.Data.Context;
 namespace Toyer.Data.Migrations.IdentityDb
 {
     [DbContext(typeof(UsersDbContext))]
-    partial class IdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240111124114_11.01.2024-AddStreetAndUnitNumbersCollumnsToAddresses")]
+    partial class _11012024AddStreetAndUnitNumbersCollumnsToAddresses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,25 +54,25 @@ namespace Toyer.Data.Migrations.IdentityDb
                     b.HasData(
                         new
                         {
-                            Id = "d5c2bc5b-7b3a-44e8-b4b3-0481ebb33cf3",
+                            Id = "8b3cd2e7-61d9-4a6a-b815-cc46269abf2f",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         },
                         new
                         {
-                            Id = "6fd98fa6-0f3b-4681-86ba-5f9960626c01",
+                            Id = "678021dd-4e87-4670-9aa8-58a7ee636b36",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "7acb8de1-609c-4330-9f42-1a4220dc0030",
+                            Id = "5aa52265-8695-492d-817f-d958fa91925c",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "8106e8a8-9bf1-4cff-bef5-6dbb128cce01",
+                            Id = "0d534034-598b-4c4d-8aa1-8ad90176352b",
                             Name = "RegisteredUser",
                             NormalizedName = "REGISTEREDUSER"
                         });
@@ -209,12 +212,6 @@ namespace Toyer.Data.Migrations.IdentityDb
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StreetNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UnitNumber")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

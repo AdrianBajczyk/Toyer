@@ -33,7 +33,7 @@ public class DeviceController : ControllerBase
         var createdDevice = await _deviceRepository.CreateNewDeviceAsync(deviceCreateDto.DeviceTypeId);
 
         return createdDevice is null
-            ? NotFound(new CustomResponse() { Message = "Device type not found.", StatusCode = 404})
+            ? NotFound(new CustomResponse() { Message = "Device type not found.", StatusCode = "404" })
             : CreatedAtAction(nameof(CreateNewDeviceAsync), _mappings.DeviceToDevicePresentDto(createdDevice));
     }
 
@@ -47,7 +47,7 @@ public class DeviceController : ControllerBase
     {
         var response = await _deviceRepository.SendOrderToDevice(deviceId, orderId);
 
-        return response.StatusCode != 202
+        return response.StatusCode != "200"
             ? NotFound(new CustomResponse() { Message = response.Message, StatusCode = response.StatusCode })
             : Ok(response);
     }
@@ -63,7 +63,7 @@ public class DeviceController : ControllerBase
         var device = await _deviceRepository.GetDeviceByIdAsync(deviceId);
 
         return device is null
-            ? NotFound(new CustomResponse() { Message = "Device not found.", StatusCode = 404})
+            ? NotFound(new CustomResponse() { Message = "Device not found.", StatusCode = "404" })
             : Ok(_mappings.DeviceToDevicePresentDto(device));
     }
 
@@ -78,7 +78,7 @@ public class DeviceController : ControllerBase
         var updatedDevice = await _deviceRepository.UpdateDeviceNameAsync(deviceId, nameUpdate.Name);
 
         return updatedDevice is null
-            ? NotFound(new CustomResponse() { Message = "Device not found", StatusCode = 404})
+            ? NotFound(new CustomResponse() { Message = "Device not found", StatusCode = "404" })
             : Ok(_mappings.DeviceToDevicePresentDto(updatedDevice));
     }
 
@@ -93,7 +93,7 @@ public class DeviceController : ControllerBase
         var deletedDevice = await _deviceRepository.DeleteDeviceByIdAsync(deviceId);
 
         return deletedDevice is null
-            ? NotFound(new CustomResponse() { Message = "Device not found.", StatusCode = 404})
+            ? NotFound(new CustomResponse() { Message = "Device not found.", StatusCode = "404" })
             : Ok(_mappings.DeviceToDevicePresentDto(deletedDevice));
     }
 }

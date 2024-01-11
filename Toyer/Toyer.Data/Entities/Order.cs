@@ -6,5 +6,5 @@ public class Order
     public string Name { get; set; }
     public string Description { get; set; }
     public string MessageBody { get; set; }
-    public ICollection<DeviceType> DeviceTypes { get; set; } = new HashSet<DeviceType>();
+    public List<DeviceType> DeviceTypes { get; set; } = new();
 }

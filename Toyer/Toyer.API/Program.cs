@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 using Toyer.API.Controllers;
@@ -51,7 +52,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-//builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
+builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
 builder.Services.AddScoped<IDeviceTypeRepository, SqlDeviceTypeRepository>();
 builder.Services.AddScoped<IOrderRepository, SqlOrderRepository>();
 builder.Services.AddScoped<IDeviceRepository, SqlDeviceRepository>();
@@ -67,7 +68,16 @@ builder.Services.AddSingleton<IDpsClient, DpsClient>();
 builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["ToyerLocalConnectionstring"]));
 
 builder.Services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(builder.Configuration["ToyerIdentityLocalConnectionstring"]));
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+})
     .AddEntityFrameworkStores<UsersDbContext>()
     .AddDefaultTokenProviders();
 

@@ -11,6 +11,5 @@ public class PersonalInfo
 
     public string UserId { get; set; }
     public User User { get; set; }
-
     public Address? Address { get; set; }
 }

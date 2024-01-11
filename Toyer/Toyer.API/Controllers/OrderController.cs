@@ -42,7 +42,7 @@ public class OrderController : ControllerBase
         var allOrders = await _ordersRepository.GetAllOrdersAsync();
 
         return allOrders is null
-            ? Accepted(new CustomResponse() { Message = "There are no orders in database yet.", StatusCode = 202 })
+            ? Accepted(new CustomResponse() { Message = "There are no orders in database yet.", StatusCode = "202" })
             : Ok(_mappings.OrdersToOrderPresentDtos(allOrders));
     }
 
@@ -57,7 +57,7 @@ public class OrderController : ControllerBase
         var order = await _ordersRepository.GetOrderByIdAsync(orderId);
 
         return order is null
-            ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = 404})
+            ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = "404" })
             : Ok(_mappings.OrderToOrderPresentDto(order));
     }
 
@@ -72,7 +72,7 @@ public class OrderController : ControllerBase
         var order = await _ordersRepository.UpdateOrderByIdAsync(orderId, orderUpdates);
 
         return order is null
-            ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = "404" })
             : Ok(_mappings.OrderToOrderPresentDto(order));
     }
 
@@ -86,7 +86,7 @@ public class OrderController : ControllerBase
     {
         var result = await _ordersRepository.AssignOrderToDeviceTypesAsync(orderId, deviceTypeListIds);
 
-        return result.StatusCode == 200
+        return result.StatusCode == "200"
             ? Ok(result)
             : NotFound(result);
     }
@@ -102,7 +102,7 @@ public class OrderController : ControllerBase
         var deletedOrder = await _ordersRepository.DeleteOrderByIdAsync(orderId);
 
         return deletedOrder is null
-            ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse() { Message = "Order not found", StatusCode = "404" })
             : Ok(_mappings.OrderToOrderPresentDto(deletedOrder));
     }
 }

@@ -1,15 +1,16 @@
-﻿using Toyer.Data.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using Toyer.Data.Entities;
 using Toyer.Logic.Responses;
 
 namespace Toyer.Logic.Services.Repositories.Interfaces;
 
 public interface IUserRepository
 {
-   Task<User?> CreateNewUserAsync(User newUser);
-   Task<User?> GetUserByIdAsync(Guid Id);
+   Task<IdentityResult> CreateNewUserAsync(User newUser, string password);
+   Task<User?> GetUserByIdAsync(string Id);
    Task<List<User>?> GetUsersAsync();
-   Task<Address?> UpdateAddressPatchAsync(Guid userId, Address updatesFromUserDocument);
-   Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(Guid userId, PersonalInfo updatesFromUser);
-   Task<User?> DeleteUserAsync(Guid Id);
-   Task<CustomResponse> AssignDeviceToUserAsync(Guid userId, Guid deviceId);
+   Task<Address?> PatchAddressAsync(string userId, Address updatesFromUserDocument);
+   Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(string userId, PersonalInfo updatesFromUser);
+   Task<IdentityResult?> DeleteUserAsync(string Id);
+   Task<IdentityResult> UpdateContactInfoAsync(string userId, string? email, string? phoneNumber);
 }
