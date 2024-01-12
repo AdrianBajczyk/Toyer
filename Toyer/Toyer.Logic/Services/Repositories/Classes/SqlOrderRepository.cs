@@ -22,7 +22,7 @@ public class SqlOrderRepository : IOrderRepository
     public async Task<CustomResponse> AssignOrderToDeviceTypesAsync(int orderId, OrderAssignDto deviceTypesToAssign)
     {
         var orderToAssign = await GetOrderByIdAsync(orderId);
-        if (orderToAssign == null) return new CustomResponse() { Message = "Order not found.", StatusCode = 404 };
+        if (orderToAssign == null) return new CustomResponse() { Message = "Order not found.", StatusCode = "404" };
 
         var deviceTypeIds = deviceTypesToAssign.DeviceTypeIds;
         var exisitingDeviceTypes = await _deviceTypeRepository.GetAllDeviceTypesAsync();
@@ -30,24 +30,24 @@ public class SqlOrderRepository : IOrderRepository
         var nonExistentDeviceTypeIds = CheckForNonExisitngIds(deviceTypeIds, exisitingDeviceTypes);
         if (nonExistentDeviceTypeIds != null)
         {
-            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", nonExistentDeviceTypeIds)}] to be assigned not found", StatusCode = 404 };
+            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", nonExistentDeviceTypeIds)}] to be assigned not found", StatusCode = "404" };
         }
 
         var duplicatedIds = CheckForDuplicatesInDb(deviceTypeIds, orderToAssign);
         if (duplicatedIds != null )
         {
-            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", duplicatedIds)}] has/have a member of given order" };
+            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", duplicatedIds)}] has/have a member of given order", StatusCode = "400" };
         }
 
         PerformAssigment(deviceTypeIds, orderToAssign, exisitingDeviceTypes!);
         await _dbContext.SaveChangesAsync();
 
-        return new CustomResponse() { Message = $"Order has been assigned to: [{string.Join(",", deviceTypeIds)}] device type/s id/s", StatusCode = 200 };
+        return new CustomResponse() { Message = $"Order has been assigned to: [{string.Join(",", deviceTypeIds)}] device type/s id/s", StatusCode = "200" };
     }
 
     public async Task<Order> CreateNewOrderAsync(Order order)
     {
-        await _dbContext.AddAsync(order);
+        await _dbContext.Orders.AddAsync(order);
         await _dbContext.SaveChangesAsync();
 
         return order;

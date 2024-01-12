@@ -17,7 +17,7 @@ namespace Toyer.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,44 +34,7 @@ namespace Toyer.Data.Migrations
 
                     b.HasIndex("OrdersId");
 
-                    b.ToTable("DeviceTypeOrder");
-                });
-
-            modelBuilder.Entity("Toyer.Data.Entities.Address", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PersonalInfoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonalInfoId")
-                        .IsUnique();
-
-                    b.ToTable("Addresses");
+                    b.ToTable("DeviceTypeOrder", (string)null);
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.Device", b =>
@@ -93,16 +56,14 @@ namespace Toyer.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserFK")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DeviceTypeId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Devices");
+                    b.ToTable("Devices", (string)null);
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.DeviceType", b =>
@@ -123,7 +84,7 @@ namespace Toyer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeviceTypes");
+                    b.ToTable("DeviceTypes", (string)null);
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.Order", b =>
@@ -148,64 +109,21 @@ namespace Toyer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
-            modelBuilder.Entity("Toyer.Data.Entities.PersonalInfo", b =>
+            modelBuilder.Entity("Toyer.Data.Entities.UserDevices", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateOnly>("BirthDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Email")
+                    b.Property<string>("DevicesIds")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("UserId");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("PersonalInfos");
-                });
-
-            modelBuilder.Entity("Toyer.Data.Entities.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("AccCreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
+                    b.ToTable("UsersDevices", (string)null);
                 });
 
             modelBuilder.Entity("DeviceTypeOrder", b =>
@@ -223,17 +141,6 @@ namespace Toyer.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Toyer.Data.Entities.Address", b =>
-                {
-                    b.HasOne("Toyer.Data.Entities.PersonalInfo", "PersonalInfo")
-                        .WithOne("Address")
-                        .HasForeignKey("Toyer.Data.Entities.Address", "PersonalInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PersonalInfo");
-                });
-
             modelBuilder.Entity("Toyer.Data.Entities.Device", b =>
                 {
                     b.HasOne("Toyer.Data.Entities.DeviceType", "DeviceType")
@@ -242,42 +149,12 @@ namespace Toyer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Toyer.Data.Entities.User", "User")
-                        .WithMany("Devices")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("DeviceType");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Toyer.Data.Entities.PersonalInfo", b =>
-                {
-                    b.HasOne("Toyer.Data.Entities.User", "User")
-                        .WithOne("PersonalInfo")
-                        .HasForeignKey("Toyer.Data.Entities.PersonalInfo", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Toyer.Data.Entities.DeviceType", b =>
                 {
                     b.Navigation("Devices");
-                });
-
-            modelBuilder.Entity("Toyer.Data.Entities.PersonalInfo", b =>
-                {
-                    b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("Toyer.Data.Entities.User", b =>
-                {
-                    b.Navigation("Devices");
-
-                    b.Navigation("PersonalInfo");
                 });
 #pragma warning restore 612, 618
         }

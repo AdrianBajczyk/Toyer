@@ -43,7 +43,7 @@ public class DeviceTypeController : ControllerBase
         var deviceType = await _deviceTypeRepository.GetDeviceTypeByIdAsync(deviceTypeId);
 
         return deviceType is null
-            ? NotFound(new CustomResponse { Message = "Device type not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "Device type not found", StatusCode = "404" })
             : Ok(_mappings.DeviceTypeToDeviceTypePresentDto(deviceType));
     }
 
@@ -58,7 +58,7 @@ public class DeviceTypeController : ControllerBase
         var deviceTypes = await _deviceTypeRepository.GetAllDeviceTypesAsync();
 
         return deviceTypes is null
-            ? Accepted(new CustomResponse() { Message = "There are no device types in data base yet", StatusCode = 202 })
+            ? Accepted(new CustomResponse() { Message = "There are no device types in data base yet", StatusCode = "202" })
             : Ok(_mappings.DeviceTypesToDeviceTypePresentDtos(deviceTypes));
     }
 
@@ -73,7 +73,7 @@ public class DeviceTypeController : ControllerBase
         var updatedDeviceType = await _deviceTypeRepository.UpdateDeviceTypeAsync(deviceTypeId, _mappings.DeviceTypeCreateDtoToDeviceType(deviceUpdateDto));
 
         return updatedDeviceType is null
-            ? NotFound(new CustomResponse { Message = "Device type not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "Device type not found", StatusCode = "404" })
             : Ok(_mappings.DeviceTypeToDeviceTypePresentDto(updatedDeviceType));
     }
 
@@ -88,7 +88,7 @@ public class DeviceTypeController : ControllerBase
         var deletedDevice = await _deviceTypeRepository.DeleteDeviceTypeAsync(deviceTypeId);
 
         return deletedDevice is null
-            ? NotFound(new CustomResponse { Message = "Device type not found", StatusCode = 404 })
+            ? NotFound(new CustomResponse { Message = "Device type not found", StatusCode = "404" })
             : Ok();
     }
 }

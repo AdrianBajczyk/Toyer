@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
-using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories.Classes;
@@ -9,21 +9,20 @@ namespace Toyer.Logic.Services.Repositories.Classes;
 public class SqlUserRepository : IUserRepository
 
 {
-    private readonly ToyerDbContext _dbContext;
-    private readonly IDeviceRepository _deviceRepository;
+    private readonly UsersDbContext _dbContext;
+    private readonly UserManager<User> _userManager;
 
-    public SqlUserRepository(ToyerDbContext dbContext, IDeviceRepository deviceRepository)
+    public SqlUserRepository(UsersDbContext usersDbContext, UserManager<User> userManager)
     {
-        _dbContext = dbContext;
-        _deviceRepository = deviceRepository;
+        _dbContext = usersDbContext;
+        _userManager = userManager;
     }
-    public async Task<User?> GetUserByIdAsync(Guid Id)
+    public async Task<User?> GetUserByIdAsync(string id)
     {
         return await _dbContext.Users
             .Include(u => u.PersonalInfo)
             .ThenInclude(p => p.Address)
-            .Include(u => u.Devices)
-            .FirstOrDefaultAsync(u => u.Id == Id);
+            .FirstOrDefaultAsync(u => u.Id == id.ToString());
     }
 
     public async Task<List<User>?> GetUsersAsync()
@@ -31,18 +30,21 @@ public class SqlUserRepository : IUserRepository
         return await _dbContext.Users
             .Include(u => u.PersonalInfo)
             .ThenInclude(p => p.Address)
-            .Include(u => u.Devices)
             .ToListAsync();
-
     }
-    public async Task<User?> CreateNewUserAsync(User newUser)
+    public async Task<IdentityResult> CreateNewUserAsync(User newUser, string password)
     {
-        await _dbContext.Users.AddAsync(newUser);
-        await _dbContext.SaveChangesAsync();
+        var result = await _userManager.CreateAsync(newUser);
 
-        return newUser;
+        if (result.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(newUser, "RegisteredUser");
+            result = await _userManager.AddPasswordAsync(newUser, password);
+        }
+
+        return result;
     }
-    public async Task<Address?> UpdateAddressPatchAsync(Guid userId, Address updatesFromUser)
+    public async Task<Address?> PatchAddressAsync(string userId, Address updatesFromUser)
     {
         var userToUpdate = await GetUserByIdAsync(userId);
 
@@ -52,6 +54,8 @@ public class SqlUserRepository : IUserRepository
 
         if (updatesFromUser.State != null) addressToUpdate.State = updatesFromUser.State;
         if (updatesFromUser.Street != null) addressToUpdate.Street = updatesFromUser.Street;
+        if (updatesFromUser.Street != null) addressToUpdate.Street = updatesFromUser.Street;
+        if (updatesFromUser.Street != null) addressToUpdate.Street = updatesFromUser.Street;
         if (updatesFromUser.City != null) addressToUpdate.City = updatesFromUser.City;
         if (updatesFromUser.Country != null) addressToUpdate.Country = updatesFromUser.Country;
         if (updatesFromUser.PostalCode != null) addressToUpdate.PostalCode = updatesFromUser.PostalCode;
@@ -60,7 +64,7 @@ public class SqlUserRepository : IUserRepository
 
         return addressToUpdate;
     }
-    public async Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(Guid userId, PersonalInfo updatesFromUser)
+    public async Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(string userId, PersonalInfo updatesFromUser)
     {
         var userToUpdate = await GetUserByIdAsync(userId);
 
@@ -70,45 +74,43 @@ public class SqlUserRepository : IUserRepository
 
         if (updatesFromUser.Name != null) personalInfoToUpdate.Name = updatesFromUser.Name;
         if (updatesFromUser.Surname != null) personalInfoToUpdate.Surname = updatesFromUser.Surname;
-        if (updatesFromUser.PhoneNumber != null) personalInfoToUpdate.PhoneNumber = updatesFromUser.PhoneNumber;
-        if (updatesFromUser.Email != null) personalInfoToUpdate.Email = updatesFromUser.Email;
         if (updatesFromUser.BirthDate != default) personalInfoToUpdate.BirthDate = updatesFromUser.BirthDate;
 
         await _dbContext.SaveChangesAsync();
 
         return personalInfoToUpdate;
     }
-    public async Task<User?> DeleteUserAsync(Guid Id)
+    public async Task<IdentityResult?> DeleteUserAsync(string Id)
     {
         var userToDelete = await GetUserByIdAsync(Id);
 
-        if (userToDelete == null) return null;
+        if (userToDelete == null) return IdentityResult.Failed(new IdentityError { Description = "User not found.", Code = "400" });
 
-        _dbContext.Users.Remove(userToDelete);
-        await _dbContext.SaveChangesAsync();
+        var result = await _userManager.DeleteAsync(userToDelete);
 
-        return userToDelete;
+        return result;
     }
 
-    public async Task<CustomResponse> AssignDeviceToUserAsync(Guid userId, Guid deviceId)
+    public async Task<IdentityResult> UpdateContactInfoAsync(string userId, string? email, string? phoneNumber)
     {
-        var user = await GetUserByIdAsync(userId);
-        if (user == null) return new CustomResponse() { Message = "User not found", StatusCode = 404 };
+        var userToUpdate = await GetUserByIdAsync(userId);
 
-        var device = await _deviceRepository.GetDeviceByIdAsync(deviceId);
-        if (device == null) return new CustomResponse() { Message = "Device not found", StatusCode = 404 };
+        if (userToUpdate == null) return IdentityResult.Failed(new IdentityError { Description = "User not found.", Code = "400" });
 
-        if (await IsAssignedToAnyUser(deviceId)) return new CustomResponse() { Message = "Device has been already assigned.", StatusCode = 400 };
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            var setEmailResult = await _userManager.SetEmailAsync(userToUpdate, email);
 
-        user.Devices.Add(device);
-        await _dbContext.SaveChangesAsync();
+            if (!setEmailResult.Succeeded) return setEmailResult;
+        }
 
-        return new CustomResponse() { Message = "Ok", StatusCode = 200 };
-    }
+        if (!string.IsNullOrWhiteSpace(phoneNumber))
+        {
+            var setPhoneNumberResult = await _userManager.SetPhoneNumberAsync(userToUpdate, phoneNumber);
 
-    private async Task<bool> IsAssignedToAnyUser(Guid deviceId)
-    {
-        var users = await GetUsersAsync();
-        return users?.Any(user => user.Devices.Any(device => device.Id == deviceId)) ?? false;
+            if (!setPhoneNumberResult.Succeeded) return setPhoneNumberResult;
+        }
+
+        return await _userManager.UpdateAsync(userToUpdate);
     }
 }

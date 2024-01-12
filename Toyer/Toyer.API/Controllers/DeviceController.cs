@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Services.Repositories.Interfaces;
-using Toyer.Logic.Dtos.DeviceType;
 using Toyer.Logic.Responses;
 
 namespace Toyer.API.Controllers;
@@ -15,11 +14,13 @@ public class DeviceController : ControllerBase
 
     private readonly IDeviceMappings _mappings;
     private readonly IDeviceRepository _deviceRepository;
+    private readonly IDeviceAssignRepository _deviceAssignRepository;
 
-    public DeviceController(IDeviceMappings mappings, IDeviceRepository deviceRepository)
+    public DeviceController(IDeviceMappings mappings, IDeviceRepository deviceRepository, IDeviceAssignRepository deviceAssignRepository)
     { 
         _mappings = mappings;
         _deviceRepository = deviceRepository;
+        _deviceAssignRepository = deviceAssignRepository;
     }
 
     ///<summary>
@@ -33,7 +34,7 @@ public class DeviceController : ControllerBase
         var createdDevice = await _deviceRepository.CreateNewDeviceAsync(deviceCreateDto.DeviceTypeId);
 
         return createdDevice is null
-            ? NotFound(new CustomResponse() { Message = "Device type not found.", StatusCode = 404})
+            ? NotFound(new CustomResponse() { Message = "Device type not found.", StatusCode = "404" })
             : CreatedAtAction(nameof(CreateNewDeviceAsync), _mappings.DeviceToDevicePresentDto(createdDevice));
     }
 
@@ -41,59 +42,60 @@ public class DeviceController : ControllerBase
     /// Sends chosen order to the device
     /// </summary>
     [HttpPost("{deviceId:guid}/command/{orderId:int}")]
-    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status202Accepted)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> SendOrderToDeviceById([FromRoute] Guid deviceId, [FromRoute] int orderId )
+    public async Task<IActionResult> SendOrderToDeviceById([FromRoute] string deviceId, [FromRoute] int orderId )
     {
         var response = await _deviceRepository.SendOrderToDevice(deviceId, orderId);
 
-        return response.StatusCode != 202
+        return response.StatusCode != "200"
             ? NotFound(new CustomResponse() { Message = response.Message, StatusCode = response.StatusCode })
-            : Accepted(response);
+            : Ok(response);
     }
 
     /// <summary>
     /// Get device by id.
     /// </summary>
-    [HttpGet("{deviceId:Guid}")]
+    [HttpGet("{deviceId}")]
     [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDeviceByIdAsync([FromRoute] Guid deviceId)
+    public async Task<IActionResult> GetDeviceByIdAsync([FromRoute] string deviceId)
     {
         var device = await _deviceRepository.GetDeviceByIdAsync(deviceId);
 
         return device is null
-            ? NotFound(new CustomResponse() { Message = "Device not found.", StatusCode = 404})
+            ? NotFound(new CustomResponse() { Message = "Device not found.", StatusCode = "404" })
             : Ok(_mappings.DeviceToDevicePresentDto(device));
     }
 
     /// <summary>
     /// Updates device name by id.
     /// </summary>
-    [HttpPut("{deviceId:Guid}")]
+    [HttpPut("{deviceId}")]
     [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatedDeviceNameByIdAsync([FromRoute] Guid deviceId, [FromForm]DeviceNameUpdateDto nameUpdate)
+    public async Task<IActionResult> UpdatedDeviceNameByIdAsync([FromRoute] string deviceId, [FromForm]DeviceNameUpdateDto nameUpdate)
     {
         var updatedDevice = await _deviceRepository.UpdateDeviceNameAsync(deviceId, nameUpdate.Name);
 
         return updatedDevice is null
-            ? NotFound(new CustomResponse() { Message = "Device not found", StatusCode = 404})
+            ? NotFound(new CustomResponse() { Message = "Device not found", StatusCode = "404" })
             : Ok(_mappings.DeviceToDevicePresentDto(updatedDevice));
     }
 
     /// <summary>
     /// Deletes device by id.
     /// </summary>
-    [HttpDelete("{deviceId:guid}")]
+    [HttpDelete("{deviceId}")]
     [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteDeviceByIdAsync([FromRoute] Guid deviceId)
+    public async Task<IActionResult> DeleteDeviceByIdAsync([FromRoute] string deviceId)
     {
         var deletedDevice = await _deviceRepository.DeleteDeviceByIdAsync(deviceId);
+        if (deletedDevice != null) await _deviceAssignRepository.DeleteDeviceAsync(deviceId);
 
         return deletedDevice is null
-            ? NotFound(new CustomResponse() { Message = "Device not found.", StatusCode = 404})
+            ? NotFound(new CustomResponse() { Message = "Device not found.", StatusCode = "404" })
             : Ok(_mappings.DeviceToDevicePresentDto(deletedDevice));
     }
 }

@@ -7,9 +7,8 @@ public class Device
     public DateOnly CreationDate { get; set; } = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
     public DateTime? LastRegistrationDate { get; set; }
 
+    public string? UserFK { get; set; }
 
-    public Guid? UserId { get; set; }
-    public User User { get; set; }
     public int DeviceTypeId { get; set; }
     public DeviceType DeviceType { get; set; }
 

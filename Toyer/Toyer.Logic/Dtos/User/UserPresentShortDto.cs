@@ -2,5 +2,5 @@
 
 public record UserPresentShortDto
 {
-    public string Login { get; set; }
+    public string UserName { get; set; }
 }

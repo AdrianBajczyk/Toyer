@@ -20,7 +20,7 @@ public static class ExceptionMiddlewareExtensions
                     logger.LogError($"Something went wrong: {contextFeature.Error}");
                     await context.Response.WriteAsync(new CustomResponse()
                     {
-                        StatusCode = context.Response.StatusCode,
+                        StatusCode = context.Response.StatusCode.ToString(),
                         Message = "Internal Server Error."
                     }.ToString());
                 }

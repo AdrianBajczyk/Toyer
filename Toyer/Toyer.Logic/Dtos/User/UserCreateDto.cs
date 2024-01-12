@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Toyer.Logic.Dtos.User;
 
@@ -6,13 +9,11 @@ public record UserCreateDto
 {
     [Required(ErrorMessage = "Login is required")]
     [StringLength(20, ErrorMessage = "Login cannot exceed 20 characters")]
+    [DisplayName("Login")]
     [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Login can only contain letters and numbers")]
-    // https://learn.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-8.0
-    public string Login {  get; set; }
+    public string UserName {  get; set; }
 
-    [MinLength(6, ErrorMessage = "Password must be at least 6 characters long")]
-    [MaxLength(20, ErrorMessage = "Password cannot exceed 20 characters")]
-    [RegularExpression(@"^(?=.*[A-Z])(?=.*\d).{6,20}$", ErrorMessage = "Password must have at least one uppercase letter and one digit")]
+    [Required(ErrorMessage = "Password is required")]
     [DataType(DataType.Password)]
     public string Password { get; set; }
 
@@ -21,49 +22,64 @@ public record UserCreateDto
     public string ConfirmPassword { get; set; }
 
     [Required(ErrorMessage = "First name is required")]
+    [RegularExpression(@"^[A-Z][a-z]*$", ErrorMessage = "Invalid format. The first letter must be a capital letter, and only small letters are allowed after that.")]
     [StringLength(20, ErrorMessage = "First name cannot exceed 20 characters")]
     public string Name { get; set; }
 
     [Required(ErrorMessage = "Surname name is required")]
+    [RegularExpression(@"^[A-Z][a-z]*$", ErrorMessage = "Invalid format. The first letter must be a capital letter, and only small letters are allowed after that.")]
     [StringLength(20, ErrorMessage = "Surname cannot exceed 20 characters")]
     public string Surname { get; set; }
 
     [Required(ErrorMessage = "Email address is required")]
     [DataType(DataType.EmailAddress)]
     [EmailAddress(ErrorMessage = "Invalid email address")]
-    // https://learn.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-8.0
     public string Email { get; set; }
 
     [Required(ErrorMessage = "Birth date is required")]
     [DataType(DataType.Date)]
-    [Display(Name = "Birth Date")]
+    [Display(Name = "Birth date")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     public DateOnly BirthDate { get; set; }
 
     [Required(ErrorMessage = "Street is required")]
+    [RegularExpression(@"^[A-Z][a-z]*$", ErrorMessage = "Invalid format. The first letter must be a capital letter, and only small letters are allowed after that.")]
     [StringLength(30, ErrorMessage = "Street cannot exceed 30 characters")]
     public string Street { get; set; }
 
+    [Required(ErrorMessage = "Street number is required")]
+    [StringLength(4, ErrorMessage = "Street number cannot exceed 4 numbers")]
+    [RegularExpression(@"^\d+$", ErrorMessage = "Unit can consit of digits only.")]
+    [Display(Name = "Street number")]
+    public int StreetNumber { get; set; }
+
+    [StringLength(4, ErrorMessage = "Street number cannot exceed 4 numbers")]
+    [RegularExpression(@"^\d+$", ErrorMessage = "Unit can consit of digits only.")]
+    [Display(Name = "Unit number")]
+    public int? UnitNumber { get; set; }
+
     [Required(ErrorMessage = "City is required")]
+    [RegularExpression(@"^[A-Z][a-z]*$", ErrorMessage = "Invalid format. The first letter must be a capital letter, and only small letters are allowed after that.")]
     [StringLength(30, ErrorMessage = "Street cannot exceed 30 characters")]
     public string City { get; set; }
 
+    [RegularExpression(@"^[A-Z][a-z]*$", ErrorMessage = "Invalid format. The first letter must be a capital letter, and only small letters are allowed after that.")]
     [StringLength(30, ErrorMessage = "State cannot exceed 30 characters")]
-    public string State { get; set; }
+    public string? State { get; set; }
 
     [Required(ErrorMessage = "Postal code is required")]
-    [Display(Name = "Postal Code")]
-    [StringLength(6, ErrorMessage = "Postal code cannot exceed 10 characters")]
+    [Display(Name = "Postal code")]
+    [DataType(DataType.PostalCode)]
     public string PostalCode { get; set; }
 
     [Required(ErrorMessage = "Country is required")]
+    [RegularExpression(@"^[A-Z][a-z]*$", ErrorMessage = "Invalid format. The first letter must be a capital letter, and only small letters are allowed after that.")]
     [StringLength(30, ErrorMessage = "Country cannot exceed 30 characters")]
     public string Country { get; set; }
 
-    [RegularExpression(@"^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$", ErrorMessage = "Invalid phone number format")]
+    [RegularExpression(@"^\(\+\d{2}\) \d{3}-\d{3}-\d{3}$", ErrorMessage = "Invalid phone number format")]
     [DisplayFormat(DataFormatString = "{0:###-###-####}", ApplyFormatInEditMode = true)]
+    [Display(Name = "Phone number")]
     public string? PhoneNumber { get; set; }
 }
 
-//partialupdate - asp.net patch mechanics (readabout)
-//

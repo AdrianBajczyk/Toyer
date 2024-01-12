@@ -1,9 +1,14 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text;
 using Toyer.API.Controllers;
 using Toyer.API.Extensions;
 using Toyer.Data.Context;
+using Toyer.Data.Entities;
 using Toyer.Data.Mappings;
 using Toyer.Logic.Mappings.UserMappings.classes;
 using Toyer.Logic.Mappings.UserMappings.Classes;
@@ -16,7 +21,6 @@ using Toyer.Logic.Services.Repositories.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
@@ -50,6 +54,7 @@ builder.Services.AddScoped<IUserRepository, SqlUserRepository>();
 builder.Services.AddScoped<IDeviceTypeRepository, SqlDeviceTypeRepository>();
 builder.Services.AddScoped<IOrderRepository, SqlOrderRepository>();
 builder.Services.AddScoped<IDeviceRepository, SqlDeviceRepository>();
+builder.Services.AddScoped<IDeviceAssignRepository, SqlDeviceAssignRepository>();
 
 builder.Services.AddScoped<IUserMapings, UserMappings>();
 builder.Services.AddScoped<IDeviceTypeMappings, DeviceTypeMappings>();
@@ -59,15 +64,45 @@ builder.Services.AddScoped<IDeviceMappings, DeviceMappings>();
 builder.Services.AddSingleton<IDeviceMessageService, DeviceMessageService>();
 builder.Services.AddSingleton<IDpsClient, DpsClient>();
 
-builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["AzureSqlConnectionstring"]));
+builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["ToyerLocalConnectionstring"]));
+builder.Services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(builder.Configuration["ToyerIdentityLocalConnectionstring"]));
+
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+})
+    .AddEntityFrameworkStores<UsersDbContext>()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 
 //  ASP.NET Core MVC trims the suffix Async from action names by default
-builder.Services.AddMvc(options =>
-{
-    options.SuppressAsyncSuffixInActionNames = false;
-});
+builder.Services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ClockSkew = TimeSpan.Zero,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuer = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["TokenValidationParameters:Issuer"],
+            ValidAudience = builder.Configuration["TokenValidationParameters:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["IssuerSigningKey"]))
+        };
+    });
 
 var app = builder.Build();
 
@@ -78,6 +113,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    //app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();

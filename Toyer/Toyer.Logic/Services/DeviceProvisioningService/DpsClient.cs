@@ -21,11 +21,10 @@ public class DpsClient : IDpsClient
         _configuration = configuration;
     }
 
-    public async Task RegisterDevice(Guid id, string pkSubsection)
+    public async Task RegisterDevice(string desiredDeviceId, string pkSubsection)
     {
         _logger.LogInformation("Initializing the device provisioning client...");
 
-        string desiredDeviceId = id.ToString();
         string dpsEnrollmentPrimaryKey = _configuration[$"DpsConfig:PrimaryKey:{pkSubsection}"];
         string dpsGlobalEndpoint = _configuration["DpsConfig:GlobalEndpoint"];
         string dpsIdScope = _configuration["DpsConfig:IdScope"];

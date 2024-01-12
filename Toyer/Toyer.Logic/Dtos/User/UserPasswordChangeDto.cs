@@ -4,9 +4,8 @@ namespace Toyer.Logic.Dtos.User
 {
     public record UserPasswordChangeDto
     {
-        [MinLength(6, ErrorMessage = "Password must be at least 6 characters long")]
-        [MaxLength(20, ErrorMessage = "Password cannot exceed 20 characters")]
-        [RegularExpression(@"^(?=.*[A-Z])(?=.*\d).{6,20}$", ErrorMessage = "Password must have at least one uppercase letter and one digit")]
+
+        [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 

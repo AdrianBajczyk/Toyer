@@ -10,5 +10,5 @@ public class UserPresentLongDto
     public PersonalInfoDto UserPersonalInfo { get; set; }
     public AddressDto UserAddress { get; set; }
     public DateTime AccCreationDate { get; set; }
-    public List<DevicePresentDto>? Devices { get; set; } 
+
 }

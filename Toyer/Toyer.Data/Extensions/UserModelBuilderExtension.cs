@@ -3,9 +3,9 @@ using Toyer.Data.Entities;
 
 namespace Toyer.Data.Extensions;
 
-public static class ModelBuilderExtension
+public static class UserModelBuilderExtension
 {
-    public static void ConfigureToyerDbContextModel(this ModelBuilder modelBuilder)
+    public static void ConfigureModelBuilder(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
             .HasOne(u => u.PersonalInfo)
@@ -16,12 +16,6 @@ public static class ModelBuilderExtension
             .HasOne(pi => pi.Address)
             .WithOne(a => a.PersonalInfo)
             .HasForeignKey<Address>(a => a.PersonalInfoId);
-
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.Devices)
-            .WithOne(d => d.User)
-            .HasForeignKey(d => d.UserId)
-            .OnDelete(DeleteBehavior.SetNull);
 
 
     }

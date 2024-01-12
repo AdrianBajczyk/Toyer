@@ -7,9 +7,9 @@ namespace Toyer.Logic.Services.Repositories.Interfaces;
 public interface IDeviceRepository
 {
     Task<Device?> CreateNewDeviceAsync(int deviceTypeId);
-    Task<Device?> DeleteDeviceByIdAsync(Guid deviceId);
-    Task<Device?> GetDeviceByIdAsync(Guid deviceId);
-    Task<CustomResponse> SendOrderToDevice(Guid deviceId, int orderId);
-    Task<Device?> UpdateDeviceNameAsync(Guid deviceId ,string nameUpdateDto);
+    Task<Device?> DeleteDeviceByIdAsync(string deviceId);
+    Task<Device?> GetDeviceByIdAsync(string deviceId);
+    Task<CustomResponse> SendOrderToDevice(string deviceId, int orderId);
+    Task<Device?> UpdateDeviceNameAsync(string deviceId ,string nameUpdateDto);
 
 }
