@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
+using Toyer.Logic.Responses;
+using Toyer.Logic.Services.Authorization;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories.Classes;
@@ -11,28 +14,28 @@ public class SqlUserRepository : IUserRepository
 {
     private readonly UsersDbContext _dbContext;
     private readonly UserManager<User> _userManager;
+    private readonly ITokenService _tokenService;
 
-    public SqlUserRepository(UsersDbContext usersDbContext, UserManager<User> userManager)
+    public SqlUserRepository(UsersDbContext usersDbContext, UserManager<User> userManager, ITokenService tokenService)
     {
         _dbContext = usersDbContext;
         _userManager = userManager;
+        _tokenService = tokenService;
     }
     public async Task<User?> GetUserByIdAsync(string id)
-    {
-        return await _dbContext.Users
+    => await _dbContext.Users
             .Include(u => u.PersonalInfo)
             .ThenInclude(p => p.Address)
-            .FirstOrDefaultAsync(u => u.Id == id.ToString());
-    }
+            .FirstOrDefaultAsync(u => u.Id.ToString() == id);
+    
 
     public async Task<List<User>?> GetUsersAsync()
-    {
-        return await _dbContext.Users
+    => await _dbContext.Users
             .Include(u => u.PersonalInfo)
             .ThenInclude(p => p.Address)
             .ToListAsync();
-    }
-    public async Task<IdentityResult> CreateNewUserAsync(User newUser, string password)
+    
+    public async Task<IdentityResult> RegisterNewUserAsync(User newUser, string password)
     {
         var result = await _userManager.CreateAsync(newUser);
 
@@ -44,7 +47,7 @@ public class SqlUserRepository : IUserRepository
 
         return result;
     }
-    public async Task<Address?> PatchAddressAsync(string userId, Address updatesFromUser)
+    public async Task<Address?> UpdateAddressAsync(string userId, Address updatesFromUser)
     {
         var userToUpdate = await GetUserByIdAsync(userId);
 
@@ -84,7 +87,7 @@ public class SqlUserRepository : IUserRepository
     {
         var userToDelete = await GetUserByIdAsync(Id);
 
-        if (userToDelete == null) return IdentityResult.Failed(new IdentityError { Description = "User not found.", Code = "400" });
+        if (userToDelete == null) return IdentityResult.Failed(new IdentityError { Description = "User not found.", Code = "404" });
 
         var result = await _userManager.DeleteAsync(userToDelete);
 
@@ -95,7 +98,7 @@ public class SqlUserRepository : IUserRepository
     {
         var userToUpdate = await GetUserByIdAsync(userId);
 
-        if (userToUpdate == null) return IdentityResult.Failed(new IdentityError { Description = "User not found.", Code = "400" });
+        if (userToUpdate == null) return IdentityResult.Failed(new IdentityError { Description = "User not found.", Code = "404" });
 
         if (!string.IsNullOrWhiteSpace(email))
         {
@@ -112,5 +115,17 @@ public class SqlUserRepository : IUserRepository
         }
 
         return await _userManager.UpdateAsync(userToUpdate);
+    }
+
+    public async Task<AuthorizationResponse> LoginAsync(string email, string password)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        var isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
+
+        if (!isPasswordValid || user == null) return new AuthorizationResponse { Message = "Invalid username or password." , StatusCode = "401"};
+
+        var accessToken = _tokenService.CreateToken(user);
+
+        return new AuthorizationResponse { Message = "Login succeed.", StatusCode = "200", Token =  accessToken };
     }
 }

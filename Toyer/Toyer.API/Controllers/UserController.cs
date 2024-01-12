@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Repositories.Interfaces;
@@ -21,6 +22,19 @@ public class UserController : ControllerBase
         _mappings = mappings;
         _deviceAssignRepository = deviceAssignRepository;
     }
+
+
+    /// <summary>
+    /// Logs user in.
+    /// </summary>
+    [HttpPost("Login")]
+    public async Task<IActionResult> Authenticate([FromForm] UserLogin request)
+    {
+        var result = await _userRepository.LoginAsync(request.Email, request.Password);
+
+        return new ObjectResult (result);
+    }
+
 
     /// <summary>
     /// Gets login of specific user.
@@ -75,7 +89,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateNewUser([FromForm] UserCreateDto newUserDto)
     {
-        var result = await _userRepository.CreateNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password);
+        var result = await _userRepository.RegisterNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password);
 
         return result.Succeeded
             ? CreatedAtAction(nameof(CreateNewUser), new CustomResponse { Message = $"User: {newUserDto.UserName} created.", StatusCode = "201" })
@@ -90,7 +104,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateAddressById([FromRoute] string userId, [FromForm] AddressDto addressUpdatesDtoFromUser)
     {
-        var updatedAddress = await _userRepository.PatchAddressAsync(userId, _mappings.AddressDtoToAddress(addressUpdatesDtoFromUser));
+        var updatedAddress = await _userRepository.UpdateAddressAsync(userId, _mappings.AddressDtoToAddress(addressUpdatesDtoFromUser));
 
         return updatedAddress is null
             ? NotFound(new CustomResponse { Message = "User not found", StatusCode = "404" })

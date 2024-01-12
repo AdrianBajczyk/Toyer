@@ -57,7 +57,11 @@ public class SqlDeviceRepository : IDeviceRepository
         return deviceToDelete;
     }
 
-    public async Task<Device?> GetDeviceByIdAsync(string deviceId) => await _dbContext.Devices.FirstOrDefaultAsync(d => d.Id.ToString() == deviceId);
+    public async Task<Device?> GetDeviceByIdAsync(string deviceId) 
+        => await _dbContext.Devices
+        .Include(d => d.DeviceType)
+        .ThenInclude(dt => dt.Orders)
+        .FirstOrDefaultAsync(d => d.Id.ToString() == deviceId);
 
     public async Task<CustomResponse> SendOrderToDevice(string deviceId, int orderId)
     {

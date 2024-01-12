@@ -48,12 +48,10 @@ public record UserCreateDto
     public string Street { get; set; }
 
     [Required(ErrorMessage = "Street number is required")]
-    [StringLength(4, ErrorMessage = "Street number cannot exceed 4 numbers")]
     [RegularExpression(@"^\d+$", ErrorMessage = "Unit can consit of digits only.")]
     [Display(Name = "Street number")]
     public int StreetNumber { get; set; }
 
-    [StringLength(4, ErrorMessage = "Street number cannot exceed 4 numbers")]
     [RegularExpression(@"^\d+$", ErrorMessage = "Unit can consit of digits only.")]
     [Display(Name = "Unit number")]
     public int? UnitNumber { get; set; }

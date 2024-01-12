@@ -12,6 +12,7 @@ using Toyer.Data.Entities;
 using Toyer.Data.Mappings;
 using Toyer.Logic.Mappings.UserMappings.classes;
 using Toyer.Logic.Mappings.UserMappings.Classes;
+using Toyer.Logic.Services.Authorization;
 using Toyer.Logic.Services.DeviceMessaging;
 using Toyer.Logic.Services.DeviceProvisioningService;
 using Toyer.Logic.Services.Repositories.Classes;
@@ -44,6 +45,29 @@ builder.Services.AddSwaggerGen(options =>
             Url = new Uri("https://example.com/license")
         }
     });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
@@ -67,6 +91,8 @@ builder.Services.AddSingleton<IDpsClient, DpsClient>();
 builder.Services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(builder.Configuration["ToyerLocalConnectionstring"]));
 builder.Services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(builder.Configuration["ToyerIdentityLocalConnectionstring"]));
 
+builder.Services.AddScoped<ITokenService, TokenService>();
+
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -87,7 +113,11 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 builder.Services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
 
 builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters()
@@ -118,6 +148,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

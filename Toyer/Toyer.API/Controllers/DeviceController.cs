@@ -2,6 +2,7 @@
 using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Services.Repositories.Interfaces;
 using Toyer.Logic.Responses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Toyer.API.Controllers;
 
@@ -41,7 +42,7 @@ public class DeviceController : ControllerBase
     ///<summary>
     /// Sends chosen order to the device
     /// </summary>
-    [HttpPost("{deviceId:guid}/command/{orderId:int}")]
+    [HttpPost("{deviceId}/command/{orderId:int}")]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SendOrderToDeviceById([FromRoute] string deviceId, [FromRoute] int orderId )
@@ -56,7 +57,7 @@ public class DeviceController : ControllerBase
     /// <summary>
     /// Get device by id.
     /// </summary>
-    [HttpGet("{deviceId}")]
+    [HttpGet("{deviceId}"), Authorize]
     [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeviceByIdAsync([FromRoute] string deviceId)
