@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Services.Repositories.Interfaces;
-using Toyer.Logic.Dtos.DeviceType;
 using Toyer.Logic.Responses;
 
 namespace Toyer.API.Controllers;
@@ -15,11 +14,13 @@ public class DeviceController : ControllerBase
 
     private readonly IDeviceMappings _mappings;
     private readonly IDeviceRepository _deviceRepository;
+    private readonly IDeviceAssignRepository _deviceAssignRepository;
 
-    public DeviceController(IDeviceMappings mappings, IDeviceRepository deviceRepository)
+    public DeviceController(IDeviceMappings mappings, IDeviceRepository deviceRepository, IDeviceAssignRepository deviceAssignRepository)
     { 
         _mappings = mappings;
         _deviceRepository = deviceRepository;
+        _deviceAssignRepository = deviceAssignRepository;
     }
 
     ///<summary>
@@ -91,6 +92,7 @@ public class DeviceController : ControllerBase
     public async Task<IActionResult> DeleteDeviceByIdAsync([FromRoute] string deviceId)
     {
         var deletedDevice = await _deviceRepository.DeleteDeviceByIdAsync(deviceId);
+        if (deletedDevice != null) await _deviceAssignRepository.DeleteDeviceAsync(deviceId);
 
         return deletedDevice is null
             ? NotFound(new CustomResponse() { Message = "Device not found.", StatusCode = "404" })

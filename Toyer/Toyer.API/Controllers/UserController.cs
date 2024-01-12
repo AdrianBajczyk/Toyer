@@ -12,12 +12,14 @@ namespace Toyer.API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserMapings _mappings;
+    private readonly IDeviceAssignRepository _deviceAssignRepository;
     private readonly IUserRepository _userRepository;
 
-    public UserController(IUserRepository userRepository, IUserMapings mappings)
+    public UserController(IUserRepository userRepository, IUserMapings mappings, IDeviceAssignRepository deviceAssignRepository)
     {
         _userRepository = userRepository;
         _mappings = mappings;
+        _deviceAssignRepository = deviceAssignRepository;
     }
 
     /// <summary>
@@ -138,8 +140,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult> DeleteUserById([FromRoute] string userId)
     {
         var result = await _userRepository.DeleteUserAsync(userId);
-
-        if (result == null) return NotFound(new CustomResponse { Message = "User not found.", StatusCode = "404" });
+        if (result!.Succeeded) await _deviceAssignRepository.DeleteUserAsync(userId);
             
         return result.Succeeded 
             ? Ok(new CustomResponse { Message = $"Deleted.", StatusCode = "200" })

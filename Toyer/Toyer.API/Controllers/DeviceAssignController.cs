@@ -27,8 +27,21 @@ public class DeviceAssignController : ControllerBase
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AssignDeviceToUserAsync([FromRoute] string deviceId, [FromRoute] string userId)
     {
-        var updateDeviceResult = await _deviceAssignRepository.AssignDeviceToUserAsync(deviceId, userId);
+        var assignDeviceResult = await _deviceAssignRepository.AssignDeviceToUserAsync(deviceId, userId);
 
-        return new ObjectResult(updateDeviceResult);
+        return new ObjectResult(assignDeviceResult);
+    }
+
+    /// <summary>
+    /// Unssigns device from user.
+    /// </summary>
+    [HttpDelete("{deviceId}/user/{userId}")]
+    [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UnassignDeviceFromUserAsync([FromRoute] string deviceId, [FromRoute] string userId)
+    {
+        var unassignDeviceResult = await _deviceAssignRepository.UnassignDeviceFromUserAsync(deviceId, userId);
+
+        return new ObjectResult(unassignDeviceResult);
     }
 }
