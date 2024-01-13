@@ -33,7 +33,7 @@ public class SqlDeviceRepository : IDeviceRepository
     public async Task<Device?> CreateNewDeviceAsync(int deviceTypeId)
     {
         var deviceTypeToAssign = await _deviceTypeRepository.GetDeviceTypeByIdAsync(deviceTypeId);
-        if (deviceTypeToAssign == null) return null;
+        if (deviceTypeToAssign == null) throw new Exception();
 
         var newDevice = new Device { Name = deviceTypeToAssign.Name + "_Device" };
         newDevice.DeviceType = deviceTypeToAssign;

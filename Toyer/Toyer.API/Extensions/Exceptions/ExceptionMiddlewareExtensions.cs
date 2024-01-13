@@ -2,7 +2,7 @@
 using System.Net;
 using Toyer.Logic.Responses;
 
-namespace Toyer.API.Extensions;
+namespace Toyer.API.Extensions.Exceptions;
 
 public static class ExceptionMiddlewareExtensions
 {
