@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
@@ -50,6 +52,9 @@ public static class SwaggerGenServiceExtensions
                     new string[]{}
                 }
             });
+
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
 
         return services;

@@ -10,18 +10,11 @@ namespace Toyer.API.Controllers;
 [Route("api/[controller]")]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-public class UserController : ControllerBase
+public class UserController(IUserRepository userRepository, IUserMapings mappings, IDeviceAssignRepository deviceAssignRepository) : ControllerBase
 {
-    private readonly IUserMapings _mappings;
-    private readonly IDeviceAssignRepository _deviceAssignRepository;
-    private readonly IUserRepository _userRepository;
-
-    public UserController(IUserRepository userRepository, IUserMapings mappings, IDeviceAssignRepository deviceAssignRepository)
-    {
-        _userRepository = userRepository;
-        _mappings = mappings;
-        _deviceAssignRepository = deviceAssignRepository;
-    }
+    private readonly IUserMapings _mappings = mappings;
+    private readonly IDeviceAssignRepository _deviceAssignRepository = deviceAssignRepository;
+    private readonly IUserRepository _userRepository = userRepository;
 
 
     /// <summary>
@@ -46,9 +39,7 @@ public class UserController : ControllerBase
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
-        return user is null
-            ? NotFound(new CustomResponse { Message = "User not found", StatusCode = "404" })
-            : Ok(_mappings.UserToUserPresentShortDto(user));
+        return Ok(_mappings.UserToUserPresentShortDto(user));
     }
     /// <summary>
     /// Gets all users.
@@ -61,9 +52,7 @@ public class UserController : ControllerBase
     {
         var allUsers = await _userRepository.GetUsersAsync();
 
-        return !allUsers.Any()
-            ? Accepted(new CustomResponse() { Message = "No users in database yet.", StatusCode = "202" })
-            : Ok(_mappings.UsersToUserPresentShortDtos(allUsers));
+        return Ok(_mappings.UsersToUserPresentShortDtos(allUsers));
     }
 
     /// <summary>
@@ -76,9 +65,7 @@ public class UserController : ControllerBase
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
-        return user is null
-            ? NotFound(new CustomResponse { Message = "User not found", StatusCode = "404" })
-            : Ok(_mappings.UserToUserPresentLongDto(user));
+        return Ok(_mappings.UserToUserPresentLongDto(user));
     }
 
     /// <summary>
@@ -91,9 +78,8 @@ public class UserController : ControllerBase
     {
         var result = await _userRepository.RegisterNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password);
 
-        return result.Succeeded
-            ? CreatedAtAction(nameof(CreateNewUser), new CustomResponse { Message = $"User: {newUserDto.UserName} created.", StatusCode = "201" })
-            : BadRequest(new CustomResponse { Message = $"Error: {string.Join(", ", result.Errors.Select(e => e.Description))}", StatusCode = "400" });
+        return CreatedAtAction(nameof(CreateNewUser), new CustomResponse { Message = $"User: {newUserDto.UserName} created.", StatusCode = 201 });
+            
     }
 
     /// <summary>
@@ -104,11 +90,9 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateAddressById([FromRoute] string userId, [FromForm] AddressDto addressUpdatesDtoFromUser)
     {
-        var updatedAddress = await _userRepository.UpdateAddressAsync(userId, _mappings.AddressDtoToAddress(addressUpdatesDtoFromUser));
+        await _userRepository.UpdateAddressAsync(userId, _mappings.AddressDtoToAddress(addressUpdatesDtoFromUser));
 
-        return updatedAddress is null
-            ? NotFound(new CustomResponse { Message = "User not found", StatusCode = "404" })
-            : Ok(_mappings.AddressToAddressDto(updatedAddress));
+        return NoContent();
     }
 
     /// <summary>
@@ -119,11 +103,9 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePersonalInfoById([FromRoute] string userId, [FromForm] PersonalInfoDto personalInfoUpdates)
     {
-        var updatedPersonalInfo = await _userRepository.UpdatePersonalInfoPatchAsync(userId, _mappings.PersonalInfoDtoToPersonalInfo(personalInfoUpdates));
+         await _userRepository.UpdatePersonalInfoPatchAsync(userId, _mappings.PersonalInfoDtoToPersonalInfo(personalInfoUpdates));
 
-        return updatedPersonalInfo is null
-            ? NotFound(new CustomResponse { Message = "User not found.", StatusCode = "404" })
-            : Ok(_mappings.PersonalInfoToPersonalInfoDto(updatedPersonalInfo));
+        return NoContent();
     }
 
     /// <summary>
@@ -135,13 +117,9 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateContactInfoById([FromRoute] string userId, [FromForm] ContactDto contactUpdates)
     {
-        var result = await _userRepository.UpdateContactInfoAsync(userId, contactUpdates.Email, contactUpdates.PhoneNumber);
+        await _userRepository.UpdateContactInfoAsync(userId, contactUpdates.Email, contactUpdates.PhoneNumber);
 
-        if (result == null) return NotFound(new CustomResponse { Message = "User not found.", StatusCode = "404" });
-
-        return result.Succeeded
-            ? Ok(new CustomResponse { Message = $"Updated.", StatusCode = "200" })
-            : new ObjectResult(new CustomResponse { Message = $"Error: {string.Join(", ", result.Errors.Select(e => e.Description))}", StatusCode = result.Errors.First().Code });
+        return NoContent();
     }
 
     /// <summary>
@@ -153,12 +131,9 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> DeleteUserById([FromRoute] string userId)
     {
-        var result = await _userRepository.DeleteUserAsync(userId);
-        if (result!.Succeeded) await _deviceAssignRepository.DeleteUserAsync(userId);
-            
-        return result.Succeeded 
-            ? Ok(new CustomResponse { Message = $"Deleted.", StatusCode = "200" })
-            : new ObjectResult(new CustomResponse { Message = $"Error: {string.Join(", ", result.Errors.Select(e => e.Description))}", StatusCode = result.Errors.First().Code });
+        await _userRepository.DeleteUserAsync(userId);
+
+        return NoContent();
 
     }
 

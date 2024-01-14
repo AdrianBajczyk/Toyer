@@ -3,7 +3,8 @@ using Toyer.API.Controllers;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Order;
-using Toyer.Logic.Responses;
+using Toyer.Logic.Exceptions.FailResponses.Derived.DeviceType;
+using Toyer.Logic.Exceptions.FailResponses.Derived.Order;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories.Classes;
@@ -19,30 +20,23 @@ public class SqlOrderRepository : IOrderRepository
         _deviceTypeRepository = deviceTypeRepository;
     }
 
-    public async Task<CustomResponse> AssignOrderToDeviceTypesAsync(int orderId, OrderAssignDto deviceTypesToAssign)
+    public async Task AssignOrderToDeviceTypesAsync(int orderId, IEnumerable<int> deviceTypeIds)
     {
         var orderToAssign = await GetOrderByIdAsync(orderId);
-        if (orderToAssign == null) return new CustomResponse() { Message = "Order not found.", StatusCode = "404" };
+        if (orderToAssign == null) throw new OrderNotFoundException(orderId);
 
-        var deviceTypeIds = deviceTypesToAssign.DeviceTypeIds;
         var exisitingDeviceTypes = await _deviceTypeRepository.GetAllDeviceTypesAsync();
 
         var nonExistentDeviceTypeIds = CheckForNonExisitngIds(deviceTypeIds, exisitingDeviceTypes);
-        if (nonExistentDeviceTypeIds != null)
-        {
-            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", nonExistentDeviceTypeIds)}] to be assigned not found", StatusCode = "404" };
-        }
+        if (nonExistentDeviceTypeIds != null) throw new DeviceTypesNotFoundException(nonExistentDeviceTypeIds);
+        
 
         var duplicatedIds = CheckForDuplicatesInDb(deviceTypeIds, orderToAssign);
-        if (duplicatedIds != null )
-        {
-            return new CustomResponse() { Message = $"ID/s: [{string.Join(", ", duplicatedIds)}] has/have a member of given order", StatusCode = "400" };
-        }
+        if (duplicatedIds != null ) throw new DeviceTypesHasGivenOrderException(duplicatedIds);
 
         PerformAssigment(deviceTypeIds, orderToAssign, exisitingDeviceTypes!);
         await _dbContext.SaveChangesAsync();
 
-        return new CustomResponse() { Message = $"Order has been assigned to: [{string.Join(",", deviceTypeIds)}] device type/s id/s", StatusCode = "200" };
     }
 
     public async Task<Order> CreateNewOrderAsync(Order order)
@@ -52,42 +46,50 @@ public class SqlOrderRepository : IOrderRepository
 
         return order;
     }
-    public async Task<ICollection<Order>?> GetAllOrdersAsync() => await _dbContext.Orders.Include(o => o.DeviceTypes).ToListAsync();
-    public async Task<Order?> GetOrderByIdAsync(int orderId) => await _dbContext.Orders.Include(o => o.DeviceTypes).FirstOrDefaultAsync(o => o.Id == orderId);
-    public async Task<Order?> UpdateOrderByIdAsync(int orderId, OrderCreateDto orderUpdates)
+    public async Task<ICollection<Order>?> GetAllOrdersAsync()
     {
-        var orderToUpdate = await GetOrderByIdAsync(orderId);
+        return await _dbContext.Orders.Include(o => o.DeviceTypes).ToListAsync()
+            ?? throw new OrderTableEmptyException();
+    }
 
-        if (orderToUpdate == null) return null;
+    public async Task<Order> GetOrderByIdAsync(int orderId) 
+    {
+        return await _dbContext.Orders
+            .Include(o => o.DeviceTypes)
+            .FirstOrDefaultAsync(o => o.Id == orderId)
+            ?? throw new OrderNotFoundException(orderId);
+    }
+    public async Task UpdateOrderByIdAsync(int orderId, OrderCreateDto orderUpdates)
+    {
+        var orderToUpdate = await GetOrderByIdAsync(orderId) 
+            ?? throw new OrderNotFoundException(orderId);
+
         if (orderUpdates.Name != null) orderToUpdate.Name = orderUpdates.Name;
         if (orderUpdates.Description != null) orderToUpdate.Description = orderUpdates.Description;
         if (orderUpdates.MessageBody != null) orderToUpdate.MessageBody = orderUpdates.MessageBody;
 
         await _dbContext.SaveChangesAsync();
-
-        return orderToUpdate;
     }
 
-    public async Task<Order?> DeleteOrderByIdAsync(int orderId)
+    public async Task DeleteOrderByIdAsync(int orderId)
     {
-        var orderToDelete = await GetOrderByIdAsync(orderId);
-        if (orderToDelete == null) return null;
+        var orderToDelete = await GetOrderByIdAsync(orderId) 
+            ?? throw new OrderNotFoundException(orderId);
 
         _dbContext.Orders.Remove(orderToDelete);
         await _dbContext.SaveChangesAsync();
 
-        return orderToDelete;
     }
 
-    private static void PerformAssigment(List<int> deviceTypeIds, Order orderToAssign, ICollection<DeviceType> deviceTypes)
+    private static void PerformAssigment(IEnumerable<int> deviceTypeIds, Order orderToAssign, ICollection<DeviceType> deviceTypes)
     {
-        foreach (var deviceTypeId in deviceTypeIds)
+        foreach (int deviceTypeId in deviceTypeIds)
         {
             var deviceType = deviceTypes!.First(dt => dt.Id == deviceTypeId);
             orderToAssign.DeviceTypes.Add(deviceType!);
         }
     }
-    private static List<int>? CheckForNonExisitngIds(List<int> deviceTypeIds, ICollection<DeviceType>? deviceTypes)
+    private static IEnumerable<int>? CheckForNonExisitngIds(IEnumerable<int> deviceTypeIds, ICollection<DeviceType>? deviceTypes)
     {
         if (deviceTypes == null) return deviceTypeIds;
 
@@ -101,7 +103,7 @@ public class SqlOrderRepository : IOrderRepository
 
         return nonExistentDeviceTypeIds.Count > 0 ? nonExistentDeviceTypeIds : null;
     }
-    private static List<int>? CheckForDuplicatesInDb(List<int> deviceTypeIds, Order orderToAssign)
+    private static IEnumerable<int>? CheckForDuplicatesInDb(IEnumerable<int> deviceTypeIds, Order orderToAssign)
     {
         var duplicatedIds = new List<int>();
 

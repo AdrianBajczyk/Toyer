@@ -6,10 +6,10 @@ namespace Toyer.API.Controllers;
 
 public interface IOrderRepository
 {
-    Task<CustomResponse> AssignOrderToDeviceTypesAsync(int orderId, OrderAssignDto deviceTypeListIds);
     Task<Order> CreateNewOrderAsync(Order order);
     Task<ICollection<Order>?> GetAllOrdersAsync();
-    Task<Order?> GetOrderByIdAsync(int orderId);
-    Task<Order?> UpdateOrderByIdAsync(int orderId, OrderCreateDto orderUpdates);
-    Task<Order?> DeleteOrderByIdAsync(int orderId);
+    Task<Order> GetOrderByIdAsync(int orderId);
+    Task AssignOrderToDeviceTypesAsync(int orderId, IEnumerable<int> deviceTypeListIds);
+    Task UpdateOrderByIdAsync(int orderId, OrderCreateDto orderUpdates);
+    Task DeleteOrderByIdAsync(int orderId);
 }

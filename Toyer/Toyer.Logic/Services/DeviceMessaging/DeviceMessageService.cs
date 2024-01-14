@@ -17,12 +17,15 @@ public class DeviceMessageService : IDeviceMessageService
     }
     public async Task SendCloudToDeviceMessageAsync(string targetDeviceId, string message)
     {
-        var azureIotHubServiceConnectionstring = _configuration["AzureIotHubServiceConnectionstring"];
 
-        ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(azureIotHubServiceConnectionstring);
-        var commandMessage = new Message(Encoding.ASCII.GetBytes(message));
-        await serviceClient.SendAsync(targetDeviceId, commandMessage);
-        
+            var azureIotHubServiceConnectionstring = _configuration["AzureIotHubServiceConnectionstring"];
+
+            ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(azureIotHubServiceConnectionstring);
+            var commandMessage = new Message(Encoding.ASCII.GetBytes(message));
+            await serviceClient.SendAsync(targetDeviceId, commandMessage);
+
+            //serviceClient.GetFileNotificationReceiver obczaj w wolnym czasie aby uzyskać zwrot z chmury o udanym lub niedudanym wysłaniu wiadomości
+
     }
 
 

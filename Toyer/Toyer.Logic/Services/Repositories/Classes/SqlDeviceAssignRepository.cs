@@ -1,38 +1,28 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+﻿using Microsoft.EntityFrameworkCore;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
-using Toyer.Logic.Responses;
+using Toyer.Logic.Exceptions.FailResponses.Derived.Device;
+using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories.Classes;
 
-public class SqlDeviceAssignRepository : IDeviceAssignRepository
+public class SqlDeviceAssignRepository(IUserRepository userRepository, IDeviceRepository deviceRepository, ToyerDbContext toyerDbContext) : IDeviceAssignRepository
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IDeviceRepository _deviceRepository;
-    private readonly ToyerDbContext _toyerDbContext;
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IDeviceRepository _deviceRepository = deviceRepository;
+    private readonly ToyerDbContext _toyerDbContext = toyerDbContext;
 
-    public SqlDeviceAssignRepository(IUserRepository userRepository, IDeviceRepository deviceRepository, ToyerDbContext toyerDbContext)
+    public async Task AssignDeviceToUserAsync(string deviceId, string userId)
     {
-        _userRepository = userRepository;
-        _deviceRepository = deviceRepository;
-        _toyerDbContext = toyerDbContext;
-    }
+        var user = await _userRepository.GetUserByIdAsync(userId) 
+            ?? throw new UserNotFoundException(userId);
 
-    public async Task<CustomResponse> AssignDeviceToUserAsync(string deviceId, string userId)
-    {
-
-        var user = await _userRepository.GetUserByIdAsync(userId);
-        if (user == null) return new CustomResponse { Message = "User not found.", StatusCode = "404" };
-
-        var device = await _deviceRepository.GetDeviceByIdAsync(deviceId);
-        if (device == null) return new CustomResponse { Message = "Device not found.", StatusCode = "404" };
+        var device = await _deviceRepository.GetDeviceByIdAsync(deviceId) 
+            ?? throw new DeviceNotFoundException(deviceId);
 
         if (_toyerDbContext.UsersDevices.Any(r => r.DevicesIds.Contains(deviceId))) 
-            return new CustomResponse { Message = "Device is in assigned state. To change user, first unassign device from its current account.", StatusCode = "400" };
+            throw new DeviceIsAssignedException(deviceId);
 
         var relation =  await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.UserId == userId);
 
@@ -40,27 +30,24 @@ public class SqlDeviceAssignRepository : IDeviceAssignRepository
 
         relation!.DevicesIds.Add(deviceId);
         await _toyerDbContext.SaveChangesAsync();
-
-        return new CustomResponse { Message = "Device assigned.", StatusCode = "200" };
     }
 
-    public async Task<CustomResponse> UnassignDeviceFromUserAsync(string deviceId, string userId)
+    public async Task UnassignDeviceFromUserAsync(string deviceId, string userId)
     {
-        var user = await _userRepository.GetUserByIdAsync(userId);
-        if (user == null) return new CustomResponse { Message = "User not found.", StatusCode = "404" };
+        var user = await _userRepository.GetUserByIdAsync(userId) 
+            ?? throw new UserNotFoundException(userId);
 
-        var device = await _deviceRepository.GetDeviceByIdAsync(deviceId);
-        if (device == null) return new CustomResponse { Message = "Device not found.", StatusCode = "404" };
+        var device = await _deviceRepository.GetDeviceByIdAsync(deviceId) 
+            ?? throw new DeviceNotFoundException(deviceId);
 
-        var relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.UserId == userId);
-        if (relation == null) return new CustomResponse { Message = "User has no specified device.", StatusCode = "404" };
+        var relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.UserId == userId)
+            ?? throw new UserHasNoDeviceException(userId, deviceId);
 
-        if (!relation.DevicesIds.Contains(deviceId)) return new CustomResponse { Message = "User has no specified device.", StatusCode = "404" };
+        if (!relation.DevicesIds.Contains(deviceId))
+            throw new UserHasNoDeviceException(userId, deviceId);
 
         relation.DevicesIds.Remove(deviceId);
         await _toyerDbContext.SaveChangesAsync();
-
-        return new CustomResponse { Message = "Device unassigned.", StatusCode = "200" };
     }
 
     public async Task DeleteDeviceAsync(string deviceId)

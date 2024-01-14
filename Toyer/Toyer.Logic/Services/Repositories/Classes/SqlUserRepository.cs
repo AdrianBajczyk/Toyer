@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
+using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Authorization;
 using Toyer.Logic.Services.Repositories.Interfaces;
@@ -22,36 +23,42 @@ public class SqlUserRepository : IUserRepository
         _userManager = userManager;
         _tokenService = tokenService;
     }
-    public async Task<User?> GetUserByIdAsync(string id)
-    => await _dbContext.Users
-            .Include(u => u.PersonalInfo)
-            .ThenInclude(p => p.Address)
-            .FirstOrDefaultAsync(u => u.Id.ToString() == id);
-    
+    public async Task<User> GetUserByIdAsync(string userId)
+    {
+        return await _dbContext.Users
+                    .Include(u => u.PersonalInfo)
+                    .ThenInclude(p => p.Address)
+                    .FirstOrDefaultAsync(u => u.Id.ToString() == userId)
+                    ?? throw new UserNotFoundException(userId);
+    }
 
-    public async Task<List<User>?> GetUsersAsync()
-    => await _dbContext.Users
-            .Include(u => u.PersonalInfo)
-            .ThenInclude(p => p.Address)
-            .ToListAsync();
-    
-    public async Task<IdentityResult> RegisterNewUserAsync(User newUser, string password)
+    public async Task<IEnumerable<User>> GetUsersAsync()
+    {
+        var users = await _dbContext.Users
+                .Include(u => u.PersonalInfo)
+                .ThenInclude(p => p.Address)
+                .ToListAsync();
+
+        return users.IsNullOrEmpty()
+            ? throw new UsersTableEmptyException()
+            : users;
+    }
+
+    public async Task<User> RegisterNewUserAsync(User newUser, string password)
     {
         var result = await _userManager.CreateAsync(newUser);
 
-        if (result.Succeeded)
-        {
-            await _userManager.AddToRoleAsync(newUser, "RegisteredUser");
-            result = await _userManager.AddPasswordAsync(newUser, password);
-        }
+        if (!result.Succeeded) throw new Exception();
 
-        return result;
+        await _userManager.AddToRoleAsync(newUser, "RegisteredUser");
+        await _userManager.AddPasswordAsync(newUser, password);
+
+        return newUser;
     }
-    public async Task<Address?> UpdateAddressAsync(string userId, Address updatesFromUser)
+    public async Task UpdateAddressAsync(string userId, Address updatesFromUser)
     {
-        var userToUpdate = await GetUserByIdAsync(userId);
-
-        if (userToUpdate == null) return null;
+        var userToUpdate = await GetUserByIdAsync(userId) 
+            ?? throw new UserNotFoundException(userId);
 
         var addressToUpdate = userToUpdate.PersonalInfo!.Address!;
 
@@ -65,13 +72,11 @@ public class SqlUserRepository : IUserRepository
 
         await _dbContext.SaveChangesAsync();
 
-        return addressToUpdate;
     }
-    public async Task<PersonalInfo?> UpdatePersonalInfoPatchAsync(string userId, PersonalInfo updatesFromUser)
+    public async Task UpdatePersonalInfoPatchAsync(string userId, PersonalInfo updatesFromUser)
     {
-        var userToUpdate = await GetUserByIdAsync(userId);
-
-        if (userToUpdate == null) return null;
+        var userToUpdate = await GetUserByIdAsync(userId) 
+            ?? throw new UserNotFoundException(userId);
 
         var personalInfoToUpdate = userToUpdate.PersonalInfo!;
 
@@ -80,41 +85,26 @@ public class SqlUserRepository : IUserRepository
         if (updatesFromUser.BirthDate != default) personalInfoToUpdate.BirthDate = updatesFromUser.BirthDate;
 
         await _dbContext.SaveChangesAsync();
-
-        return personalInfoToUpdate;
     }
-    public async Task<IdentityResult?> DeleteUserAsync(string Id)
+    public async Task DeleteUserAsync(string userId)
     {
-        var userToDelete = await GetUserByIdAsync(Id);
+        var userToDelete = await GetUserByIdAsync(userId) 
+            ?? throw new UserNotFoundException(userId);
 
-        if (userToDelete == null) return IdentityResult.Failed(new IdentityError { Description = "User not found.", Code = "404" });
+        await _userManager.DeleteAsync(userToDelete);
 
-        var result = await _userManager.DeleteAsync(userToDelete);
-
-        return result;
     }
 
-    public async Task<IdentityResult> UpdateContactInfoAsync(string userId, string? email, string? phoneNumber)
+    public async Task UpdateContactInfoAsync(string userId, string? email, string? phoneNumber)
     {
-        var userToUpdate = await GetUserByIdAsync(userId);
+        var userToUpdate = await GetUserByIdAsync(userId) 
+            ?? throw new UserNotFoundException(userId);
 
-        if (userToUpdate == null) return IdentityResult.Failed(new IdentityError { Description = "User not found.", Code = "404" });
+        if (!string.IsNullOrWhiteSpace(email)) await _userManager.SetEmailAsync(userToUpdate, email);
 
-        if (!string.IsNullOrWhiteSpace(email))
-        {
-            var setEmailResult = await _userManager.SetEmailAsync(userToUpdate, email);
+        if (!string.IsNullOrWhiteSpace(phoneNumber)) await _userManager.SetPhoneNumberAsync(userToUpdate, phoneNumber);
 
-            if (!setEmailResult.Succeeded) return setEmailResult;
-        }
-
-        if (!string.IsNullOrWhiteSpace(phoneNumber))
-        {
-            var setPhoneNumberResult = await _userManager.SetPhoneNumberAsync(userToUpdate, phoneNumber);
-
-            if (!setPhoneNumberResult.Succeeded) return setPhoneNumberResult;
-        }
-
-        return await _userManager.UpdateAsync(userToUpdate);
+         await _userManager.UpdateAsync(userToUpdate);
     }
 
     public async Task<AuthorizationResponse> LoginAsync(string email, string password)

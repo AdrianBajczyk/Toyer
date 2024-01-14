@@ -1,4 +1,4 @@
-using Toyer.API.Extensions.Exceptions;
+using Toyer.API.Extensions;
 using Toyer.API.Extensions.WebAppBuilder;
 
 
@@ -17,6 +17,7 @@ builder.Services.AddCustomMappingServices();
 builder.Services.AddCustomDbContexts(builder.Configuration);
 builder.Services.AddCustomAuthenticationServices(builder.Configuration);
 builder.Services.AddCustomIdentity();
+builder.Services.AddTransient<ExceptionCustomHandler>();
 
 //  ASP.NET Core MVC trims the suffix Async from action names by default
 builder.Services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
@@ -29,7 +30,6 @@ builder.Services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = fa
 
 var app = builder.Build();
 
-app.ConfigureExceptionHandler(app.Services.GetRequiredService<ILogger<Program>>());
 
 if (app.Environment.IsDevelopment())
 {
@@ -37,6 +37,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
 }
+
+app.UseMiddleware<ExceptionCustomHandler>();
 
 app.UseHttpsRedirection();
 

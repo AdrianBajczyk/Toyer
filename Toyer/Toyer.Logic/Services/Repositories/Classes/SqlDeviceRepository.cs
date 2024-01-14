@@ -2,7 +2,9 @@
 using Toyer.API.Controllers;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
-using Toyer.Logic.Responses;
+using Toyer.Logic.Exceptions.FailResponses.Derived.Device;
+using Toyer.Logic.Exceptions.FailResponses.Derived.DeviceType;
+using Toyer.Logic.Exceptions.FailResponses.Derived.Order;
 using Toyer.Logic.Services.DeviceMessaging;
 using Toyer.Logic.Services.DeviceProvisioningService;
 using Toyer.Logic.Services.Repositories.Interfaces;
@@ -30,13 +32,16 @@ public class SqlDeviceRepository : IDeviceRepository
         _messageService = messageService;
         _orderRepository = orderRepository;
     }
-    public async Task<Device?> CreateNewDeviceAsync(int deviceTypeId)
+    public async Task<Device> CreateNewDeviceAsync(int deviceTypeId)
     {
-        var deviceTypeToAssign = await _deviceTypeRepository.GetDeviceTypeByIdAsync(deviceTypeId);
-        if (deviceTypeToAssign == null) throw new Exception();
+        var deviceTypeToAssign = await _deviceTypeRepository.GetDeviceTypeByIdAsync(deviceTypeId) 
+            ?? throw new DeviceTypeNotFoundException(deviceTypeId);
 
-        var newDevice = new Device { Name = deviceTypeToAssign.Name + "_Device" };
-        newDevice.DeviceType = deviceTypeToAssign;
+        var newDevice = new Device
+        {
+            Name = deviceTypeToAssign.Name + "_Device",
+            DeviceType = deviceTypeToAssign
+        };
 
         await _dbContext.Devices.AddAsync(newDevice);
 
@@ -46,44 +51,46 @@ public class SqlDeviceRepository : IDeviceRepository
         return newDevice;
     }
 
-    public async Task<Device?> DeleteDeviceByIdAsync(string deviceId)
+
+    public async Task<Device> GetDeviceByIdAsync(string deviceId)
     {
-        var deviceToDelete = await GetDeviceByIdAsync(deviceId);
-        if (deviceToDelete == null) return null;
+        var device = await _dbContext.Devices
+            .Include(d => d.DeviceType)
+            .ThenInclude(dt => dt.Orders)
+            .FirstOrDefaultAsync(d => d.Id.ToString() == deviceId);
 
-        _dbContext.Devices.Remove(deviceToDelete);
-        await _dbContext.SaveChangesAsync();
-
-        return deviceToDelete;
-    }
-
-    public async Task<Device?> GetDeviceByIdAsync(string deviceId) 
-        => await _dbContext.Devices
-        .Include(d => d.DeviceType)
-        .ThenInclude(dt => dt.Orders)
-        .FirstOrDefaultAsync(d => d.Id.ToString() == deviceId);
-
-    public async Task<CustomResponse> SendOrderToDevice(string deviceId, int orderId)
-    {
-        var orderMessage = await _orderRepository.GetOrderByIdAsync(orderId);
-        if (orderMessage == null) return new CustomResponse() { Message = "Order not found.", StatusCode = "404" };
-
-        var device = await GetDeviceByIdAsync(deviceId);
-        if (device == null) return new CustomResponse() { Message = "Device nont found.", StatusCode = "404" };
-
-        await _messageService.SendCloudToDeviceMessageAsync(deviceId, orderMessage.MessageBody);
-        return new CustomResponse() { Message = "Order send.", StatusCode = "200" };
+        return device 
+            ?? throw new DeviceNotFoundException(deviceId);
     }
 
 
-    public async Task<Device?> UpdateDeviceNameAsync(string deviceId, string nameUpdateDto)
+    public async Task SendOrderToDevice(string deviceId, int orderId)
     {
-        var device = await GetDeviceByIdAsync(deviceId);
-        if (device == null) return null;
+        var order = await _orderRepository.GetOrderByIdAsync(orderId) 
+            ?? throw new OrderNotFoundException(orderId);
+
+        _ = await GetDeviceByIdAsync(deviceId)
+            ?? throw new DeviceNotFoundException(deviceId);
+
+        await _messageService.SendCloudToDeviceMessageAsync(deviceId, order.MessageBody);
+    }
+
+
+    public async Task UpdateDeviceNameAsync(string deviceId, string nameUpdateDto)
+    {
+        var device = await GetDeviceByIdAsync(deviceId)
+            ?? throw new DeviceNotFoundException(deviceId);
 
         device.Name = nameUpdateDto;
         await _dbContext.SaveChangesAsync();
+    }
 
-        return device;
+    public async Task DeleteDeviceByIdAsync(string deviceId)
+    {
+        var deviceToDelete = await GetDeviceByIdAsync(deviceId)
+            ?? throw new DeviceNotFoundException(deviceId);
+
+        _dbContext.Devices.Remove(deviceToDelete);
+        await _dbContext.SaveChangesAsync();
     }
 }

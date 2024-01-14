@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Devices.Client;
+using Microsoft.Azure.Devices.Common.Exceptions;
 using Microsoft.Azure.Devices.Provisioning.Client;
 using Microsoft.Azure.Devices.Provisioning.Client.Transport;
 using Microsoft.Azure.Devices.Shared;
@@ -44,39 +45,20 @@ public class DpsClient : IDpsClient
             security,
             transportHandler);
 
-        _logger.LogInformation($"Initialized for device Id {security.GetRegistrationID()}.");
-        _logger.LogInformation(security.GetPrimaryKey());
 
-        _logger.LogInformation("Registering with the device provisioning service...");
-        try
-        {
             DeviceRegistrationResult result = await provClient.RegisterAsync();
 
             if (result.Status != ProvisioningRegistrationStatusType.Assigned)
             {
-                _logger.LogError($"Registration failed. Error: " + result.ErrorMessage);
-                return;
+                throw new IotHubException(result.ErrorMessage);
             }
-
-            _logger.LogInformation($"Device {result.DeviceId} registered to {result.AssignedHub}.");
-
-            _logger.LogInformation("Creating symmetric key authentication for IoT Hub...");
 
             IAuthenticationMethod auth = new DeviceAuthenticationWithRegistrySymmetricKey(
                 result.DeviceId,
                 security.GetPrimaryKey());
 
-            
-            _logger.LogInformation($"Testing the provisioned device with IoT Hub...");
             using DeviceClient iotClient = DeviceClient.Create(result.AssignedHub, auth, TransportType.Mqtt);
 
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.ToString());
-        }
-
-        _logger.LogInformation("Finished...");
     }
 
     private ProvisioningTransportHandler GetTransportHandler()
