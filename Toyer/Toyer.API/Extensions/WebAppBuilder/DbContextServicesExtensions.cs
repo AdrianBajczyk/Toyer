@@ -11,9 +11,9 @@ using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
-public static class DbContextServicesExtensions
+internal static class DbContextServicesExtensions
 {
-    public static IServiceCollection AddCustomDbContexts(this IServiceCollection services, IConfiguration configuration)
+    internal static IServiceCollection AddCustomDbContexts(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(configuration["ToyerLocalConnectionstring"]));
         services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(configuration["ToyerIdentityLocalConnectionstring"]));

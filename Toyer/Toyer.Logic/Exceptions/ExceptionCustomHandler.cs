@@ -1,9 +1,11 @@
-﻿using Toyer.Logic.Exceptions.FailResponses.Abstract;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Toyer.Logic.Exceptions.FailResponses.Abstract;
 using Toyer.Logic.Responses;
 
-namespace Toyer.API.Extensions;
+namespace Toyer.Logic.Exceptions;
 
-internal sealed class ExceptionCustomHandler(ILogger<ExceptionCustomHandler> logger) : IMiddleware
+public sealed class ExceptionCustomHandler(ILogger<ExceptionCustomHandler> logger) : IMiddleware
 {
 
     private readonly ILogger<ExceptionCustomHandler> _logger = logger;

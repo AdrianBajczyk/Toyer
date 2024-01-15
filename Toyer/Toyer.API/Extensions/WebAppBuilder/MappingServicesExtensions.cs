@@ -3,20 +3,19 @@ using Toyer.Data.Mappings;
 using Toyer.Logic.Mappings.UserMappings.classes;
 using Toyer.Logic.Mappings.UserMappings.Classes;
 
-namespace Toyer.API.Extensions.WebAppBuilder
+namespace Toyer.API.Extensions.WebAppBuilder;
+
+internal static class MappingServicesExtensions
 {
-    internal static class MappingServicesExtensions
+    internal static IServiceCollection AddCustomMappingServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddCustomMappingServices(this IServiceCollection services)
-        {
-            services.AddAutoMapper(typeof(AutoMapperProfiles));
+        services.AddAutoMapper(typeof(AutoMapperProfiles));
 
-            services.AddScoped<IUserMapings, UserMappings>();
-            services.AddScoped<IDeviceTypeMappings, DeviceTypeMappings>();
-            services.AddScoped<IOrderMappings, OrderMappings>();
-            services.AddScoped<IDeviceMappings, DeviceMappings>();
+        services.AddScoped<IUserMapings, UserMappings>();
+        services.AddScoped<IDeviceTypeMappings, DeviceTypeMappings>();
+        services.AddScoped<IOrderMappings, OrderMappings>();
+        services.AddScoped<IDeviceMappings, DeviceMappings>();
 
-            return services;
-        }
+        return services;
     }
 }

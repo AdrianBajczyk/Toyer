@@ -5,9 +5,9 @@ using Toyer.Logic.Services.Authorization;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
-public static class AuthenticationServicesExtensions
+internal static class AuthenticationServicesExtensions
 {
-    public static IServiceCollection AddCustomAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
+    internal static IServiceCollection AddCustomAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ITokenService, TokenService>();
 
