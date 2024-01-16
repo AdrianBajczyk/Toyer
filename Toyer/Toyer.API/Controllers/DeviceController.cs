@@ -3,11 +3,13 @@ using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Services.Repositories.Interfaces;
 using Toyer.Logic.Responses;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Toyer.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class DeviceController(IDeviceMappings mappings, IDeviceRepository deviceRepository, IDeviceAssignRepository deviceAssignRepository) : ControllerBase
@@ -21,6 +23,7 @@ public class DeviceController(IDeviceMappings mappings, IDeviceRepository device
     /// Create a new device and enroll it to the Azure IoT hub. 
     /// </summary>
     [HttpPost]
+    [Authorize(Policy = "Production ")]
     [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateNewDeviceAsync([FromForm]DeviceCreateDto deviceCreateDto)
@@ -73,6 +76,7 @@ public class DeviceController(IDeviceMappings mappings, IDeviceRepository device
     /// Deletes device by id.
     /// </summary>
     [HttpDelete("{deviceId}")]
+    [Authorize(Policy = "Production ")]
     [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteDeviceByIdAsync([FromRoute] string deviceId)

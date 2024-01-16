@@ -1,4 +1,6 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Dtos.Order;
 using Toyer.Logic.Responses;
@@ -7,6 +9,7 @@ namespace Toyer.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class OrderController(IOrderRepository ordersRepository, IOrderMappings mapper) : ControllerBase
@@ -18,6 +21,7 @@ public class OrderController(IOrderRepository ordersRepository, IOrderMappings m
     /// Create new order to control device.
     /// </summary>
     [HttpPost]
+    [Authorize(Policy = "Production ")]
     [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateOrderAsync([FromForm] OrderCreateDto orderCreateDto)
@@ -31,6 +35,7 @@ public class OrderController(IOrderRepository ordersRepository, IOrderMappings m
     /// Gets all orders for all devices
     /// </summary>
     [HttpGet]
+    [Authorize(Policy = "Production ")]
     [ProducesResponseType(typeof(IEnumerable<OrderPresentDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllOrdersAsync()
@@ -57,6 +62,7 @@ public class OrderController(IOrderRepository ordersRepository, IOrderMappings m
     /// Updates order credits by id.
     /// </summary>
     [HttpPut("{orderId:int}")]
+    [Authorize(Policy = "Production ")]
     [ProducesResponseType(typeof(OrderPresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
@@ -71,6 +77,7 @@ public class OrderController(IOrderRepository ordersRepository, IOrderMappings m
     /// Assigns order to device types.
     /// </summary>
     [HttpPut("assignment/{orderId:int}")]
+    [Authorize(Policy = "Production ")]
     [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
@@ -85,6 +92,7 @@ public class OrderController(IOrderRepository ordersRepository, IOrderMappings m
     /// Deletes order selected by id.
     /// </summary>
     [HttpDelete("{orderId:int}")]
+    [Authorize(Policy = "Production ")]
     [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteOrderByIdAsync([FromRoute] int orderId)

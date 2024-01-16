@@ -1,26 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Toyer.Logic.Services.Authorization;
+using Toyer.Logic.Services.Authorization.Token;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
-internal static class AuthenticationServicesExtensions
+public static class AuthenticationServicesExtensions
 {
-    internal static IServiceCollection AddCustomAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCustomAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ITokenService, TokenService>();
-
+        
         services
             .AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
+                    
                     ClockSkew = TimeSpan.Zero,
                     ValidateAudience = true,
                     ValidateLifetime = true,
@@ -31,7 +33,12 @@ internal static class AuthenticationServicesExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(configuration["IssuerSigningKey"]))
                 };
+
+
             });
+
+
+        
 
 
         return services;

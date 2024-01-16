@@ -5,9 +5,9 @@ using Toyer.Logic.Mappings.UserMappings.Classes;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
-internal static class MappingServicesExtensions
+public static class MappingServicesExtensions
 {
-    internal static IServiceCollection AddCustomMappingServices(this IServiceCollection services)
+    public static IServiceCollection AddCustomMappingServices(this IServiceCollection services)
     {
         services.AddAutoMapper(typeof(AutoMapperProfiles));
 

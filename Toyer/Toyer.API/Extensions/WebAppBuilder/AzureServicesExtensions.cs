@@ -3,9 +3,9 @@ using Toyer.Logic.Services.DeviceProvisioningService;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
-internal static class AzureServicesExtensions
+public static class AzureServicesExtensions
 {
-    internal static IServiceCollection AddCustomAzureServices(this IServiceCollection services)
+    public static IServiceCollection AddCustomAzureServices(this IServiceCollection services)
     {
         services.AddSingleton<IDeviceMessageService, DeviceMessageService>();
         services.AddSingleton<IDpsClient, DpsClient>();

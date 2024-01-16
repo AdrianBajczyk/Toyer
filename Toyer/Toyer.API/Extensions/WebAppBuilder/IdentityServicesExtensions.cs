@@ -4,9 +4,9 @@ using Toyer.Data.Entities;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
-internal static class IdentityServicesExtensions
+public static class IdentityServicesExtensions
 {
-    internal static IServiceCollection AddCustomIdentity(this IServiceCollection services)
+    public static IServiceCollection AddCustomIdentity(this IServiceCollection services)
     {
         services.AddIdentity<User, IdentityRole>(options =>
         {
@@ -18,7 +18,6 @@ internal static class IdentityServicesExtensions
             options.Password.RequireUppercase = true;
             options.Password.RequireLowercase = true;
         })
-
         .AddEntityFrameworkStores<UsersDbContext>()
         .AddDefaultTokenProviders();
 

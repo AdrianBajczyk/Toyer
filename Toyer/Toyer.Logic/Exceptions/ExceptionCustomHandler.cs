@@ -27,6 +27,7 @@ public sealed class ExceptionCustomHandler(ILogger<ExceptionCustomHandler> logge
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = exception switch
         {
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             BadRequestException => StatusCodes.Status400BadRequest,
             NotFoundException => StatusCodes.Status404NotFound,
             _ => StatusCodes.Status500InternalServerError

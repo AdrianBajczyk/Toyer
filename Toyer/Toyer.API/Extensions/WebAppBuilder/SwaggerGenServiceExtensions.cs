@@ -4,9 +4,9 @@ using System.Reflection;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
-internal static class SwaggerGenServiceExtensions
+public static class SwaggerGenServiceExtensions
 {
-    internal static IServiceCollection AddCustomSwaggerGen(this IServiceCollection services)
+    public static IServiceCollection AddCustomSwaggerGen(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
         {

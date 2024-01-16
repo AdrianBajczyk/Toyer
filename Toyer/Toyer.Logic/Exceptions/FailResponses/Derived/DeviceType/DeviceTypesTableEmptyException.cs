@@ -2,5 +2,5 @@
 
 namespace Toyer.Logic.Exceptions.FailResponses.Derived.DeviceType;
 
-public sealed class DeviceTypesTableEmptyException() 
+public sealed class DeviceTypesTableEmptyException()
     : NotFoundException("There are no device types yet.");

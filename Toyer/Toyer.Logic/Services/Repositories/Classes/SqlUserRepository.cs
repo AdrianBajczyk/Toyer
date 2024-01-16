@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
 using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Responses;
-using Toyer.Logic.Services.Authorization;
+using Toyer.Logic.Services.Authorization.Token;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories.Classes;
@@ -16,6 +18,7 @@ public class SqlUserRepository : IUserRepository
     private readonly UsersDbContext _dbContext;
     private readonly UserManager<User> _userManager;
     private readonly ITokenService _tokenService;
+
 
     public SqlUserRepository(UsersDbContext usersDbContext, UserManager<User> userManager, ITokenService tokenService)
     {
@@ -78,13 +81,15 @@ public class SqlUserRepository : IUserRepository
         var userToUpdate = await GetUserByIdAsync(userId) 
             ?? throw new UserNotFoundException(userId);
 
-        var personalInfoToUpdate = userToUpdate.PersonalInfo!;
+            var personalInfoToUpdate = userToUpdate.PersonalInfo!;
 
-        if (updatesFromUser.Name != null) personalInfoToUpdate.Name = updatesFromUser.Name;
-        if (updatesFromUser.Surname != null) personalInfoToUpdate.Surname = updatesFromUser.Surname;
-        if (updatesFromUser.BirthDate != default) personalInfoToUpdate.BirthDate = updatesFromUser.BirthDate;
+            if (updatesFromUser.Name != null) personalInfoToUpdate.Name = updatesFromUser.Name;
+            if (updatesFromUser.Surname != null) personalInfoToUpdate.Surname = updatesFromUser.Surname;
+            if (updatesFromUser.BirthDate != default) personalInfoToUpdate.BirthDate = updatesFromUser.BirthDate;
 
-        await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+       
+
     }
     public async Task DeleteUserAsync(string userId)
     {
@@ -92,7 +97,6 @@ public class SqlUserRepository : IUserRepository
             ?? throw new UserNotFoundException(userId);
 
         await _userManager.DeleteAsync(userToDelete);
-
     }
 
     public async Task UpdateContactInfoAsync(string userId, string? email, string? phoneNumber)
@@ -114,7 +118,8 @@ public class SqlUserRepository : IUserRepository
 
         if (!isPasswordValid || user == null) return new AuthorizationResponse { Message = "Invalid username or password." , StatusCode = "401"};
 
-        var accessToken = _tokenService.CreateToken(user);
+        var roles = await _userManager.GetRolesAsync(user);
+        var accessToken = _tokenService.CreateToken(user, roles[0]);
 
         return new AuthorizationResponse { Message = "Login succeed.", StatusCode = "200", Token =  accessToken };
     }

@@ -4,9 +4,9 @@ using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
-internal static class RepositoryServicesExtensions
+public static class RepositoryServicesExtensions
 {
-    internal static IServiceCollection AddCustomRepositories(this IServiceCollection services)
+    public static IServiceCollection AddCustomRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, SqlUserRepository>();
         services.AddScoped<IDeviceTypeRepository, SqlDeviceTypeRepository>();

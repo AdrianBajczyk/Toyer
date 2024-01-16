@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Toyer.Data.Entities;
 
-namespace Toyer.Logic.Services.Authorization;
+namespace Toyer.Logic.Services.Authorization.Token;
 
 public class TokenService : ITokenService
 {
@@ -18,21 +19,15 @@ public class TokenService : ITokenService
         _configuration = configuration;
     }
 
-    public string CreateToken(User user)
+    public string CreateToken(User user, string role)
     {
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
         var token = CreateJwtToken(
-            CreateClaims(user),
+            CreateClaims(user, role),
             CreateSigningCredentials(),
             expiration
         );
         var tokenHandler = new JwtSecurityTokenHandler();
-
-        //
-        Console.WriteLine(_configuration["TokenValidationParameters:Issuer"]);
-        Console.WriteLine(_configuration["TokenValidationParameters:Audience"]);
-        Console.WriteLine(_configuration["IssuerSigningKey"]);
-        //
 
         return tokenHandler.WriteToken(token);
     }
@@ -47,21 +42,27 @@ public class TokenService : ITokenService
             signingCredentials: credentials
         );
     }
-        
 
-    private List<Claim> CreateClaims(User user)
+
+    private List<Claim> CreateClaims(User user, string role)
     {
         try
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, _configuration["TokenValidationParameters:Audience"]),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email)
             };
+
+            if (role != null)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             return claims;
         }
         catch (Exception e)

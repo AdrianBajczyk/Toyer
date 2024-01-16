@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Repositories.Interfaces;
@@ -7,6 +9,7 @@ namespace Toyer.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class DeviceAssignController(IDeviceAssignRepository deviceAssignRepository) : ControllerBase
