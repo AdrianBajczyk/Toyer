@@ -7,7 +7,7 @@ using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories.Classes;
 
-public class SqlDeviceAssignRepository(IUserRepository userRepository, IDeviceRepository deviceRepository, ToyerDbContext toyerDbContext) : IDeviceAssignRepository
+public class SqlDeviceAssignmentRepository(IUserRepository userRepository, IDeviceRepository deviceRepository, ToyerDbContext toyerDbContext) : IDeviceAssignmentRepository
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IDeviceRepository _deviceRepository = deviceRepository;

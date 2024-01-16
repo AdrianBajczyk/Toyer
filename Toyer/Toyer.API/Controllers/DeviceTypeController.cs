@@ -21,7 +21,7 @@ public class DeviceTypeController(IDeviceTypeRepository deviceTypeRepository, ID
     /// Creates new device type which ultimately is container for availble orders for speiffic device
     /// </summary>
     [HttpPost]
-    [Authorize(Policy = "Production ")]
+    [Authorize(Policy = "Production")]
     [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateNewDeviceTypeAsync([FromForm] DeviceTypeCreateDto newDeviceType)
     {

@@ -1,53 +1,55 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using System.Security.Claims;
 using Toyer.Data.Entities;
 
 namespace Toyer.Logic.Services.Authorization.AuthorizationHandlers;
 
-public class ReadPermission : IAuthorizationRequirement;
-public class EditPermission : IAuthorizationRequirement;
-public class DeletePermission : IAuthorizationRequirement;
 
-
-public class PermissionHandler : IAuthorizationHandler
+public class PermissionHandler : AuthorizationHandler<OperationAuthorizationRequirement, string>
 {
-    public Task HandleAsync(AuthorizationHandlerContext context)
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, string userIdResource)
     {
-        var pendingRequirements = context.PendingRequirements.ToList();
-
-        foreach (var requirement in pendingRequirements)
+        switch (requirement.Name)
         {
-            if (requirement is ReadPermission)
-            {
-                if (context.HasSucceeded)
+            case nameof(PermissionRequirements.EditPermission):
                 {
-                    context.Succeed(requirement);
+                    if (IsOwner(context.User, userIdResource) || IsPrivileged(context.User))
+                    {
+                        context.Succeed(requirement);
+                    }
+                    break;
                 }
-            }
-            else if (requirement is EditPermission || requirement is DeletePermission)
-            {
-                if (IsOwner(context.User, context.Resource) || IsPrivileged(context.User))
+            case nameof(PermissionRequirements.ReadPermission):
                 {
-                    context.Succeed(requirement);
+                    if (context.HasSucceeded)
+                    {
+                        context.Succeed(requirement);
+                    }
+                    break;
                 }
-            }
+            case nameof(PermissionRequirements.DeletePermission):
+                {
+                    if (IsOwner(context.User, userIdResource) || IsPrivileged(context.User))
+                    {
+                        context.Succeed(requirement);
+                    }
+                    break;
+                }
         }
-
         return Task.CompletedTask;
     }
 
-    private static bool IsOwner(ClaimsPrincipal user, object? resource)
+    private static bool IsOwner(ClaimsPrincipal user, string userIdResource)
     {
-        if(resource is string resourceUseId)
-        {
-            return user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value == resourceUseId;
-        }
-        throw new ArgumentException("Non userId passed as a resource argument.");
+            return user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value == userIdResource; 
     }
 
     private static bool IsPrivileged(ClaimsPrincipal user)
     {
         return (user.IsInRole("Administrator") || user.IsInRole("Employee"));
     }
+
+
 }
 

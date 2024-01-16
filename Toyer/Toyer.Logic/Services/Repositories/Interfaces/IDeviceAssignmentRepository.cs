@@ -3,7 +3,7 @@ using Toyer.Logic.Responses;
 
 namespace Toyer.Logic.Services.Repositories.Interfaces
 {
-    public interface IDeviceAssignRepository
+    public interface IDeviceAssignmentRepository
     {
         Task AssignDeviceToUserAsync(string deviceId, string userId);
         Task UnassignDeviceFromUserAsync(string deviceId, string userId);

@@ -12,9 +12,9 @@ namespace Toyer.API.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-public class DeviceAssignController(IDeviceAssignRepository deviceAssignRepository) : ControllerBase
+public class DeviceAssignController(IDeviceAssignmentRepository deviceAssignRepository) : ControllerBase
 {
-    private readonly IDeviceAssignRepository _deviceAssignRepository = deviceAssignRepository;
+    private readonly IDeviceAssignmentRepository _deviceAssignRepository = deviceAssignRepository;
 
     /// <summary>
     /// Assigns device to user.

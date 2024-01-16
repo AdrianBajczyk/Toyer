@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Responses;
+using Toyer.Logic.Services.Authorization.AuthorizationHandlers;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.API.Controllers;
@@ -16,12 +16,12 @@ namespace Toyer.API.Controllers;
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class UserController(IUserRepository userRepository, 
     IUserMapings mappings, 
-    IDeviceAssignRepository deviceAssignRepository, 
+    IDeviceAssignmentRepository deviceAssignRepository, 
     IAuthorizationService authorizationService) 
     : ControllerBase
 {
     private readonly IUserMapings _mappings = mappings;
-    private readonly IDeviceAssignRepository _deviceAssignRepository = deviceAssignRepository;
+    private readonly IDeviceAssignmentRepository _deviceAssignRepository = deviceAssignRepository;
     private readonly IAuthorizationService _authorizationService = authorizationService;
     private readonly IUserRepository _userRepository = userRepository;
 
@@ -51,6 +51,7 @@ public class UserController(IUserRepository userRepository,
 
         return Ok(_mappings.UserToUserPresentShortDto(user));
     }
+
     /// <summary>
     /// Gets all users.
     /// </summary>
@@ -74,7 +75,7 @@ public class UserController(IUserRepository userRepository,
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExtendedById([FromRoute] string userId)
     {
-        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, "OwnerOrPrivilegedPolicy");
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
 
         var user = await _userRepository.GetUserByIdAsync(userId);
@@ -104,7 +105,7 @@ public class UserController(IUserRepository userRepository,
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateAddressById([FromRoute] string userId, [FromForm] AddressDto addressUpdatesDtoFromUser)
     {
-        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, "OwnerOrPrivilegedPolicy");
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
 
         await _userRepository.UpdateAddressAsync(userId, _mappings.AddressDtoToAddress(addressUpdatesDtoFromUser));
@@ -119,7 +120,7 @@ public class UserController(IUserRepository userRepository,
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePersonalInfoById([FromRoute] string userId, [FromForm] PersonalInfoDto personalInfoUpdates)
     {
-        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, "OwnerOrPrivilegedPolicy");
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
 
         await _userRepository.UpdatePersonalInfoPatchAsync(userId, _mappings.PersonalInfoDtoToPersonalInfo(personalInfoUpdates));
@@ -135,7 +136,7 @@ public class UserController(IUserRepository userRepository,
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateContactInfoById([FromRoute] string userId, [FromForm] ContactDto contactUpdates)
     {
-        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, "OwnerOrPrivilegedPolicy");
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
 
         await _userRepository.UpdateContactInfoAsync(userId, contactUpdates.Email, contactUpdates.PhoneNumber);
@@ -151,8 +152,7 @@ public class UserController(IUserRepository userRepository,
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> DeleteUserById([FromRoute] string userId)
     {
-
-        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, "OwnerOrPrivilegedPolicy");
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.DeletePermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
 
         await _userRepository.DeleteUserAsync(userId);

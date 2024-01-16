@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Toyer.API.Extensions.WebAppBuilder;
 using Toyer.Logic.Exceptions;
 using Toyer.Logic.Services.Authorization.AuthorizationHandlers;
@@ -27,12 +28,6 @@ builder.Services.AddTransient<IAuthorizationHandler, PermissionHandler>();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("ProductionTasks", policy => policy.RequireRole("Employee", "Administrator"));
-    options.AddPolicy("OwnerOrPrivilegedPolicy", policy =>
-    {
-        policy.Requirements.Add(new EditPermission());
-        policy.Requirements.Add(new DeletePermission());
-
-    });
 });
 
 
