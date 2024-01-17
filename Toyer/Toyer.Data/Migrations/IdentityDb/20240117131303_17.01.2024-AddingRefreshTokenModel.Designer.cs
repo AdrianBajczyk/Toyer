@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Toyer.Data.Context;
 
@@ -11,9 +12,11 @@ using Toyer.Data.Context;
 namespace Toyer.Data.Migrations.IdentityDb
 {
     [DbContext(typeof(UsersDbContext))]
-    partial class IdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240117131303_17.01.2024-AddingRefreshTokenModel")]
+    partial class _17012024AddingRefreshTokenModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

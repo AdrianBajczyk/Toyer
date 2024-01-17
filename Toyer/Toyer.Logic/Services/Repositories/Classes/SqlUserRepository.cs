@@ -127,8 +127,11 @@ public class SqlUserRepository : IUserRepository
 
     private async Task UpdateUsersRefreshToken(User user, string refreshToken)
     {
-        user.RefreshTokenModel!.RefreshToken = refreshToken;
-        user.RefreshTokenModel!.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+        user.RefreshTokenModel = new RefreshTokenModel 
+        {
+            RefreshToken = refreshToken,
+            RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
+        };
 
         await _userManager.UpdateAsync(user);
     }
