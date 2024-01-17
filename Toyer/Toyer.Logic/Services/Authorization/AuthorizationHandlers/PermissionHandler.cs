@@ -22,7 +22,7 @@ public class PermissionHandler : AuthorizationHandler<OperationAuthorizationRequ
                 }
             case nameof(PermissionRequirements.ReadPermission):
                 {
-                    if (context.HasSucceeded)
+                    if (IsOwner(context.User, userIdResource) || IsPrivileged(context.User))
                     {
                         context.Succeed(requirement);
                     }

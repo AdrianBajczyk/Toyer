@@ -62,6 +62,14 @@ public class SqlDeviceAssignmentRepository(IUserRepository userRepository, IDevi
         if (relation != null) _toyerDbContext.UsersDevices.Remove(relation);
     }
 
+    public async Task<string> GetUserIdByAssignedDeviceId(string deviceId)
+    {
+        var relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.DevicesIds.Contains(deviceId)) 
+            ?? throw new DeviceIsUnassignedException(deviceId);
+
+        return relation.UserId;
+    }
+
     private async Task CreateRelationId(string userId)
     {
         await _toyerDbContext.UsersDevices.AddAsync(new UserDevices() { UserId = userId });

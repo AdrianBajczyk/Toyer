@@ -4,6 +4,8 @@ using Toyer.Logic.Services.Repositories.Interfaces;
 using Toyer.Logic.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Toyer.Logic.Services.Authorization.AuthorizationHandlers;
+using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 
 namespace Toyer.API.Controllers;
 
@@ -12,12 +14,35 @@ namespace Toyer.API.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-public class DeviceController(IDeviceMappings mappings, IDeviceRepository deviceRepository, IDeviceAssignmentRepository deviceAssignRepository) : ControllerBase
+public class DeviceController(IDeviceMappings mappings,
+    IDeviceRepository deviceRepository, 
+    IDeviceAssignmentRepository deviceAssignRepository,
+    IAuthorizationService authorizationService) : ControllerBase
 {
 
     private readonly IDeviceMappings _mappings = mappings;
     private readonly IDeviceRepository _deviceRepository = deviceRepository;
     private readonly IDeviceAssignmentRepository _deviceAssignRepository = deviceAssignRepository;
+    private readonly IAuthorizationService _authorizationService = authorizationService;
+
+
+    ///<summary>
+    /// Sends chosen order to the device
+    /// </summary>
+    [HttpPost("{deviceId}/command/{orderId:int}")]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SendOrderToDeviceById([FromRoute] string deviceId, [FromRoute] int orderId)
+    {
+        var ownerId = await _deviceAssignRepository.GetUserIdByAssignedDeviceId(deviceId);
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, ownerId, PermissionRequirements.EditPermission);
+
+        if (!authorizationResult.Succeeded) throw new AccessException();
+
+        await _deviceRepository.SendOrderToDevice(deviceId, orderId);
+
+        return NoContent();
+    }
 
     ///<summary>
     /// Create a new device and enroll it to the Azure IoT hub. 
@@ -33,19 +58,7 @@ public class DeviceController(IDeviceMappings mappings, IDeviceRepository device
         return CreatedAtAction(nameof(CreateNewDeviceAsync), _mappings.DeviceToDevicePresentDto(createdDevice));
     }
 
-    ///<summary>
-    /// Sends chosen order to the device
-    /// </summary>
-    [HttpPost("{deviceId}/command/{orderId:int}")]
-    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> SendOrderToDeviceById([FromRoute] string deviceId, [FromRoute] int orderId )
-    {
 
-        await _deviceRepository.SendOrderToDevice(deviceId, orderId);
-
-        return NoContent();
-    }
 
     /// <summary>
     /// Get device by id.
@@ -55,6 +68,11 @@ public class DeviceController(IDeviceMappings mappings, IDeviceRepository device
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeviceByIdAsync([FromRoute] string deviceId)
     {
+        var ownerId = await _deviceAssignRepository.GetUserIdByAssignedDeviceId(deviceId);
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, ownerId, PermissionRequirements.ReadPermission);
+
+        if (!authorizationResult.Succeeded) throw new AccessException();
+
         var device = await _deviceRepository.GetDeviceByIdAsync(deviceId);
 
         return Ok(_mappings.DeviceToDevicePresentDto(device));
@@ -68,6 +86,11 @@ public class DeviceController(IDeviceMappings mappings, IDeviceRepository device
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatedDeviceNameByIdAsync([FromRoute] string deviceId, [FromForm]DeviceNameUpdateDto nameUpdate)
     {
+        var ownerId = await _deviceAssignRepository.GetUserIdByAssignedDeviceId(deviceId);
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, ownerId, PermissionRequirements.ReadPermission);
+
+        if (!authorizationResult.Succeeded) throw new AccessException();
+
         await _deviceRepository.UpdateDeviceNameAsync(deviceId, nameUpdate.Name);
 
         return NoContent();

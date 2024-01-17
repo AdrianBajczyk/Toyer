@@ -9,5 +9,6 @@ namespace Toyer.Logic.Services.Repositories.Interfaces
         Task UnassignDeviceFromUserAsync(string deviceId, string userId);
         Task DeleteUserAsync(string userId);
         Task DeleteDeviceAsync(string deviceId);
+        Task<string> GetUserIdByAssignedDeviceId(string deviceId);
     }
 }
