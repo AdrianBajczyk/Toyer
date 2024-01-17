@@ -3,7 +3,7 @@ using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Device;
 using Toyer.Logic.Dtos.DeviceType;
 
-namespace Toyer.Logic.Mappings.UserMappings.classes;
+namespace Toyer.Logic.Services.Mappings.UserMappings.Classes;
 
 public class DeviceMappings : IDeviceMappings
 {
@@ -15,12 +15,12 @@ public class DeviceMappings : IDeviceMappings
     }
     public Device DeviceCreateDtoToDevice(DeviceCreateDto deviceCreateDto) => _mapper.Map<Device>(deviceCreateDto);
     public Device DeviceNameUpdateDtoToDevice(DeviceNameUpdateDto deviceNameUpdateDto) => _mapper.Map<Device>(deviceNameUpdateDto);
-    public DevicePresentDto DeviceToDevicePresentDto(Device device) 
-    { 
+    public DevicePresentDto DeviceToDevicePresentDto(Device device)
+    {
         var devicePresentDto = _mapper.Map<DevicePresentDto>(device);
         devicePresentDto.DeviceTypeDto = _mapper.Map<DeviceTypePresentDto>(device.DeviceType);
         devicePresentDto.DateOfCreation = device.CreationDate;
 
         return devicePresentDto;
-    } 
+    }
 }

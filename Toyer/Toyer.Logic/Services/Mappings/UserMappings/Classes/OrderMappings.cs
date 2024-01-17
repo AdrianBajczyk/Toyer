@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Toyer.API.Controllers;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Order;
+using Toyer.Logic.Services.Mappings.UserMappings.Interfaes;
 
-namespace Toyer.Logic.Mappings.UserMappings.Classes;
+namespace Toyer.Logic.Services.Mappings.UserMappings.Classes;
 
 public class OrderMappings : IOrderMappings
 {

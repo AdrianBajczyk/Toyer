@@ -1,7 +1,6 @@
-﻿using Toyer.API.Controllers;
-using Toyer.Data.Mappings;
-using Toyer.Logic.Mappings.UserMappings.classes;
-using Toyer.Logic.Mappings.UserMappings.Classes;
+﻿using Toyer.Logic.Services.Mappings;
+using Toyer.Logic.Services.Mappings.UserMappings.Classes;
+using Toyer.Logic.Services.Mappings.UserMappings.Interfaes;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 

@@ -2,7 +2,7 @@
 
 namespace Toyer.Data.Entities;
 
-public class UserDevices
+public record UserDevices
 {
     [Key]
     public string UserId { get; set; }

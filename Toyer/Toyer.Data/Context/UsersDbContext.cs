@@ -10,6 +10,8 @@ public  class UsersDbContext(DbContextOptions<UsersDbContext> options) : Identit
 {
     public DbSet<Address> Addresses { get; set; }
     public DbSet<PersonalInfo> PersonalInfos { get; set; }
+    public DbSet<RefreshTokenModel> RefreshTokens { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

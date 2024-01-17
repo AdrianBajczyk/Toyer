@@ -2,7 +2,7 @@
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.DeviceType;
 
-namespace Toyer.Logic.Mappings.UserMappings.classes;
+namespace Toyer.Logic.Services.Mappings.UserMappings.Classes;
 
 public class DeviceTypeMappings : IDeviceTypeMappings
 {

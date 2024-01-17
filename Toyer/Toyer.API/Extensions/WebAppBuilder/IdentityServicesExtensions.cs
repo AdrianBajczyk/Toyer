@@ -17,6 +17,7 @@ public static class IdentityServicesExtensions
             options.Password.RequireNonAlphanumeric = false;
             options.Password.RequireUppercase = true;
             options.Password.RequireLowercase = true;
+            //obczaj opcje 
         })
         .AddEntityFrameworkStores<UsersDbContext>()
         .AddDefaultTokenProviders();
@@ -24,3 +25,5 @@ public static class IdentityServicesExtensions
         return services;
     }
 }
+
+//rainbow attacks 

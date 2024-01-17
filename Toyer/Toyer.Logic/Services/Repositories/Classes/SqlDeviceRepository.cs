@@ -5,7 +5,7 @@ using Toyer.Data.Entities;
 using Toyer.Logic.Exceptions.FailResponses.Derived.Device;
 using Toyer.Logic.Exceptions.FailResponses.Derived.DeviceType;
 using Toyer.Logic.Exceptions.FailResponses.Derived.Order;
-using Toyer.Logic.Services.Authorization.Token.DeviceMessaging;
+using Toyer.Logic.Services.DeviceMessaging;
 using Toyer.Logic.Services.DeviceProvisioningService;
 using Toyer.Logic.Services.Repositories.Interfaces;
 

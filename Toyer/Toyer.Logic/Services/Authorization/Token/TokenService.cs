@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Toyer.Data.Entities;
 
@@ -11,7 +12,7 @@ namespace Toyer.Logic.Services.Authorization.Token;
 public class TokenService : ITokenService
 {
 
-    private const int ExpirationMinutes = 15;
+    private const int ExpirationMinutes = 10;
     private readonly IConfiguration _configuration;
 
     public TokenService(IConfiguration configuration)
@@ -19,7 +20,7 @@ public class TokenService : ITokenService
         _configuration = configuration;
     }
 
-    public string CreateToken(User user, string role)
+    public string GenerateAccessToken(User user, string role)
     {
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
         var token = CreateJwtToken(
@@ -32,6 +33,25 @@ public class TokenService : ITokenService
         return tokenHandler.WriteToken(token);
     }
 
+    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["IssuerSigningKey"])),
+            ValidateLifetime = false
+        };
+        var tokenHandler = new JwtSecurityTokenHandler();
+        SecurityToken securityToken;
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+        var jwtSecurityToken = securityToken as JwtSecurityToken;
+        if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            throw new SecurityTokenException("Invalid token");
+        return principal;
+    }
+
     private JwtSecurityToken CreateJwtToken(List<Claim> claims, SigningCredentials credentials, DateTime expiration)
     {
         return new JwtSecurityToken(
@@ -42,6 +62,7 @@ public class TokenService : ITokenService
             signingCredentials: credentials
         );
     }
+
 
 
     private List<Claim> CreateClaims(User user, string role)
@@ -81,4 +102,16 @@ public class TokenService : ITokenService
             SecurityAlgorithms.HmacSha256
         );
     }
+
+    public string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+    }
+
+    
 }

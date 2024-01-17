@@ -1,7 +1,7 @@
 ﻿using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.Order;
 
-namespace Toyer.API.Controllers
+namespace Toyer.Logic.Services.Mappings.UserMappings.Interfaes
 {
     public interface IOrderMappings
     {

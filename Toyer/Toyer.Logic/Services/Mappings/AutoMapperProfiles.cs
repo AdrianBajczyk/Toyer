@@ -5,7 +5,7 @@ using Toyer.Logic.Dtos.DeviceType;
 using Toyer.Logic.Dtos.Order;
 using Toyer.Logic.Dtos.User;
 
-namespace Toyer.Data.Mappings;
+namespace Toyer.Logic.Services.Mappings;
 
 public class AutoMapperProfiles : Profile
 {
@@ -15,7 +15,7 @@ public class AutoMapperProfiles : Profile
         CreateMap<User, UserPresentLongDto>().ReverseMap();
         CreateMap<UserCreateDto, User>().ReverseMap();
         CreateMap<PersonalInfo, PersonalInfoDto>().ReverseMap();
-        CreateMap<UserCreateDto, PersonalInfo >().ReverseMap();
+        CreateMap<UserCreateDto, PersonalInfo>().ReverseMap();
         CreateMap<UserCreateDto, Address>().ReverseMap();
         CreateMap<Address, AddressDto>().ReverseMap();
 

@@ -1,4 +1,4 @@
-﻿using Toyer.Logic.Services.Authorization.Token.DeviceMessaging;
+﻿using Toyer.Logic.Services.DeviceMessaging;
 using Toyer.Logic.Services.DeviceProvisioningService;
 
 namespace Toyer.API.Extensions.WebAppBuilder;

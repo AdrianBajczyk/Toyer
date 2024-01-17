@@ -49,9 +49,7 @@ public class SqlUserRepository : IUserRepository
 
     public async Task<User> RegisterNewUserAsync(User newUser, string password)
     {
-        var result = await _userManager.CreateAsync(newUser);
-
-        if (!result.Succeeded) throw new Exception();
+        await _userManager.CreateAsync(newUser);
 
         await _userManager.AddToRoleAsync(newUser, "RegisteredUser");
         await _userManager.AddPasswordAsync(newUser, password);
@@ -111,16 +109,27 @@ public class SqlUserRepository : IUserRepository
          await _userManager.UpdateAsync(userToUpdate);
     }
 
-    public async Task<AuthorizationResponse> LoginAsync(string email, string password)
+    public async Task<AuthenticationResponse> LoginAsync(string email, string password)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        var isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
+        if (user == null) return new AuthenticationResponse { Message = "Invalid username or password.", StatusCode = 401 };
 
-        if (!isPasswordValid || user == null) return new AuthorizationResponse { Message = "Invalid username or password." , StatusCode = "401"};
+        var isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
+        if (!isPasswordValid) return new AuthenticationResponse { Message = "Invalid username or password.", StatusCode = 401 };
 
         var roles = await _userManager.GetRolesAsync(user);
-        var accessToken = _tokenService.CreateToken(user, roles[0]);
+        var accessToken = _tokenService.GenerateAccessToken(user, roles[0]);
+        var refreshToken = _tokenService.GenerateRefreshToken();
+        await UpdateUsersRefreshToken(user, refreshToken);
 
-        return new AuthorizationResponse { Message = "Login succeed.", StatusCode = "200", Token =  accessToken };
+        return new AuthenticationResponse { Message = "Login succeed.", StatusCode = 200, Token = accessToken, RefreshToken = refreshToken };
+    }
+
+    private async Task UpdateUsersRefreshToken(User user, string refreshToken)
+    {
+        user.RefreshTokenModel!.RefreshToken = refreshToken;
+        user.RefreshTokenModel!.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+        await _userManager.UpdateAsync(user);
     }
 }

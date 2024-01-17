@@ -45,7 +45,7 @@ public class UserController(IUserRepository userRepository,
     [HttpGet("{userId}")]
     [ProducesResponseType(typeof(UserPresentShortDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetShortById([FromRoute] string userId)
+    public async Task<IActionResult> GetShortByIdAsync([FromRoute] string userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
@@ -73,7 +73,7 @@ public class UserController(IUserRepository userRepository,
     [HttpGet("extended/{userId}")]
     [ProducesResponseType(typeof(UserPresentLongDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetExtendedById([FromRoute] string userId)
+    public async Task<IActionResult> GetExtendedByIdAsync([FromRoute] string userId)
     {
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
@@ -90,11 +90,11 @@ public class UserController(IUserRepository userRepository,
     [AllowAnonymous]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateNewUser([FromForm] UserCreateDto newUserDto)
+    public async Task<IActionResult> CreateNewUserAsync([FromForm] UserCreateDto newUserDto)
     {
         var result = await _userRepository.RegisterNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password);
 
-        return CreatedAtAction(nameof(CreateNewUser), new CustomResponse { Message = $"User: {newUserDto.UserName} created.", StatusCode = 201 });
+        return CreatedAtAction(nameof(CreateNewUserAsync), new CustomResponse { Message = $"User: {newUserDto.UserName} created.", StatusCode = 201 });
     }
 
     /// <summary>
@@ -103,7 +103,7 @@ public class UserController(IUserRepository userRepository,
     [HttpPut("Address/{userId}")]
     [ProducesResponseType(typeof(AddressDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateAddressById([FromRoute] string userId, [FromForm] AddressDto addressUpdatesDtoFromUser)
+    public async Task<IActionResult> UpdateAddressByIdAsync([FromRoute] string userId, [FromForm] AddressDto addressUpdatesDtoFromUser)
     {
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
@@ -118,7 +118,7 @@ public class UserController(IUserRepository userRepository,
     [HttpPut("PersonalInfo/{userId}")]
     [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePersonalInfoById([FromRoute] string userId, [FromForm] PersonalInfoDto personalInfoUpdates)
+    public async Task<IActionResult> UpdatePersonalInfoByIdAsync([FromRoute] string userId, [FromForm] PersonalInfoDto personalInfoUpdates)
     {
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
@@ -134,7 +134,7 @@ public class UserController(IUserRepository userRepository,
     [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateContactInfoById([FromRoute] string userId, [FromForm] ContactDto contactUpdates)
+    public async Task<IActionResult> UpdateContactInfoByIdAsync([FromRoute] string userId, [FromForm] ContactDto contactUpdates)
     {
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
@@ -150,7 +150,7 @@ public class UserController(IUserRepository userRepository,
     [ProducesResponseType(typeof(UserPresentShortDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> DeleteUserById([FromRoute] string userId)
+    public async Task<ActionResult> DeleteUserByIdAsync([FromRoute] string userId)
     {
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.DeletePermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
