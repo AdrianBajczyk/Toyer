@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Toyer.Data.Context;
@@ -111,7 +109,7 @@ public class SqlUserRepository : IUserRepository
 
     public async Task<AuthenticationResponse> LoginAsync(string email, string password)
     {
-        var user = await _userManager.FindByEmailAsync(email);
+        var user = await _userManager.Users.Include(u => u.RefreshTokenModel).FirstOrDefaultAsync(u => u.Email == email);
         if (user == null) return new AuthenticationResponse { Message = "Invalid username or password.", StatusCode = 401 };
 
         var isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
@@ -127,12 +125,21 @@ public class SqlUserRepository : IUserRepository
 
     private async Task UpdateUsersRefreshToken(User user, string refreshToken)
     {
-        user.RefreshTokenModel = new RefreshTokenModel 
+        if (user.RefreshTokenModel == null)
         {
-            RefreshToken = refreshToken,
-            RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
-        };
 
-        await _userManager.UpdateAsync(user);
+            user.RefreshTokenModel = new RefreshTokenModel
+            {
+                RefreshToken = refreshToken,
+                RefreshTokenExpiryTime = DateTime.Now.AddDays(7),
+            };
+        }
+        else
+        {
+            user.RefreshTokenModel.RefreshToken = refreshToken;
+            user.RefreshTokenModel.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+        }
+
+        await _dbContext.SaveChangesAsync();
     }
 }

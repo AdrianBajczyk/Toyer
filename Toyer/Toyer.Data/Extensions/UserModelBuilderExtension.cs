@@ -17,6 +17,11 @@ public static class UserModelBuilderExtension
             .WithOne(a => a.PersonalInfo)
             .HasForeignKey<Address>(a => a.PersonalInfoId);
 
+        modelBuilder.Entity<User>()
+                .HasOne(u => u.RefreshTokenModel)       
+                .WithOne(rt => rt.User)                  
+                .HasForeignKey<RefreshTokenModel>(rt => rt.UserId)  
+                .OnDelete(DeleteBehavior.Cascade);
 
     }
 }
