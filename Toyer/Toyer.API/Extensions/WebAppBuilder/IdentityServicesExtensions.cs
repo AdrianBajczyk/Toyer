@@ -10,19 +10,32 @@ public static class IdentityServicesExtensions
     {
         services.AddIdentity<User, IdentityRole>(options =>
         {
+            SetPasswordConfiguration(options);
+            SetLockoutConfiguration(options);
             options.SignIn.RequireConfirmedAccount = false;
             options.User.RequireUniqueEmail = true;
-            options.Password.RequireDigit = true;
-            options.Password.RequiredLength = 6;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = true;
-            options.Password.RequireLowercase = true;
-            //obczaj opcje 
+
         })
         .AddEntityFrameworkStores<UsersDbContext>()
         .AddDefaultTokenProviders();
 
         return services;
+    }
+
+    private static void SetLockoutConfiguration(IdentityOptions options)
+    {
+        options.Lockout.AllowedForNewUsers = true;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        options.Lockout.MaxFailedAccessAttempts = 3;
+    }
+
+    private static void SetPasswordConfiguration(IdentityOptions options)
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = true;
     }
 }
 

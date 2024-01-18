@@ -20,6 +20,7 @@ builder.Services.AddCustomMappingServices();
 builder.Services.AddCustomDbContexts(builder.Configuration);
 builder.Services.AddCustomAuthenticationServices(builder.Configuration);
 builder.Services.AddCustomIdentity();
+builder.Services.AddCustomEmailService(builder.Configuration);
 
 builder.Services.AddTransient<ExceptionCustomHandler>();
 builder.Services.AddTransient<IAuthorizationHandler, PermissionHandler>();

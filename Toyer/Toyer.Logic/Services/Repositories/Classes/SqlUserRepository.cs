@@ -6,6 +6,7 @@ using Toyer.Data.Entities;
 using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Authorization.Token;
+using Toyer.Logic.Services.EmailService;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories.Classes;
@@ -16,13 +17,14 @@ public class SqlUserRepository : IUserRepository
     private readonly UsersDbContext _dbContext;
     private readonly UserManager<User> _userManager;
     private readonly ITokenService _tokenService;
+    private readonly IEmailSender _emailSender;
 
-
-    public SqlUserRepository(UsersDbContext usersDbContext, UserManager<User> userManager, ITokenService tokenService)
+    public SqlUserRepository(UsersDbContext usersDbContext, UserManager<User> userManager, ITokenService tokenService, IEmailSender emailSender)
     {
         _dbContext = usersDbContext;
         _userManager = userManager;
         _tokenService = tokenService;
+        _emailSender = emailSender;
     }
     public async Task<User> GetUserByIdAsync(string userId)
     {
@@ -119,6 +121,9 @@ public class SqlUserRepository : IUserRepository
         var accessToken = _tokenService.GenerateAccessToken(user, roles[0]);
         var refreshToken = _tokenService.GenerateRefreshToken();
         await UpdateUsersRefreshToken(user, refreshToken);
+
+        //var message = new EmailMessage(new string[] { "adrian.bajczyk@gmail.com" }, "Test email async", "This is the content from our async email.");
+        // _emailSender.SendEmail(message);
 
         return new AuthenticationResponse { Message = "Login succeed.", StatusCode = 200, Token = accessToken, RefreshToken = refreshToken };
     }
