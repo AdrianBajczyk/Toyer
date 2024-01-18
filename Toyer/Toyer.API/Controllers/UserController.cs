@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Responses;
@@ -36,6 +38,21 @@ public class UserController(IUserRepository userRepository,
         var result = await _userRepository.LoginAsync(request.Email, request.Password);
 
         return new ObjectResult(result);
+    }
+
+    /// <summary>
+    /// Confirms user email by token.
+    /// </summary>
+    [HttpGet("Confirmation/")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ConfirmEmail(string token, string email)
+    {
+        await _userRepository.ConfirmEmailAsync(token, email);
+
+        return NoContent();
     }
 
 
@@ -101,7 +118,7 @@ public class UserController(IUserRepository userRepository,
     /// Updates account address by applying changes from non-null properties.
     /// </summary>
     [HttpPut("Address/{userId}")]
-    [ProducesResponseType(typeof(AddressDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateAddressByIdAsync([FromRoute] string userId, [FromForm] AddressDto addressUpdatesDtoFromUser)
     {
@@ -116,7 +133,7 @@ public class UserController(IUserRepository userRepository,
     /// Updates account personal information by applying changes from non-null properties.
     /// </summary>
     [HttpPut("PersonalInfo/{userId}")]
-    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePersonalInfoByIdAsync([FromRoute] string userId, [FromForm] PersonalInfoDto personalInfoUpdates)
     {
@@ -131,7 +148,7 @@ public class UserController(IUserRepository userRepository,
     /// Updates account contcact info by applying changes from non-null properties.
     /// </summary>
     [HttpPut("Conctact/{userId}")]
-    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateContactInfoByIdAsync([FromRoute] string userId, [FromForm] ContactDto contactUpdates)
@@ -147,7 +164,7 @@ public class UserController(IUserRepository userRepository,
     /// Deletes account of existing user
     /// </summary>
     [HttpDelete("{userId}")]
-    [ProducesResponseType(typeof(UserPresentShortDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> DeleteUserByIdAsync([FromRoute] string userId)

@@ -48,7 +48,10 @@ public class SqlOrderRepository : IOrderRepository
     }
     public async Task<ICollection<Order>?> GetAllOrdersAsync()
     {
-        return await _dbContext.Orders.Include(o => o.DeviceTypes).ToListAsync()
+        return await _dbContext.Orders
+            .Include(o => o.DeviceTypes)
+            .AsNoTracking()
+            .ToListAsync()
             ?? throw new OrderTableEmptyException();
     }
 
@@ -56,7 +59,7 @@ public class SqlOrderRepository : IOrderRepository
     {
         return await _dbContext.Orders
             .Include(o => o.DeviceTypes)
-            .FirstOrDefaultAsync(o => o.Id == orderId)
+            .SingleOrDefaultAsync(o => o.Id == orderId)
             ?? throw new OrderNotFoundException(orderId);
     }
     public async Task UpdateOrderByIdAsync(int orderId, OrderCreateDto orderUpdates)

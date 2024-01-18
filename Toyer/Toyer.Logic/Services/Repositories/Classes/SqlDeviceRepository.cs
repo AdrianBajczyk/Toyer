@@ -54,13 +54,11 @@ public class SqlDeviceRepository : IDeviceRepository
 
     public async Task<Device> GetDeviceByIdAsync(string deviceId)
     {
-        var device = await _dbContext.Devices
+        return await _dbContext.Devices
             .Include(d => d.DeviceType)
             .ThenInclude(dt => dt.Orders)
-            .FirstOrDefaultAsync(d => d.Id.ToString() == deviceId);
-
-        return device 
-            ?? throw new DeviceNotFoundException(deviceId);
+            .SingleOrDefaultAsync(d => d.Id.ToString() == deviceId)
+             ?? throw new DeviceNotFoundException(deviceId);
     }
 
 

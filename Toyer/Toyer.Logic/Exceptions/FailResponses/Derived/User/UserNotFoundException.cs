@@ -2,5 +2,7 @@
 
 namespace Toyer.Logic.Exceptions.FailResponses.Derived.User;
 
-public sealed class UserNotFoundException(string userId)
-        : NotFoundException($"User with the identifier {userId} was not found.");
+public sealed class UserNotFoundException(string credit)
+        : NotFoundException($"User {credit} was not found.")
+{
+}

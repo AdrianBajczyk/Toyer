@@ -2,5 +2,5 @@
 
 namespace Toyer.Logic.Exceptions.FailResponses.Derived.User;
 
-public sealed class AuthenticationException()
-        : BadRequestException($"Invalid authentication reqest.");
+public sealed class EmailAlreadyConfirmedException()
+        : BadRequestException($"Email already confirmed.");

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
+using Toyer.Logic.Exceptions.FailResponses.Derived.Server;
 using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Authorization.Token;
@@ -18,20 +21,24 @@ public class SqlUserRepository : IUserRepository
     private readonly UserManager<User> _userManager;
     private readonly ITokenService _tokenService;
     private readonly IEmailSender _emailSender;
+    private readonly IHttpContextAccessor _httpAccessor;
+    private readonly LinkGenerator _generator;
 
-    public SqlUserRepository(UsersDbContext usersDbContext, UserManager<User> userManager, ITokenService tokenService, IEmailSender emailSender)
+    public SqlUserRepository(UsersDbContext usersDbContext, UserManager<User> userManager, ITokenService tokenService, IEmailSender emailSender, IHttpContextAccessor httpAccessor, LinkGenerator generator)
     {
         _dbContext = usersDbContext;
         _userManager = userManager;
         _tokenService = tokenService;
         _emailSender = emailSender;
+        _httpAccessor = httpAccessor;
+        _generator = generator;
     }
     public async Task<User> GetUserByIdAsync(string userId)
     {
         return await _dbContext.Users
                     .Include(u => u.PersonalInfo)
                     .ThenInclude(p => p.Address)
-                    .FirstOrDefaultAsync(u => u.Id.ToString() == userId)
+                    .SingleOrDefaultAsync(u => u.Id.ToString() == userId)
                     ?? throw new UserNotFoundException(userId);
     }
 
@@ -40,6 +47,7 @@ public class SqlUserRepository : IUserRepository
         var users = await _dbContext.Users
                 .Include(u => u.PersonalInfo)
                 .ThenInclude(p => p.Address)
+                .AsNoTracking()
                 .ToListAsync();
 
         return users.IsNullOrEmpty()
@@ -53,9 +61,12 @@ public class SqlUserRepository : IUserRepository
 
         await _userManager.AddToRoleAsync(newUser, "RegisteredUser");
         await _userManager.AddPasswordAsync(newUser, password);
+        await SendConfimationLinkByEmail(newUser);
 
         return newUser;
     }
+
+
     public async Task UpdateAddressAsync(string userId, Address updatesFromUser)
     {
         var userToUpdate = await GetUserByIdAsync(userId) 
@@ -103,7 +114,6 @@ public class SqlUserRepository : IUserRepository
             ?? throw new UserNotFoundException(userId);
 
         if (!string.IsNullOrWhiteSpace(email)) await _userManager.SetEmailAsync(userToUpdate, email);
-
         if (!string.IsNullOrWhiteSpace(phoneNumber)) await _userManager.SetPhoneNumberAsync(userToUpdate, phoneNumber);
 
          await _userManager.UpdateAsync(userToUpdate);
@@ -122,9 +132,6 @@ public class SqlUserRepository : IUserRepository
         var refreshToken = _tokenService.GenerateRefreshToken();
         await UpdateUsersRefreshToken(user, refreshToken);
 
-        //var message = new EmailMessage(new string[] { "adrian.bajczyk@gmail.com" }, "Test email async", "This is the content from our async email.");
-        // _emailSender.SendEmail(message);
-
         return new AuthenticationResponse { Message = "Login succeed.", StatusCode = 200, Token = accessToken, RefreshToken = refreshToken };
     }
 
@@ -132,9 +139,7 @@ public class SqlUserRepository : IUserRepository
     {
         if (user.RefreshTokenModel == null)
         {
-
-            user.RefreshTokenModel = new RefreshTokenModel
-            {
+            user.RefreshTokenModel = new RefreshTokenModel {
                 RefreshToken = refreshToken,
                 RefreshTokenExpiryTime = DateTime.Now.AddDays(7),
             };
@@ -146,5 +151,28 @@ public class SqlUserRepository : IUserRepository
         }
 
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task ConfirmEmailAsync(string token, string userEmail)
+    {
+        var user = await _userManager.FindByEmailAsync(userEmail) ?? throw new UserNotFoundException(userEmail);
+        if (user.EmailConfirmed) throw new EmailAlreadyConfirmedException();
+        
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+
+        if (!result.Succeeded) throw new EmailServiceException("Unexpected server error occured.");
+
+    }
+
+    private async Task SendConfimationLinkByEmail(User user)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        var confirmationLink = _generator.GetUriByAction(_httpAccessor.HttpContext, action: "ConfirmEmail", controller: "User", values: new { token, email = user.Email });
+        await Console.Out.WriteLineAsync(confirmationLink);
+        if (confirmationLink == null) throw new HttpContextException("Email confirmation link error.");
+
+        var message = new EmailMessage(new string[] { user.Email }, "Confirmation email link", confirmationLink);
+        await _emailSender.SendEmailAsync(message);
     }
 }

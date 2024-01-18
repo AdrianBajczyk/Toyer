@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Toyer.Data.Entities;
 using Toyer.Logic.Responses;
 
@@ -14,4 +15,7 @@ public interface IUserRepository
    Task UpdatePersonalInfoPatchAsync(string userId, PersonalInfo updatesFromUser);
    Task DeleteUserAsync(string Id);
    Task UpdateContactInfoAsync(string userId, string? email, string? phoneNumber);
+   Task ConfirmEmailAsync(string token, string userEmail);
+    
+
 }

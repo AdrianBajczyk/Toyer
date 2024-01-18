@@ -25,7 +25,6 @@ public class SqlDeviceAssignmentRepository(IUserRepository userRepository, IDevi
             throw new DeviceIsAssignedException(deviceId);
 
         var relation =  await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.UserId == userId);
-
         if (relation == null) await CreateRelationId(userId);
 
         relation!.DevicesIds.Add(deviceId);
@@ -53,7 +52,7 @@ public class SqlDeviceAssignmentRepository(IUserRepository userRepository, IDevi
     public async Task DeleteDeviceAsync(string deviceId)
     {
         var relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.DevicesIds.Contains(deviceId));
-        if (relation != null) relation.DevicesIds.Remove(deviceId);
+        relation?.DevicesIds.Remove(deviceId);
     }
 
     public async Task DeleteUserAsync(string userId)

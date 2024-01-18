@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc;
 using Toyer.API.Extensions.WebAppBuilder;
 using Toyer.Logic.Exceptions;
 using Toyer.Logic.Services.Authorization.AuthorizationHandlers;
@@ -26,12 +29,11 @@ builder.Services.AddTransient<ExceptionCustomHandler>();
 builder.Services.AddTransient<IAuthorizationHandler, PermissionHandler>();
 
 
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("ProductionTasks", policy => policy.RequireRole("Employee", "Administrator"));
 });
-
-
 
 //  ASP.NET Core MVC trims the suffix Async from action names by default
 builder.Services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);

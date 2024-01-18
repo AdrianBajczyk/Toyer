@@ -24,7 +24,7 @@ public class SqlDeviceTypeRepository(ToyerDbContext dbContext) : IDeviceTypeRepo
     {
         return await _dbContext.DeviceTypes
             .Include(dt => dt.Orders)
-            .FirstOrDefaultAsync(d => d.Id == deviceTypeId)
+            .SingleOrDefaultAsync(d => d.Id == deviceTypeId)
             ?? throw new DeviceTypeNotFoundException(deviceTypeId);
     } 
 
