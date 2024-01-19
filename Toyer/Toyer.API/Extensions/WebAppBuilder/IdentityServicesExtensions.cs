@@ -12,7 +12,7 @@ public static class IdentityServicesExtensions
         {
             SetPasswordConfiguration(options);
             SetLockoutConfiguration(options);
-            options.SignIn.RequireConfirmedAccount = false;
+            options.SignIn.RequireConfirmedAccount = true;
             options.User.RequireUniqueEmail = true;
 
         })

@@ -2,5 +2,5 @@
 
 namespace Toyer.Logic.Exceptions.FailResponses.Derived.User;
 
-public sealed class AuthenticationException()
+public sealed class InvalidAuthenticationReqestException()
         : BadRequestException($"Invalid authentication reqest.");

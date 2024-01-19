@@ -17,16 +17,27 @@ namespace Toyer.API.Controllers;
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class UserController(IUserRepository userRepository, 
-    IUserMapings mappings, 
-    IDeviceAssignmentRepository deviceAssignRepository, 
+    IUserMapings mappings,  
     IAuthorizationService authorizationService) 
     : ControllerBase
 {
     private readonly IUserMapings _mappings = mappings;
-    private readonly IDeviceAssignmentRepository _deviceAssignRepository = deviceAssignRepository;
     private readonly IAuthorizationService _authorizationService = authorizationService;
     private readonly IUserRepository _userRepository = userRepository;
 
+    /// <summary>
+    /// Creates account for new user and sends confirmation email to selected address.
+    /// </summary>
+    [HttpPost]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateNewUserAsync([FromForm] UserCreateDto newUserDto)
+    {
+        var result = await _userRepository.RegisterNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password);
+
+        return CreatedAtAction(nameof(CreateNewUserAsync), new CustomResponse { Message = $"User: {newUserDto.UserName} created.", StatusCode = 201 });
+    }
 
     /// <summary>
     /// Logs user in.
@@ -41,9 +52,25 @@ public class UserController(IUserRepository userRepository,
     }
 
     /// <summary>
+    /// Sends email confirmation link to users email.
+    /// </summary>
+    [HttpPost("Email")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    
+    public async Task<IActionResult> ResendEmailConfirmationLink([FromForm] UserEmail userInput)
+    {
+        await _userRepository.ResendEmailConfirmationLink(userInput.Email);
+
+        return NoContent();
+    }
+
+
+    /// <summary>
     /// Confirms user email by token.
     /// </summary>
-    [HttpGet("Confirmation/")]
+    [HttpGet("Email")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
@@ -54,6 +81,21 @@ public class UserController(IUserRepository userRepository,
 
         return NoContent();
     }
+
+    ///// <summary>
+    ///// Confirms user email by token.
+    ///// </summary>
+    //[HttpGet("Password")]
+    //[AllowAnonymous]
+    //[ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
+    //[ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    //[ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
+    //public async Task<IActionResult> SendPasswordResetLink(UserEmail input)
+    //{
+    //    await _userRepository.SendPasswordResetLink(input.Email);
+
+    //    return NoContent();
+    //}
 
 
     /// <summary>
@@ -100,19 +142,7 @@ public class UserController(IUserRepository userRepository,
         return Ok(_mappings.UserToUserPresentLongDto(user));
     }
 
-    /// <summary>
-    /// Creates account for new user
-    /// </summary>
-    [HttpPost]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateNewUserAsync([FromForm] UserCreateDto newUserDto)
-    {
-        var result = await _userRepository.RegisterNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password);
-
-        return CreatedAtAction(nameof(CreateNewUserAsync), new CustomResponse { Message = $"User: {newUserDto.UserName} created.", StatusCode = 201 });
-    }
+    
 
     /// <summary>
     /// Updates account address by applying changes from non-null properties.

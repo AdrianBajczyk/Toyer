@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Toyer.Data.Entities;
+using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Responses;
 
 namespace Toyer.Logic.Services.Repositories.Interfaces;
@@ -16,6 +17,6 @@ public interface IUserRepository
    Task DeleteUserAsync(string Id);
    Task UpdateContactInfoAsync(string userId, string? email, string? phoneNumber);
    Task ConfirmEmailAsync(string token, string userEmail);
-    
-
+   Task ResendEmailConfirmationLink(string userEmail);
+   Task SendPasswordResetLink(string userEmail);
 }

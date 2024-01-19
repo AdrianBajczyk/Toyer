@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
+using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Exceptions.FailResponses.Derived.Server;
 using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Responses;
@@ -61,7 +62,7 @@ public class SqlUserRepository : IUserRepository
 
         await _userManager.AddToRoleAsync(newUser, "RegisteredUser");
         await _userManager.AddPasswordAsync(newUser, password);
-        await SendConfimationLinkByEmail(newUser);
+        await SendConfimationLinkByEmailAsync(newUser);
 
         return newUser;
     }
@@ -121,16 +122,18 @@ public class SqlUserRepository : IUserRepository
 
     public async Task<AuthenticationResponse> LoginAsync(string email, string password)
     {
-        var user = await _userManager.Users.Include(u => u.RefreshTokenModel).FirstOrDefaultAsync(u => u.Email == email);
-        if (user == null) return new AuthenticationResponse { Message = "Invalid username or password.", StatusCode = 401 };
+        var user = await _userManager.Users.Include(u => u.RefreshTokenModel).FirstOrDefaultAsync(u => u.Email == email)
+            ?? throw new InvalidUserOrPasswordException();
 
         var isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
-        if (!isPasswordValid) return new AuthenticationResponse { Message = "Invalid username or password.", StatusCode = 401 };
+        if (!isPasswordValid) throw new InvalidUserOrPasswordException();
 
         var roles = await _userManager.GetRolesAsync(user);
         var accessToken = _tokenService.GenerateAccessToken(user, roles[0]);
         var refreshToken = _tokenService.GenerateRefreshToken();
         await UpdateUsersRefreshToken(user, refreshToken);
+
+        if (!user.EmailConfirmed) throw new EmailNotConfirmedException();
 
         return new AuthenticationResponse { Message = "Login succeed.", StatusCode = 200, Token = accessToken, RefreshToken = refreshToken };
     }
@@ -164,13 +167,34 @@ public class SqlUserRepository : IUserRepository
 
     }
 
-    private async Task SendConfimationLinkByEmail(User user)
+    public async Task ResendEmailConfirmationLink(string userEmail)
+    {
+        var user = await _userManager.FindByEmailAsync(userEmail) 
+            ?? throw new UserNotFoundException("userEmail");
+
+
+        await SendConfimationLinkByEmailAsync(user);
+    }
+
+    public async Task SendPasswordResetLink(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email)
+            ?? throw new UserNotFoundException(email);
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var confirmationLink = _generator.GetUriByAction(_httpAccessor.HttpContext, action: "ResetPassword", controller: "User", values: new { token, email = user.Email }) 
+            ?? throw new HttpContextException("Email confirmation link error.");
+
+        var message = new EmailMessage(new string[] { user.Email }, "Password reset link", confirmationLink);
+        await _emailSender.SendEmailAsync(message);
+    }
+
+    private async Task SendConfimationLinkByEmailAsync(User user)
     {
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-        var confirmationLink = _generator.GetUriByAction(_httpAccessor.HttpContext, action: "ConfirmEmail", controller: "User", values: new { token, email = user.Email });
-        await Console.Out.WriteLineAsync(confirmationLink);
-        if (confirmationLink == null) throw new HttpContextException("Email confirmation link error.");
+        var confirmationLink = _generator.GetUriByAction(_httpAccessor.HttpContext, action: "ConfirmEmail", controller: "User", values: new { token, email = user.Email }) 
+            ?? throw new HttpContextException("Email confirmation link error.");
 
         var message = new EmailMessage(new string[] { user.Email }, "Confirmation email link", confirmationLink);
         await _emailSender.SendEmailAsync(message);
