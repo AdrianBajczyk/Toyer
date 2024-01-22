@@ -1,5 +1,4 @@
-import React from "react";
-import { type ComponentPropsWithoutRef } from "react";
+import React, { type ComponentPropsWithoutRef } from "react";
 
 type ButtonProps = {
     element: 'button';
