@@ -6,6 +6,6 @@ children: ReactNode;
 } & ComponentPropsWithoutRef<T>;
 
 export default function Container<C extends ElementType>({as, children, ...props}: ContainerProps<C>){
-    const Component = as || 'div';
+    const Component = as || React.Fragment;
     return <Component {...props}>{children}</Component>
 }
