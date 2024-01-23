@@ -1,9 +1,7 @@
 import React from "react";
 
-interface LoginPageProps{
-    
-}
+interface LoginPageProps {}
 
-export default function LoginPage(props: LoginPageProps){
-    return <div>LoginPage</div>
+export default function LoginPage(props : LoginPageProps) {
+  return <div>LoginPage</div>;
 }
