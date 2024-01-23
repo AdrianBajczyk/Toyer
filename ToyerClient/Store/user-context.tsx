@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useContext } from "react";
+import { type ReactNode, createContext, useContext, useReducer } from "react";
 
 type User = {
     email: string;
@@ -10,6 +10,10 @@ type UserState = {
     isLoggedIn: boolean;
     user: User;
 }
+
+const initialState: UserState = {
+    user: {email:"", token:"", refreshToken:""}, 
+    isLoggedIn: false,}
 
 type UserContextValue = UserState & {
     setUser: (userData: User) => void;
@@ -33,18 +37,62 @@ type UserContextProviderProps = {
     children: ReactNode;
 };
 
+type EnstablishUserAction = {
+    type: 'ENSTABLISH_USER',
+    payload: User
+};
+
+type LoginUserAction = {
+    type: 'LOGIN_USER'
+}
+
+type LogoutUserAction = {
+    type: 'LOGOUT_USER'
+}
+
+type Action = EnstablishUserAction | LoginUserAction | LogoutUserAction
+
+function userReducer(state: UserState, action: Action) : UserState {
+if (action.type === 'LOGIN_USER'){
+    return {
+        ...state,
+        isLoggedIn: true
+    }
+} 
+if (action.type === 'LOGOUT_USER'){
+    return {
+        ...state,
+        isLoggedIn: false
+    }
+}
+if (action.type === 'ENSTABLISH_USER'){
+    return{
+        ...state,
+        user: {
+            email: action.payload.email,
+            token: action.payload.token,
+            refreshToken: action.payload.refreshToken,
+        }
+    }
+} else {
+    return state;
+}
+}
+
 export default function UserContextProvider({children}: UserContextProviderProps) {
+    const [userState, dispatch] = useReducer(userReducer, initialState)
+
     const ctx: UserContextValue = {
-        user: {email:"", token:"", refreshToken:""},
-        isLoggedIn: false,
+        user: userState.user,
+        isLoggedIn: userState.isLoggedIn,
         setUser(userData) {
-            //add logic later
+            dispatch({type: 'ENSTABLISH_USER', payload: userData})
         },
         logIn() {
-            //add logic later
+            dispatch({type: 'LOGIN_USER'})
         },
         logOut() {
-            //add logic later
+            dispatch({type: 'LOGOUT_USER'})
         },
     };
 return <UserContext.Provider value={ctx}>{children}</UserContext.Provider>
