@@ -1,5 +1,4 @@
-import React from "react";
-import { type ReactNode, createContext } from "react";
+import { type ReactNode, createContext, useContext } from "react";
 
 type User = {
     email: string;
@@ -19,6 +18,16 @@ type UserContextValue = UserState & {
 }
 
 const UserContext = createContext<UserContextValue | null>(null);
+
+export function useUserContext() {
+    const userCtx = useContext(UserContext)
+
+    if (userCtx === null){
+        throw new Error("Fatal Error. Unexpected behavior. User context is null.")
+    }
+
+    return userCtx;
+}
 
 type UserContextProviderProps = {
     children: ReactNode;
