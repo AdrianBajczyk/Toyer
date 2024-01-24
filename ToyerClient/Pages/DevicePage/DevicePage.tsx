@@ -1,9 +1,7 @@
 import React from "react";
 
-interface DevicePageProps{
-    
-}
+interface DevicePageProps {}
 
-export default function DevicePage(props: DevicePageProps){
-    return <div>DevicePage</div>
+export default function DevicePage(props: DevicePageProps) {
+  return <div>DevicePage</div>;
 }
