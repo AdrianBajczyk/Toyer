@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Toyer.API.Extensions.WebAppBuilder;
 using Toyer.Logic.Exceptions;
@@ -28,7 +26,16 @@ builder.Services.AddCustomEmailService(builder.Configuration);
 builder.Services.AddTransient<ExceptionCustomHandler>();
 builder.Services.AddTransient<IAuthorizationHandler, PermissionHandler>();
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 builder.Services.AddAuthorization(options =>
 {
@@ -37,6 +44,39 @@ builder.Services.AddAuthorization(options =>
 
 //  ASP.NET Core MVC trims the suffix Async from action names by default
 builder.Services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
+builder.Services.AddMvc()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = actionContext =>
+        {
+            var errorDetails = actionContext.ModelState
+                .Where(entry => entry.Value.Errors.Any())
+                .ToDictionary(
+                    entry => entry.Key,
+                    entry => entry.Value.Errors.Select(error => error.ErrorMessage).ToList()
+                );
+
+            var errorDictionary = errorDetails.ToDictionary(
+                kv => kv.Key,
+                kv => kv.Value.FirstOrDefault()
+            );
+
+
+            var result = new ObjectResult(new
+            {
+                Errors = errorDictionary,
+                Message = "Validation failed",
+                StatusCode = StatusCodes.Status400BadRequest
+            })
+            {
+                StatusCode = StatusCodes.Status400BadRequest
+            };
+
+            return result;
+        };
+    });
+
+builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthorizationMiddlewareResultHandler>();
 
 #endregion
 
@@ -55,7 +95,10 @@ if (app.Environment.IsDevelopment())
     //app.UseDeveloperExceptionPage();
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();

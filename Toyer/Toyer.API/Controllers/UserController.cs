@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Toyer.Data.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Responses;
@@ -34,6 +33,8 @@ public class UserController(IUserRepository userRepository,
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateNewUserAsync([FromForm] UserCreateDto newUserDto)
     {
+
+
         var result = await _userRepository.RegisterNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password);
 
         return CreatedAtAction(nameof(CreateNewUserAsync), new CustomResponse { Message = $"User: {newUserDto.UserName} created.", StatusCode = 201 });
@@ -44,7 +45,7 @@ public class UserController(IUserRepository userRepository,
     /// </summary>
     [HttpPost("Login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Authenticate([FromForm] UserLogin request)
+    public async Task<IActionResult> Authenticate([FromBody] UserLogin request)
     {
         var result = await _userRepository.LoginAsync(request.Email, request.Password);
 

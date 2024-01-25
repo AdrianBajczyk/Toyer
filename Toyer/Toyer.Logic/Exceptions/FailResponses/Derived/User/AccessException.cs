@@ -1,4 +1,6 @@
-﻿namespace Toyer.Logic.Exceptions.FailResponses.Derived.User;
+﻿using Toyer.Logic.Exceptions.FailResponses.Abstract;
 
-public sealed class AccessException()
-        : UnauthorizedAccessException($"Access denied.");
+namespace Toyer.Logic.Exceptions.FailResponses.Derived.User;
+
+public sealed class AccessException() : UnauthorizedAccessException($"Access denied.");
+
