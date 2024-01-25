@@ -44,6 +44,7 @@ builder.Services.AddAuthorization(options =>
 
 //  ASP.NET Core MVC trims the suffix Async from action names by default
 builder.Services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
+
 builder.Services.AddMvc()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -64,9 +65,9 @@ builder.Services.AddMvc()
 
             var result = new ObjectResult(new
             {
-                Errors = errorDictionary,
+                StatusCode = StatusCodes.Status400BadRequest,
                 Message = "Validation failed",
-                StatusCode = StatusCodes.Status400BadRequest
+                Errors = errorDictionary,
             })
             {
                 StatusCode = StatusCodes.Status400BadRequest

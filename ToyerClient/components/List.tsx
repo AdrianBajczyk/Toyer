@@ -1,10 +1,10 @@
-import React, { type ReactNode } from 'react';
+import { ComponentPropsWithoutRef, type ReactNode } from 'react';
 
 type ListProps<T> = {
-  items: T[];
+  items: T[]; 
   renderItem: (item: T) => ReactNode;
-};
+} & ComponentPropsWithoutRef<'ul'>;
 
-export function List<T>({ items, renderItem }: ListProps<T>) {
-  return <ul>{items.map(renderItem)}</ul>;
+export function List<T>({ items,  renderItem, ...otherProps }: ListProps<T>) {
+  return <ul {...otherProps}>{items.map(renderItem)}</ul>;
 }

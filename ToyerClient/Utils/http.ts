@@ -1,5 +1,5 @@
 
-import {JSONObject, JSONArray} from "./JsonType.ts"
+import {JSONObject} from "./JsonType.ts"
 
 type RequestOptions = {
     method: string,
@@ -12,7 +12,7 @@ export async function get<T>(url: string){
     const response = await fetch(url)
 
     if (!response.ok){
-        throw new Error(`Faied to fetch data. ${response.status} ${response.statusText}.`);
+        throw new Error(`Faied to fetch data. ${response.status}.`);
     }
 
     const data = await response.json() as unknown;
@@ -21,7 +21,7 @@ export async function get<T>(url: string){
 
 export async function post<T>(url: string, reqBody: JSONObject){
 
-    const stringBody : string = JSON.stringify({body: reqBody});
+    const stringBody : string = JSON.stringify(reqBody);
 
     const requestOptions : RequestOptions = {
         method: 'POST',
@@ -32,7 +32,7 @@ export async function post<T>(url: string, reqBody: JSONObject){
     const response = await fetch(url, requestOptions)
 
     if (!response.ok){
-        throw new Error(`Faied to fetch data. ${response.status} ${response.statusText}.`);
+        throw new Error(`Failed to fetch data. ${response.status}.`);
     }
 
     const data = await response.json() as unknown;
