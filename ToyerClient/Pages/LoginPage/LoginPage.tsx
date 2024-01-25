@@ -40,6 +40,6 @@ export default function LoginPage(props: LoginPageProps) {
   }, []);
 
   return <>
-  <div>LoginPage</div>
+  <h1>LoginPage</h1>
   </>;
 }

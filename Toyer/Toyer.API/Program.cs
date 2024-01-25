@@ -39,7 +39,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("ProductionTasks", policy => policy.RequireRole("Employee", "Administrator"));
+    options.AddPolicy("Production", policy => policy.RequireRole("Employee", "Administrator"));
 });
 
 //  ASP.NET Core MVC trims the suffix Async from action names by default

@@ -33,8 +33,9 @@ public class DeviceTypeController(IDeviceTypeRepository deviceTypeRepository, ID
     /// <summary>
     /// Gets info of speciffic device type.
     /// </summary>
-    [Authorize]
+    
     [HttpGet("{deviceTypeId:int}")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(DeviceTypePresentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeviceTypeByIdAsync([FromRoute] int deviceTypeId)
@@ -48,7 +49,7 @@ public class DeviceTypeController(IDeviceTypeRepository deviceTypeRepository, ID
     /// Gets info of all device types.
     /// </summary>
     [HttpGet]
-    [Authorize(Policy = "Production ")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IEnumerable<DeviceTypePresentDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllDeviceTypesAsync()
@@ -62,7 +63,7 @@ public class DeviceTypeController(IDeviceTypeRepository deviceTypeRepository, ID
     /// Updates name of device type info by id.
     /// </summary>
     [HttpPut("{deviceTypeId:int}")]
-    [Authorize(Policy = "Production ")]
+    [Authorize(Policy = "Production")]
     [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateDeviceTypeInfoAsync([FromRoute]int deviceTypeId, [FromForm]DeviceTypeCreateDto deviceUpdateDto)
@@ -76,7 +77,7 @@ public class DeviceTypeController(IDeviceTypeRepository deviceTypeRepository, ID
     /// Deletes device type selected by id.
     /// </summary>
     [HttpDelete("{deviceTypeId:int}")]
-    [Authorize(Policy = "Production ")]
+    [Authorize(Policy = "Production")]
     [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteDeviceTypeByIdAsync([FromRoute] int deviceTypeId)

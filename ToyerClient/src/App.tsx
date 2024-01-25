@@ -1,19 +1,21 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
 import HomePage from "../Pages/HomePage/HomePage.tsx";
-import DevicePage from "../Pages/DevicePage/DevicePage.tsx";
+import DevicesPage from "../Pages/DevicesPage/DevicesPage.tsx";
 import UserContextProvider from "../Store/user-context.tsx";
-import MainNavigation from "../Components/MainNavigation/MainNavigation.tsx";
 import RootLayout from "../Pages/RootLayout/RootLayout.tsx";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.tsx";
+import DeviceDetails from "../Pages/DeviceDetails/DeviceDetails.tsx"
 
 const router = createBrowserRouter([
   {
     path: "/",
-    errorElement: <ErrorPage message="Page not found"/>,
+    errorElement: <ErrorPage message="Page not found" />,
     element: <RootLayout />,
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/devices", element: <DevicesPage />},
+      { path: "/devices/:id", element: <DeviceDetails />},
       { path: "/login", element: <LoginPage /> },
     ],
   },

@@ -3,5 +3,7 @@ interface HomePageProps{
 }
 
 export default function HomePage(props: HomePageProps){
-    return <div>HomePage</div>
+    return <>
+    <h1>HomePage</h1>
+    </>
 }

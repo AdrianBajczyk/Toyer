@@ -84,7 +84,7 @@ public class UserController(IUserRepository userRepository,
     }
 
     ///// <summary>
-    ///// Confirms user email by token.
+    ///// Confirms user password by token.
     ///// </summary>
     //[HttpGet("Password")]
     //[AllowAnonymous]
@@ -116,7 +116,7 @@ public class UserController(IUserRepository userRepository,
     /// Gets all users.
     /// </summary>
     [HttpGet]
-    [Authorize(Policy = "ProductionTasks")]
+    [Authorize(Policy = "Production")]
     [ProducesResponseType(typeof(IEnumerable<UserPresentShortDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status202Accepted)]
     [ProducesResponseType(typeof(UnauthorizedResult), StatusCodes.Status401Unauthorized)]

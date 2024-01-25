@@ -1,10 +1,11 @@
-import {  NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { List } from "../List.tsx";
 import classes from "./MainNavigation.module.css";
 
 const links = [
   { id: "l1", to: "/", name: "Home" },
-  { id: "l2", to: "/login", name: "Login" },
+  { id: "l2", to: "/devices", name: "Devices" },
+  { id: "l3", to: "/login", name: "Login" },
 ];
 
 function MainNavigation() {
@@ -15,8 +16,15 @@ function MainNavigation() {
           items={links}
           className={classes.list}
           renderItem={(link) => (
-            <li>
-              <NavLink id={link.id} to={link.to} className={({isActive})=>isActive? classes.active : undefined}end>
+            <li key={link.id}>
+              <NavLink
+                id={link.id}
+                to={link.to}
+                className={({ isActive }) =>
+                  isActive ? classes.active : undefined
+                }
+                end
+              >
                 {link.name}
               </NavLink>
             </li>
