@@ -5,6 +5,6 @@ type ListProps<T> = {
   renderItem: (item: T) => ReactNode;
 } & ComponentPropsWithoutRef<'ul'>;
 
-export function List<T>({ items,  renderItem, ...otherProps }: ListProps<T>) {
+export default function List<T>({ items,  renderItem, ...otherProps }: ListProps<T>) {
   return <ul {...otherProps}>{items.map(renderItem)}</ul>;
 }

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { List } from "../List.tsx";
+import  List  from "../List.tsx";
 import classes from "./MainNavigation.module.css";
 
 const links = [
