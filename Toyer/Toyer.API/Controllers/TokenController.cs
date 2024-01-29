@@ -31,7 +31,7 @@ public class TokenController(UsersDbContext usersDbContext, IUserRepository user
         return Ok(new AuthenticationResponse()
         {
             Message = "Success.",
-            StatusCode = 200,
+            Status = 200,
             Token = accessToken,
             RefreshToken = refreshToken
         });

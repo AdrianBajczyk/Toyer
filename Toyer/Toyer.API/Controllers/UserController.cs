@@ -37,7 +37,7 @@ public class UserController(IUserRepository userRepository,
 
         var result = await _userRepository.RegisterNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password);
 
-        return CreatedAtAction(nameof(CreateNewUserAsync), new CustomResponse { Message = $"User: {newUserDto.UserName} created.", StatusCode = 201 });
+        return CreatedAtAction(nameof(CreateNewUserAsync), new CustomResponse { message = $"User: {newUserDto.UserName} created.", status = 201 });
     }
 
     /// <summary>

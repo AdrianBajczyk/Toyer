@@ -135,7 +135,7 @@ public class SqlUserRepository : IUserRepository
 
         if (!user.EmailConfirmed) throw new EmailNotConfirmedException();
 
-        return new AuthenticationResponse { Message = "Login succeed.", StatusCode = 200, Token = accessToken, RefreshToken = refreshToken };
+        return new AuthenticationResponse { Message = "Login succeed.", Status = 200, Token = accessToken, RefreshToken = refreshToken };
     }
 
     private async Task UpdateUsersRefreshToken(User user, string refreshToken)

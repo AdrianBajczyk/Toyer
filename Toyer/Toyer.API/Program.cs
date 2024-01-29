@@ -65,9 +65,9 @@ builder.Services.AddMvc()
 
             var result = new ObjectResult(new
             {
-                StatusCode = StatusCodes.Status400BadRequest,
+                status = StatusCodes.Status400BadRequest,
                 Message = "Validation failed",
-                Errors = errorDictionary,
+                error = errorDictionary,
             })
             {
                 StatusCode = StatusCodes.Status400BadRequest

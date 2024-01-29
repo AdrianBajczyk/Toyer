@@ -34,24 +34,32 @@ public sealed class ExceptionCustomHandler(ILogger<ExceptionCustomHandler> logge
             BadRequestException => StatusCodes.Status400BadRequest,
             NotFoundException => StatusCodes.Status404NotFound,
             _ => StatusCodes.Status500InternalServerError
-        }; ;
+        };
+
+        var responseMessage = exception switch
+        {
+            AuthenticationException => "Unauthorized",
+            UnauthorizedAccessException => "Unauthorized",
+            AuthorizationException => "Unauthorized",
+            BadRequestException => "Bad Request",
+            NotFoundException => "Not Found",
+            _ => "Internal Server Error"
+        };
 
         var responseError = exception.Message;
-        var responseMessage = "Client-side error.";
 
         if (context.Response.StatusCode == 500)
         {
             responseError = "Something went wrong...";
-            responseMessage = "Internal server error.";
             _logger.LogError(exception.ToString());
         }
 
 
         var respnse = new CustomResponse
         {
-            StatusCode = context.Response.StatusCode,
-            Message = responseMessage,
-            Error = responseError,
+            status = context.Response.StatusCode,
+            message = responseMessage,
+            error = responseError,
         }.ToString();
 
         await context.Response.WriteAsync(respnse);
