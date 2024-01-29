@@ -27,14 +27,9 @@ export default function DevicesPage() {
 }
 
 export async function loader() {
-  try {
-    const responseData = await get<DeviceType[]>(
+
+  return await get<DeviceType[]>(
       `https://localhost:7065/api/DeviceType`
     );
 
-    return responseData;
-  } catch (error) {
-    if (error instanceof Error) {
-    }
-  }
 }
