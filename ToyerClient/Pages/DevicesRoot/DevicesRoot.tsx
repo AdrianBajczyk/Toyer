@@ -1,4 +1,3 @@
-import React from "react";
 import DevicesNavigation from "../../Components/DevicesNavigation/DevicesNavigation";
 import {Outlet} from "react-router-dom";
 
