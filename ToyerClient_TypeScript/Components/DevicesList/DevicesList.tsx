@@ -1,5 +1,5 @@
 import { type DeviceType } from "../../Pages/DevicesPage/DevicesPage.tsx";
-import List from "../List.tsx";
+import List from "../UI/List.tsx";
 import { Link } from "react-router-dom";
 
 type DevicesListProps = {

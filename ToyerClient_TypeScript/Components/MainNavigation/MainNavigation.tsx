@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
-import  List  from "../List.tsx";
+import List from "../UI/List.tsx";
 import classes from "./MainNavigation.module.css";
 
 const links = [
   { id: "l1", to: "/", name: "Home" },
   { id: "l2", to: "/devices", name: "Devices" },
   { id: "l3", to: "/login", name: "Login" },
+  { id: "l4", to: "/register", name: "Register" },
 ];
 
 function MainNavigation() {

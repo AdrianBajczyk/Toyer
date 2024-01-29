@@ -7,6 +7,7 @@ import RootLayout from "../Pages/RootLayout/RootLayout.tsx";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.tsx";
 import DeviceDetails, {loader as deviceLoader} from "../Pages/DeviceDetails/DeviceDetails.tsx";
 import DevicesRootLayout from "../Pages/DevicesRoot/DevicesRoot.tsx";
+import RegisterPage from "../Pages/RegisterPage/RegisterPage.tsx"
 
 
 const router = createBrowserRouter([
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
     children: [
       { index:true, element: <HomePage /> },
       { path: 'login', element: <LoginPage /> },
-      // { path: "/register", element: <ResgisterPage /> },
+      { path: "/register", element: <RegisterPage /> },
       // { path: "/profile", element: <Profile /> },
       {path: 'devices', element: <DevicesRootLayout/>, children:[
         { index:true, element: <DevicesPage />, loader:devicesLoader },

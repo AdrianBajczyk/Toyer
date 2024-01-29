@@ -1,5 +1,5 @@
 import { type LoaderFunction, useNavigate, useLoaderData } from "react-router-dom";
-import Button from "../../Components/Button.tsx"
+import Button from "../../Components/UI/Button.tsx"
 import { DeviceType } from "../DevicesPage/DevicesPage.tsx";
 import {get} from "../../Utils/http.ts"
 
