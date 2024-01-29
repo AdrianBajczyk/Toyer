@@ -1,4 +1,5 @@
 
+import { ErrorResponse, json } from "react-router"
 import {JSONObject} from "./JsonType.ts"
 
 type RequestOptions = {
@@ -7,12 +8,20 @@ type RequestOptions = {
     body: string
 }
 
+type ServerErrorResponse = {
+    status: number;
+    message: string; 
+    error: string;
+}
 
 export async function get<T>(url: string){
     const response = await fetch(url)
 
     if (!response.ok){
-        throw new Error(`Faied to fetch data. ${response.status}.`);
+        const errorData : ServerErrorResponse = await response.json()
+        console.log("debug: http.ts")
+        console.log(errorData)
+        throw new Response(`${errorData.error}`, { status: errorData.status, statusText: errorData.message }); 
     }
 
     const data = await response.json() as unknown;
@@ -32,7 +41,8 @@ export async function post<T>(url: string, reqBody: JSONObject){
     const response = await fetch(url, requestOptions)
 
     if (!response.ok){
-        throw new Error(`Failed to fetch data. ${response.status}.`);
+        const errorData = await response.json()
+        throw new Error(errorData) ;
     }
 
     const data = await response.json() as unknown;

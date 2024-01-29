@@ -6,13 +6,12 @@ import UserContextProvider from "../Store/user-context.tsx";
 import RootLayout from "../Pages/RootLayout/RootLayout.tsx";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.tsx";
 import DeviceDetails from "../Pages/DeviceDetails/DeviceDetails.tsx";
-import { ApiUrlProvider } from "../Store/api-url-context.tsx"
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    errorElement: <ErrorPage message="Page not found" />,
+    errorElement: <ErrorPage />,
     element: <RootLayout />,
     children: [
       { path: "", element: <HomePage /> },
@@ -28,11 +27,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <ApiUrlProvider>
     <UserContextProvider>
       <RouterProvider router={router} />
     </UserContextProvider>
-    </ApiUrlProvider>
   );
 }
 export default App;

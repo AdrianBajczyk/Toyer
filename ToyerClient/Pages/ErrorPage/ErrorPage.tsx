@@ -1,17 +1,23 @@
-import MainNavigation from "../../Components/MainNavigation/MainNavigation.tsx"
+import { useRouteError, isRouteErrorResponse } from "react-router";
+import MainNavigation from "../../Components/MainNavigation/MainNavigation.tsx";
 
-type ErrorPageProps = {
-    message:string;
-}
+function ErrorPage() {
+  const error = useRouteError() as Response;
 
-function ErrorPage({message} : ErrorPageProps){
-return <>
-<MainNavigation/>
-<main>
-    <h2>Error</h2>
-    <p>{message}</p>
-</main>
-</>
+  if (isRouteErrorResponse(error)) {
+    return (
+      <>
+        <MainNavigation />
+        <main>
+          <h1>{error.status}</h1>
+          <h2>{error.statusText}</h2> 
+          <h3>{error.data}</h3>
+        </main>
+      </>
+    );
+  }
+
+  return <></>;
 }
 
 export default ErrorPage;

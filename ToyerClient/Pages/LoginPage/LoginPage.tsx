@@ -18,21 +18,10 @@ export default function LoginPage(props: LoginPageProps) {
   useEffect(() => {
     async function fetchLogin() {
       setIsFetching(true);
-      try{
         const responseData = await get<LoginPageResponse>(
           `https://localhost:7065/api/User`
         );
-  
-        console.log(responseData)
-  
         setLoginResponse(responseData);
-      } catch(error) {
-        if (error instanceof Error)
-        {
-          setError(error.message)
-        }
-      }
-      
       setIsFetching(false);
     }
 
