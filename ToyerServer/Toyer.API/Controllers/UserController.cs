@@ -31,7 +31,7 @@ public class UserController(IUserRepository userRepository,
     [AllowAnonymous]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateNewUserAsync([FromForm] UserCreateDto newUserDto)
+    public async Task<IActionResult> CreateNewUserAsync([FromBody] UserCreateDto newUserDto)
     {
 
 

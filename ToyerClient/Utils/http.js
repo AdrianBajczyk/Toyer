@@ -5,8 +5,6 @@ export async function get(url){
 
     if (!response.ok){
         const errorData = await response.json()
-        console.log("debug: http.ts")
-        console.log(errorData)
         throw new Response(`${errorData.error}`, { status: errorData.status, statusText: errorData.message }); 
     }
 
@@ -17,6 +15,7 @@ export async function get(url){
 export async function post(url, reqBody){
 
     const stringBody  = JSON.stringify(reqBody);
+    console.log(stringBody)
 
     const requestOptions = {
         method: 'POST',
@@ -28,7 +27,8 @@ export async function post(url, reqBody){
 
     if (!response.ok){
         const errorData = await response.json()
-        throw new Error(errorData) ;
+        console.log(errorData.error)
+        throw new Response(`${errorData.error}`, { status: errorData.status, statusText: errorData.message }); 
     }
 
     const data = await response.json();
