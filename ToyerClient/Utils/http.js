@@ -27,7 +27,7 @@ export async function post(url, reqBody) {
 
     const response = await fetch(url, requestOptions);
 
-    if (!response.ok) {
+    if (!response.ok && response.status!==422) {
       const errorData = await response.json();
       throw new Response(JSON.stringify(errorData.error), {
         status: errorData.status,
@@ -37,5 +37,6 @@ export async function post(url, reqBody) {
 
 
   const data = await response.json();
+  console.log(data)
   return data;
 }

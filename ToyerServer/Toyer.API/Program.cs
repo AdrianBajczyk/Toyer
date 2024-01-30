@@ -65,12 +65,12 @@ builder.Services.AddMvc()
 
             var result = new ObjectResult(new
             {
-                status = StatusCodes.Status400BadRequest,
-                Message = "Validation failed",
-                error = errorDictionary,
+                status = StatusCodes.Status422UnprocessableEntity,
+                message = "Validation failed",
+                errors = errorDictionary,
             })
             {
-                StatusCode = StatusCodes.Status400BadRequest
+                StatusCode = StatusCodes.Status422UnprocessableEntity
             };
 
             
