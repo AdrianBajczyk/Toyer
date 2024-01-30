@@ -2,10 +2,11 @@ import {Link} from "react-router-dom";
 
 
 export default function Button(props){
-    
+
     const linkStyle = {
         textDecoration: 'none', 
-        color: 'inherit', 
+        color: 'inherit',
+        cursor: 'auto',
       };
 
 if(props.element === 'link'){

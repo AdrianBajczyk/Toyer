@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.jsx";
 import RootLayout from "../Pages/RootLayout/RootLayout.jsx";
 import HomePage from "../Pages/HomePage/HomePage.jsx";
-import LoginPage from "../Pages/LoginPage/LoginPage.jsx";
+import LoginPage, {action as loginAction} from "../Pages/LoginPage/LoginPage.jsx";
 import RegisterPage, {action as registerAction} from "../Pages/RegisterPage/RegisterPage.jsx";
 import DevicesRootLayout from "../Pages/DevicesRoot/DevicesRoot.jsx";
 import DevicesPage, {loader as devicesLoader} from "../Pages/DevicesPage/DevicesPage.jsx";
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { index:true, element: <HomePage /> },
-      { path: 'login', element: <LoginPage /> },
+      { path: 'login', element: <LoginPage />, action:loginAction },
       { path: "register", element: <RegisterPage />, action:registerAction },
     //   { path: "/profile", element: <Profile /> },
       {path: 'devices', element: <DevicesRootLayout/>, children:[

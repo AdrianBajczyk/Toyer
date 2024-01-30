@@ -1,6 +1,6 @@
 import { redirect } from "react-router-dom";
 import RegisterForm from "../../Components/RegisterForm/RegisterForm";
-import {post} from "../../Utils/http.js"
+import { post } from "../../Utils/http.js"
 
 export default function RegisterPage(){
 
