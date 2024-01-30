@@ -5,6 +5,7 @@ function ErrorPage() {
   const error = useRouteError();
 
   if (isRouteErrorResponse(error)) {
+
     return (
       <>
         <MainNavigation />

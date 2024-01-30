@@ -1,11 +1,14 @@
 import CustomForm from "../UI/CustomForm.jsx";
 import Input from "../UI/Input/Input.jsx";
 import Button from "../UI/Button.jsx"
+import { useNavigation } from "react-router-dom";
 
 
 export function RegisterForm(){
 
+const navigation = useNavigation();
 
+const isSubmitting = navigation.state === 'submitting';
 
     return<>
     <CustomForm method='post'>
@@ -24,7 +27,7 @@ export function RegisterForm(){
         <Input type="text" label="Postal code" name="PostalCode" id="PostalCodeInput"/>
         <Input type="text" label="Country" name="Country" id="CountryInput"/>
         <Input type="text" label="Phone" name="PhoneNumber" id="PhoneInput"/>
-    <Button element='button'>Register</Button>
+    <Button element='button' disabled={isSubmitting}>{isSubmitting? "Submitting" : "Register"}</Button>
     </CustomForm>
     </>
 }

@@ -18,7 +18,7 @@ export default function DevicesPage() {
 export async function loader() {
 
   return await get(
-      `https://localhost:7065/api/DeviceType/34`
+      `https://localhost:7065/api/DeviceType`
     );
 
 }
