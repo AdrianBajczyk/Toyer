@@ -11,7 +11,7 @@ function ErrorPage() {
         <main>
           <h1>{error.status}</h1>
           <h2>{error.statusText}</h2> 
-          {/* <h3>{error.data}</h3> */}
+          <h3>{error.data}</h3>
         </main>
       </>
     );
