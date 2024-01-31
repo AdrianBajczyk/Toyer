@@ -10,7 +10,7 @@ export default function AuthForm() {
   const isSubmitting = navigation.state === "submitting";
 
   return (
-    <>
+    <section>
       <CustomForm method="post">
         <Input type="email" label="Email" name="Email" id="EmailInput" />
         <Input
@@ -19,13 +19,13 @@ export default function AuthForm() {
           name="Password"
           id="PasswordInput"
         />
-        <Button element="link" to={"/register"} disabled={isSubmitting}>
-          Create new user
-        </Button>
         <Button element="button" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Login"}
         </Button>
       </CustomForm>
+      <Button element="link" to={"/register"} disabled={isSubmitting}>
+          Create new user
+        </Button>
       {actionData && actionData.errors && (
         <ul>
           {Object.entries(actionData.errors).map(([key, value]) => (
@@ -36,6 +36,6 @@ export default function AuthForm() {
           ))}
         </ul>
       )}
-    </>
+    </section>
   );
 }
