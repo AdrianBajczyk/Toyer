@@ -8,6 +8,7 @@ import RegisterPage, {action as registerAction} from "../Pages/RegisterPage/Regi
 import DevicesRootLayout from "../Pages/DevicesRoot/DevicesRoot.jsx";
 import DevicesPage, {loader as devicesLoader} from "../Pages/DevicesPage/DevicesPage.jsx";
 import DeviceDetails, {loader as deviceLoader} from "../Pages/DeviceDetails/DeviceDetails.jsx";
+import RegisterSuccess from '../Pages/RegisterSuccess/RegisterSuccess.jsx';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,8 @@ const router = createBrowserRouter([
       { index:true, element: <HomePage /> },
       { path: 'login', element: <LoginPage />, action:loginAction },
       { path: "register", element: <RegisterPage />, action:registerAction },
+      {path: 'register/success', element:<RegisterSuccess/>},
+      
     //   { path: "/profile", element: <Profile /> },
       {path: 'devices', element: <DevicesRootLayout/>, children:[
         { index:true, element: <DevicesPage />, loader:devicesLoader },

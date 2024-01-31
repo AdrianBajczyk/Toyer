@@ -18,5 +18,5 @@ if(response.status === 422){
     return response
 }
 
-return redirect('/')
+return redirect('/register/success')
 }

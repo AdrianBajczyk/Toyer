@@ -8,22 +8,22 @@ import UserNote from "../UI/InputNotes/UserNote.jsx";
 import PwdNote from "../UI/InputNotes/PwdNote.jsx";
 import PwdConfirmNote from "../UI/InputNotes/PwdConfirmNote.jsx";
 import PropNote from "../UI/InputNotes/PropNote.jsx";
-import { isEarlierThan100YearsAgo } from "../../Utils/date.js"
+import { isEarlierThan100YearsAgo } from "../../Utils/date.js";
 import EmailNote from "../UI/InputNotes/EmailNote.jsx";
 import NumNote from "../UI/InputNotes/NumNote.jsx";
 import PostalNote from "../UI/InputNotes/PostalNote.jsx";
 import PhoneNote from "../UI/InputNotes/PhoneNote.jsx";
-
+import DateNote from "../UI/InputNotes/DateNote.jsx";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const PROP_REGEX = /^[A-Z][a-z]{3,23}$/;
+const PROP_REGEX = /^[A-Z][a-z]{2,23}$/;
 const EMAIL_REGEX = /^[\w\-\.]+@([\w-]+\.)+[a-z]{2,3}$/;
 const DIGIT_REGEX = /^\d{1,4}$/;
 const PHONE_REGEX = /^\(\+\d{2}\) \d{3}-\d{3}-\d{3}$/;
 const POSTAL_REGEX = /^(?=(?:[^-]*-?[^-]*){0,1}$)[A-Z0-9-]{5,10}$/;
 
-const REGISTER_URL = "/User/Login";
+const REGISTER_URL = "/User";
 
 export function RegisterForm() {
   const navigation = useNavigation();
@@ -94,12 +94,26 @@ export function RegisterForm() {
   const [validPhone, setValidPhone] = useState(false);
   const [phoneFocus, setPhoneFocus] = useState(false);
 
+  const isSubmitBlocked =
+    !validUser ||
+    !validPwd ||
+    !validConfirm ||
+    !validName ||
+    !validSurname ||
+    !validEmail ||
+    !validBirthDate ||
+    !validStreet ||
+    !validStreetNum ||
+    !validCity ||
+    !validPostal ||
+    !validCountry;
+
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
-    useEffect(() => {
-      userRef.current?.focus();
-    }, []);
+  useEffect(() => {
+    userRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     setValidUser(USER_REGEX.test(user));
@@ -107,7 +121,7 @@ export function RegisterForm() {
 
   useEffect(() => {
     setValidPwd(PWD_REGEX.test(pwd));
-    setValidConfirm((pwd === confirmPwd) && (confirmPwd));
+    setValidConfirm(pwd === confirmPwd && confirmPwd);
   }, [pwd, confirmPwd]);
 
   useEffect(() => {
@@ -127,7 +141,11 @@ export function RegisterForm() {
   }, [email]);
 
   useEffect(() => {
-    setValidBirthDate(isDateMatch(birthDate, 'yyyy-MM-dd') && !isFuture(birthDate) && !isEarlierThan100YearsAgo(birthDate));
+    setValidBirthDate(
+      isDateMatch(birthDate, "yyyy-MM-dd") &&
+        !isFuture(birthDate) &&
+        !isEarlierThan100YearsAgo(birthDate)
+    );
   }, [birthDate]);
 
   useEffect(() => {
@@ -139,7 +157,7 @@ export function RegisterForm() {
   }, [streetNum]);
 
   useEffect(() => {
-    setValidUnitNum(DIGIT_REGEX.test(unitNum));
+    setValidUnitNum(DIGIT_REGEX.test(unitNum) || !unitNum);
   }, [unitNum]);
 
   useEffect(() => {
@@ -147,11 +165,11 @@ export function RegisterForm() {
   }, [city]);
 
   useEffect(() => {
-    setValidState(PROP_REGEX.test(state));
+    setValidState(PROP_REGEX.test(state) || !state);
   }, [state]);
 
   useEffect(() => {
-    console.log(postal)
+    console.log(postal);
     setValidPostal(POSTAL_REGEX.test(postal));
   }, [postal]);
 
@@ -160,7 +178,7 @@ export function RegisterForm() {
   }, [country]);
 
   useEffect(() => {
-    setValidPhone(PHONE_REGEX.test(phone));
+    setValidPhone(PHONE_REGEX.test(phone) || !phone);
   }, [phone]);
 
   useEffect(() => {
@@ -183,6 +201,10 @@ export function RegisterForm() {
   ]);
 
   return (
+    <>{(actionData && !actionData.errors) ? (
+    <section>
+        <>DUPA</>
+    </section> ) : (
     <section>
       <p
         ref={errRef}
@@ -208,7 +230,11 @@ export function RegisterForm() {
           onBlur={() => setUserFocus(false)}
           validInput={validUser}
         />
-        <UserNote isInputFocus={userFocus} isInputValid={validUser} currentInput={user}/>
+        <UserNote
+          isInputFocus={userFocus}
+          isInputValid={validUser}
+          currentInput={user}
+        />
         <Input
           type="password"
           label="Password:"
@@ -224,7 +250,11 @@ export function RegisterForm() {
           onBlur={() => setPwdFocus(false)}
           validInput={validPwd}
         />
-        <PwdNote isInputFocus={pwdFocus} isInputValid={validPwd} currentInput={pwd}/>
+        <PwdNote
+          isInputFocus={pwdFocus}
+          isInputValid={validPwd}
+          currentInput={pwd}
+        />
         <Input
           type="password"
           label="Confirm password:"
@@ -240,7 +270,10 @@ export function RegisterForm() {
           onBlur={() => setConfirmFocus(false)}
           validInput={validConfirm}
         />
-        <PwdConfirmNote isInputFocus={confirmFocus} isInputValid={validConfirm}/>
+        <PwdConfirmNote
+          isInputFocus={confirmFocus}
+          isInputValid={validConfirm}
+        />
         <Input
           type="text"
           label="Name"
@@ -256,7 +289,11 @@ export function RegisterForm() {
           onBlur={() => setNameFocus(false)}
           validInput={validName}
         />
-        <PropNote isInputFocus={nameFocus} isInputValid={validName} currentInput={name}/>
+        <PropNote
+          isInputFocus={nameFocus}
+          isInputValid={validName}
+          currentInput={name}
+        />
         <Input
           type="text"
           label="Surname"
@@ -272,7 +309,11 @@ export function RegisterForm() {
           onBlur={() => setSurnameFocus(false)}
           validInput={validSurname}
         />
-        <PropNote isInputFocus={surnameFocus} isInputValid={validSurname} currentInput={surname}/>
+        <PropNote
+          isInputFocus={surnameFocus}
+          isInputValid={validSurname}
+          currentInput={surname}
+        />
         <Input
           type="email"
           label="Email"
@@ -288,7 +329,11 @@ export function RegisterForm() {
           onBlur={() => setEmailFocus(false)}
           validInput={validEmail}
         />
-        <EmailNote isInputFocus={emailFocus} isInputValid={validEmail} currentInput={email}/>
+        <EmailNote
+          isInputFocus={emailFocus}
+          isInputValid={validEmail}
+          currentInput={email}
+        />
         <Input
           type="date"
           label="Birth date:"
@@ -303,6 +348,11 @@ export function RegisterForm() {
           onFocus={() => setBirthDateFocus(true)}
           onBlur={() => setBirthDateFocus(false)}
           validInput={validBirthDate}
+        />
+        <DateNote
+          isInputFocus={birthDateFocus}
+          isInputValid={validBirthDate}
+          currentInput={birthDate}
         />
         <Input
           type="text"
@@ -319,7 +369,11 @@ export function RegisterForm() {
           onBlur={() => setStreetFocus(false)}
           validInput={validStreet}
         />
-        <PropNote isInputFocus={streetFocus} isInputValid={validStreet} currentInput={street}/>
+        <PropNote
+          isInputFocus={streetFocus}
+          isInputValid={validStreet}
+          currentInput={street}
+        />
         <Input
           type="text"
           label="Street number"
@@ -335,7 +389,11 @@ export function RegisterForm() {
           onBlur={() => setStreetNumFocus(false)}
           validInput={validStreetNum}
         />
-        <NumNote isInputFocus={streetNumFocus} isInputValid={validStreetNum} currentInput={streetNum}/>
+        <NumNote
+          isInputFocus={streetNumFocus}
+          isInputValid={validStreetNum}
+          currentInput={streetNum}
+        />
         <Input
           type="text"
           label="Unit number:"
@@ -344,14 +402,17 @@ export function RegisterForm() {
           ref={userRef}
           onChange={(e) => setUnitNum(e.target.value)}
           value={unitNum}
-          required
           aria-invalid={validUnitNum ? "false" : "true"}
           aria-describedby="numnote"
           onFocus={() => setUnitNumFocus(true)}
           onBlur={() => setUnitNumFocus(false)}
           validInput={validUnitNum}
         />
-        <NumNote isInputFocus={unitNumFocus} isInputValid={validUnitNum} currentInput={unitNum}/>
+        <NumNote
+          isInputFocus={unitNumFocus}
+          isInputValid={validUnitNum}
+          currentInput={unitNum}
+        />
         <Input
           type="text"
           label="City"
@@ -367,7 +428,11 @@ export function RegisterForm() {
           onBlur={() => setCityFocus(false)}
           validInput={validCity}
         />
-        <PropNote isInputFocus={cityFocus} isInputValid={validCity} currentInput={city}/>
+        <PropNote
+          isInputFocus={cityFocus}
+          isInputValid={validCity}
+          currentInput={city}
+        />
         <Input
           type="text"
           label="State"
@@ -382,7 +447,11 @@ export function RegisterForm() {
           onBlur={() => setStateFocus(false)}
           validInput={validState}
         />
-        <PropNote isInputFocus={stateFocus} isInputValid={validState} currentInput={state}/>
+        <PropNote
+          isInputFocus={stateFocus}
+          isInputValid={validState}
+          currentInput={state}
+        />
         <Input
           type="text"
           label="Postal code:"
@@ -398,7 +467,11 @@ export function RegisterForm() {
           onBlur={() => setPostalFocus(false)}
           validInput={validPostal}
         />
-        <PostalNote isInputFocus={postalFocus} isInputValid={validPostal} currentInput={postal}/>
+        <PostalNote
+          isInputFocus={postalFocus}
+          isInputValid={validPostal}
+          currentInput={postal}
+        />
         <Input
           type="text"
           label="Country:"
@@ -414,7 +487,11 @@ export function RegisterForm() {
           onBlur={() => setCountryFocus(false)}
           validInput={validCountry}
         />
-        <PropNote isInputFocus={countryFocus} isInputValid={validCountry} currentInput={country}/>
+        <PropNote
+          isInputFocus={countryFocus}
+          isInputValid={validCountry}
+          currentInput={country}
+        />
         <Input
           type="tel"
           label="Phone:"
@@ -429,8 +506,12 @@ export function RegisterForm() {
           onBlur={() => setPhoneFocus(false)}
           validInput={validPhone}
         />
-        <PhoneNote isInputFocus={phoneFocus} isInputValid={validPhone} currentInput={phone}/>
-        <Button element="button" disabled={isSubmitting}>
+        <PhoneNote
+          isInputFocus={phoneFocus}
+          isInputValid={validPhone}
+          currentInput={phone}
+        />
+        <Button element="button" disabled={isSubmitting || isSubmitBlocked}>
           {isSubmitting ? "Submitting" : "Register"}
         </Button>
       </CustomForm>
@@ -444,7 +525,7 @@ export function RegisterForm() {
           ))}
         </ul>
       )}
-    </section>
+    </section> )}</>
   );
 }
 
