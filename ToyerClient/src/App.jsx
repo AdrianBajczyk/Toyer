@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-// import UserContextProvider from '../Store/user-context.jsx';
+import UserContextProvider, { useUserContext } from '../Store/user-context.jsx';
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.jsx";
 import RootLayout from "../Pages/RootLayout/RootLayout.jsx";
 import HomePage from "../Pages/HomePage/HomePage.jsx";
@@ -33,9 +33,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    
+    <UserContextProvider>
       <RouterProvider router={router} />
-
+    </UserContextProvider>
   );
 }
 

@@ -113,8 +113,7 @@ export function RegisterForm() {
   }, []);
 
   useEffect(() => {
-    // setValidUser(USER_REGEX.test(user));
-    setValidUser(true);
+    setValidUser(USER_REGEX.test(user));
   }, [user]);
 
   useEffect(() => {
@@ -123,8 +122,7 @@ export function RegisterForm() {
   }, [pwd, confirmPwd]);
 
   useEffect(() => {
-    // setValidName(PROP_REGEX.test(name));
-    setValidName(true);
+    setValidName(PROP_REGEX.test(name));
   }, [name]);
 
   useEffect(() => {
@@ -222,7 +220,7 @@ export function RegisterForm() {
           ref={userRef}
           onChange={(e) => setUser(e.target.value)}
           value={user}
-        //   required
+          required
           aria-invalid={validUser ? "false" : "true"}
           aria-describedby="uidnote"
           onFocus={() => setUserFocus(true)}
@@ -281,7 +279,7 @@ export function RegisterForm() {
           ref={userRef}
           onChange={(e) => setName(e.target.value)}
           value={name}
-        //   required
+          required
           aria-invalid={validName ? "false" : "true"}
           aria-describedby="propnote"
           onFocus={() => setNameFocus(true)}
@@ -514,15 +512,20 @@ export function RegisterForm() {
           {isSubmitting ? "Submitting" : "Register"}
         </Button>
       </CustomForm>
-      {actionData && actionData.errors && (
+      {actionData && actionData.error && typeof actionData.error === 'object'(
         <ul>
-          {Object.entries(actionData.errors).map(([key, value]) => (
+          {Object.entries(actionData.error).map(([key, value]) => (
             <li key={key}>
               <h3>{key}</h3>
               <p>{value}</p>
             </li>
           ))}
         </ul>
+      )}
+      {
+        actionData && actionData.error && typeof actionData.error === 'string' &&(
+          <p>{actionData.error}</p>
+        
       )}
     </section> )}</>
   );

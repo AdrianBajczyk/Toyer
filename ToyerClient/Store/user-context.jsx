@@ -1,5 +1,4 @@
-import {  createContext, useContext, useReducer } from "react";
-
+import { createContext, useContext, useReducer } from "react";
 
 const initialState = {
   user: { email: "", token: "", refreshToken: "" },
@@ -18,10 +17,8 @@ export function useUserContext() {
   return userCtx;
 }
 
-
 function userReducer(state, action) {
-
-    //switch case (lepsza wydajność - malutka, ale zawsze :D)(cukier składniowy)
+  //switch case (lepsza wydajność - malutka, ale zawsze :D)(cukier składniowy)
   if (action.type === "LOGIN_USER") {
     return {
       ...state,
@@ -47,9 +44,7 @@ function userReducer(state, action) {
   return state;
 }
 
-export default function UserContextProvider({
-  children,
-}) {
+export default function UserContextProvider({ children }) {
   const [userState, dispatch] = useReducer(userReducer, initialState);
 
   const ctx = {

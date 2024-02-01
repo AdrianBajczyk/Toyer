@@ -26,15 +26,19 @@ export default function AuthForm() {
       <Button element="link" to={"/register"} disabled={isSubmitting}>
           Create new user
         </Button>
-      {actionData && actionData.errors && (
+      {actionData && actionData.error && typeof actionData.error === 'object' && (
         <ul>
-          {Object.entries(actionData.errors).map(([key, value]) => (
+          {Object.entries(actionData.error).map(([key, value]) => (
             <li key={key}>
               <h3>{key}</h3>
               <p>{value}</p>
             </li>
           ))}
         </ul>
+      )}{
+        actionData && actionData.error && typeof actionData.error === 'string' && (
+          <p>{actionData.error}</p>
+        
       )}
     </section>
   );
