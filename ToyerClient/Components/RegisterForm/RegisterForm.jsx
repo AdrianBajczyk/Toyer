@@ -23,8 +23,6 @@ const DIGIT_REGEX = /^\d{1,4}$/;
 const PHONE_REGEX = /^\(\+\d{2}\) \d{3}-\d{3}-\d{3}$/;
 const POSTAL_REGEX = /^(?=(?:[^-]*-?[^-]*){0,1}$)[A-Z0-9-]{5,10}$/;
 
-const REGISTER_URL = "/User";
-
 export function RegisterForm() {
   const navigation = useNavigation();
   const actionData = useActionData();
@@ -109,14 +107,14 @@ export function RegisterForm() {
     !validCountry;
 
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     userRef.current?.focus();
   }, []);
 
   useEffect(() => {
-    setValidUser(USER_REGEX.test(user));
+    // setValidUser(USER_REGEX.test(user));
+    setValidUser(true);
   }, [user]);
 
   useEffect(() => {
@@ -125,7 +123,8 @@ export function RegisterForm() {
   }, [pwd, confirmPwd]);
 
   useEffect(() => {
-    setValidName(PROP_REGEX.test(name));
+    // setValidName(PROP_REGEX.test(name));
+    setValidName(true);
   }, [name]);
 
   useEffect(() => {
@@ -223,7 +222,7 @@ export function RegisterForm() {
           ref={userRef}
           onChange={(e) => setUser(e.target.value)}
           value={user}
-          required
+        //   required
           aria-invalid={validUser ? "false" : "true"}
           aria-describedby="uidnote"
           onFocus={() => setUserFocus(true)}
@@ -282,7 +281,7 @@ export function RegisterForm() {
           ref={userRef}
           onChange={(e) => setName(e.target.value)}
           value={name}
-          required
+        //   required
           aria-invalid={validName ? "false" : "true"}
           aria-describedby="propnote"
           onFocus={() => setNameFocus(true)}
