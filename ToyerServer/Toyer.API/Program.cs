@@ -67,7 +67,7 @@ builder.Services.AddMvc()
             {
                 status = StatusCodes.Status422UnprocessableEntity,
                 message = "Validation failed",
-                errors = errorDictionary,
+                error = errorDictionary,
             })
             {
                 StatusCode = StatusCodes.Status422UnprocessableEntity
