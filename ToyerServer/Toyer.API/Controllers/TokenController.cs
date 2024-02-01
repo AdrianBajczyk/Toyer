@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using Toyer.Data.Context;
 using Toyer.Logic.Dtos.Token;
+using Toyer.Logic.Exceptions.FailResponses.Abstract;
 using Toyer.Logic.Responses;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
@@ -14,10 +14,8 @@ namespace Toyer.API.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-public class TokenController(UsersDbContext usersDbContext, IUserRepository userRepository, ITokenRepository tokenRepository) : ControllerBase
+public class TokenController(ITokenRepository tokenRepository) : ControllerBase
 {
-    private readonly UsersDbContext _usersDbContext = usersDbContext;
-    private readonly IUserRepository _userRepository = userRepository;
     private readonly ITokenRepository _tokenRepository = tokenRepository;
 
     /// <summary>
@@ -26,14 +24,21 @@ public class TokenController(UsersDbContext usersDbContext, IUserRepository user
     [HttpPost]
     public async Task<IActionResult> Refresh([FromBody]TokenDto tokenApiDto)
     {
-        var (accessToken, refreshToken) = await _tokenRepository.RefreshAsyc(tokenApiDto.AccessToken, tokenApiDto.RefreshToken);
+        string refreshToken = HttpContext.Request.Cookies["refreshToken"] ?? throw new ForbiddenException();
+            
+        var (accessToken, newRefreshToken) = await _tokenRepository.RefreshAsyc(tokenApiDto.AccessToken, refreshToken);
+
+        Response.Cookies.Append("refreshToken", newRefreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true, 
+        });
 
         return Ok(new AuthenticationResponse()
         {
             Message = "Success.",
             Status = 200,
             Token = accessToken,
-            RefreshToken = refreshToken
         });
     }
 

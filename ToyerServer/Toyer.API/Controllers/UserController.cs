@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -47,9 +48,20 @@ public class UserController(IUserRepository userRepository,
     [AllowAnonymous]
     public async Task<IActionResult> Authenticate([FromBody] UserLogin request)
     {
-        var result = await _userRepository.LoginAsync(request.Email, request.Password);
+        var (accessToken, refreshToken) = await _userRepository.LoginAsync(request.Email, request.Password);
 
-        return new ObjectResult(result);
+        Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+        });
+
+        return Ok(new AuthenticationResponse()
+        {
+            Message = "Success.",
+            Status = 200,
+            Token = accessToken,
+        });
     }
 
     /// <summary>

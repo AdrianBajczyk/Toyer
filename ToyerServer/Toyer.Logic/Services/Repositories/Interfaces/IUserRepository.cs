@@ -9,7 +9,7 @@ namespace Toyer.Logic.Services.Repositories.Interfaces;
 public interface IUserRepository
 {
    Task<User> RegisterNewUserAsync(User newUser, string password);
-   Task<AuthenticationResponse> LoginAsync(string email, string password);
+   Task<(string accessToken, string refreshToken)> LoginAsync(string email, string password);
    Task<User> GetUserByIdAsync(string Id);
    Task<IEnumerable<User>> GetUsersAsync();
    Task UpdateAddressAsync(string userId, Address updatesFromUserDocument);
