@@ -35,13 +35,11 @@ export async function post(urlRoute, reqBody) {
         statusText: error.response.data.message,
       });
     } else if (error.request && !excludedStatusCodes.includes(error.request.status)) {
-      console.log(error.request);
       throw new Response("No response. Server is offline. Try again later.", {
         status: 500,
         statusText: "Connection error.",
       });
     } else if (excludedStatusCodes.includes(error.response.status)) {
-      console.log(error.response)
       return error.response.data;
     }
   }
