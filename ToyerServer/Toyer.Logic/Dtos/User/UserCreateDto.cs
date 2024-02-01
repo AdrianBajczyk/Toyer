@@ -8,9 +8,9 @@ namespace Toyer.Logic.Dtos.User;
 public record UserCreateDto
 {
     [Required(ErrorMessage = "Login is required")]
-    [StringLength(20, ErrorMessage = "Login cannot exceed 20 characters")]
+    [StringLength(24, ErrorMessage = "Login cannot exceed 20 characters")]
     [DisplayName("Login")]
-    [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Login can only contain letters and numbers")]
+    [RegularExpression("^[A-z][A-z0-9-_]{3,23}$", ErrorMessage = "Letters, numbers, underscores, hyphens allowed")]
     public string UserName {  get; set; }
 
     [Required(ErrorMessage = "Password is required")]
