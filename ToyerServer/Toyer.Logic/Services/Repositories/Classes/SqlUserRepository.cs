@@ -120,7 +120,7 @@ public class SqlUserRepository : IUserRepository
          await _userManager.UpdateAsync(userToUpdate);
     }
 
-    public async Task<(string accessToken, string refreshToken)> LoginAsync(string email, string password)
+    public async Task<(string accessToken, string refreshToken, string userId)> LoginAsync(string email, string password)
     {
         var user = await _userManager.Users.Include(u => u.RefreshTokenModel).FirstOrDefaultAsync(u => u.Email == email)
             ?? throw new InvalidUserOrPasswordException();
@@ -135,7 +135,7 @@ public class SqlUserRepository : IUserRepository
 
         if (!user.EmailConfirmed) throw new EmailNotConfirmedException();
 
-        return (accessToken, refreshToken);
+        return (accessToken, refreshToken, user.Id);
     }
 
     private async Task UpdateUsersRefreshToken(User user, string refreshToken)
