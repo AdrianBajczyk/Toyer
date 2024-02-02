@@ -4,6 +4,7 @@ const excludedStatusCodes = [422, 401];
 
 export async function get(urlRoute) {
   try {
+    console.log("dupa")
     const response = await axios.get(urlRoute);
     return response.data;
   } catch (error) {

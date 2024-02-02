@@ -9,6 +9,7 @@ import DevicesPage, {loader as devicesLoader} from "../Pages/DevicesPage/Devices
 import DeviceDetails, {loader as deviceLoader} from "../Pages/DeviceDetails/DeviceDetails.jsx";
 import RegisterSuccess from '../Pages/RegisterSuccess/RegisterSuccess.jsx';
 import  useUserContext  from '../Hooks/useUserContext.js';
+import User, {loader as usersLoader} from '../Pages/UserPage/User.jsx';
 
 function App() {
 
@@ -23,7 +24,8 @@ function App() {
         { index:true, element: <HomePage /> },
         { path: 'login', element: <LoginPage />, action:loginAction(userCtx) },
         { path: "register", element: <RegisterPage />, action:registerAction },
-        {path: 'register/success', element:<RegisterSuccess/>},
+        { path: 'register/success', element:<RegisterSuccess/>},
+        { path:'user', element:<User/>, loader:usersLoader },
         
       //   { path: "/profile", element: <Profile /> },
         {path: 'devices', element: <DevicesRootLayout/>, children:[

@@ -6,6 +6,7 @@ const links = [
   { id: "l1", to: "/", name: "Home" },
   { id: "l2", to: "/devices", name: "Devices" },
   { id: "l3", to: "/login", name: "Login" },
+  { id: "l4", to: "/user", name: "User" },
 ];
 
 function MainNavigation() {
