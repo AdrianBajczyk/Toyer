@@ -13,6 +13,7 @@ public static class RepositoryServicesExtensions
         services.AddScoped<IOrderRepository, SqlOrderRepository>();
         services.AddScoped<IDeviceRepository, SqlDeviceRepository>();
         services.AddScoped<IDeviceAssignmentRepository, SqlDeviceAssignmentRepository>();
+        services.AddScoped<ITokenRepository, SqlTokenRepository>();
 
         return services;
     }

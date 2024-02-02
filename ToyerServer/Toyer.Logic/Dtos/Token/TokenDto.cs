@@ -5,9 +5,7 @@ namespace Toyer.Logic.Dtos.Token
     public class TokenDto
     {
         [Required]
-        public string AccessToken { get; set; }
+        public string Token { get; set; }
 
-        [Required]
-        public string RefreshToken { get; set; }
     }
 }

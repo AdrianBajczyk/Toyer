@@ -28,12 +28,13 @@ builder.Services.AddTransient<IAuthorizationHandler, PermissionHandler>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
+    options.AddPolicy("AllowLocalHost",
         builder =>
         {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
+            builder.WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials(); // Allow credentials (cookies)
         });
 });
 
@@ -101,7 +102,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowLocalHost");
 
 app.UseAuthentication();
 app.UseAuthorization();

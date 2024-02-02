@@ -54,6 +54,7 @@ public class UserController(IUserRepository userRepository,
         {
             HttpOnly = true,
             Secure = true,
+            SameSite = SameSiteMode.Lax,
         });
 
         return Ok(new AuthenticationResponse()
@@ -129,7 +130,7 @@ public class UserController(IUserRepository userRepository,
     /// Gets all users.
     /// </summary>
     [HttpGet]
-    [Authorize(Policy = "Production")]
+    //[Authorize(Policy = "Production")]
     [ProducesResponseType(typeof(IEnumerable<UserPresentShortDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status202Accepted)]
     [ProducesResponseType(typeof(UnauthorizedResult), StatusCodes.Status401Unauthorized)]

@@ -10,7 +10,6 @@ public record RefreshTokenModel
     public long Id { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime RefreshTokenExpiryTime { get; set; }
-
     public string UserId { get; set; }
     public User User { get; set; } = null!;
 }

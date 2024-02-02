@@ -35,13 +35,18 @@ public class TokenService : ITokenService
 
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
+        Console.WriteLine(_configuration["IssuerSigningKey"]);
+
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = true,
             ValidateIssuer = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["IssuerSigningKey"])),
-            ValidateLifetime = false
+            ValidateLifetime = false,
+            ValidAudience = _configuration["TokenValidationParameters:Audience"],
+            ValidIssuer = _configuration["TokenValidationParameters:Issuer"]
+
         };
         var tokenHandler = new JwtSecurityTokenHandler();
         SecurityToken securityToken;

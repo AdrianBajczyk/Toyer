@@ -11,7 +11,7 @@ namespace Toyer.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class TokenController(ITokenRepository tokenRepository) : ControllerBase
@@ -26,12 +26,13 @@ public class TokenController(ITokenRepository tokenRepository) : ControllerBase
     {
         string refreshToken = HttpContext.Request.Cookies["refreshToken"] ?? throw new ForbiddenException();
             
-        var (accessToken, newRefreshToken) = await _tokenRepository.RefreshAsyc(tokenApiDto.AccessToken, refreshToken);
+        var (accessToken, newRefreshToken) = await _tokenRepository.RefreshAsyc(tokenApiDto.Token, refreshToken);
 
         Response.Cookies.Append("refreshToken", newRefreshToken, new CookieOptions
         {
             HttpOnly = true,
-            Secure = true, 
+            Secure = true,
+            SameSite = SameSiteMode.Lax
         });
 
         return Ok(new AuthenticationResponse()
