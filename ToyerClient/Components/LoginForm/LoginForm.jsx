@@ -24,19 +24,14 @@ export default function LoginForm() {
     setNotEmptyPwd(pwd.length > 0);
   }, [pwd]);
 
-  const resetForm = () => {
-    setEmail("");
-    setValidEmail(false);
-    setPwd("");
-    setNotEmptyPwd(false);
-  };
+
 
   const isSubmitting = navigation.state === "submitting";
   const isSubmittBlocked = !validEmail || !emptyPwd;
 
   return (
     <section>
-      <CustomForm method="post" onSubmit={() => {setEmail(''); setPwd('')}}>
+      <CustomForm method="post" >
         <Input
           type="email"
           label="Email"
@@ -78,7 +73,8 @@ export default function LoginForm() {
         )}
       {actionData &&
         actionData.error &&
-        typeof actionData.error === "string" && <p>{actionData.error}</p>}
+        typeof actionData.error === "string" && <p className={actionData.error ? "errmsg" : "offscreen"}
+        aria-live="assertive">{actionData.error}</p>}
     </section>
   );
 }

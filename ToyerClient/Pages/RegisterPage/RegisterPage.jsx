@@ -1,22 +1,24 @@
 import { redirect } from "react-router-dom";
 import RegisterForm from "../../Components/RegisterForm/RegisterForm";
-import { post } from "../../Utils/http.js"
+import { post } from "../../Utils/http.js";
 
-export default function RegisterPage(){
-
-    return <RegisterForm/>
+export default function RegisterPage() {
+  return <RegisterForm />;
 }
 
-export async function action({request, params}){
+export async function action({ request }) {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
 
-const formData = await request.formData();
-const data = Object.fromEntries(formData);
+  if (data.UnitNumber === "") {
+    data.UnitNumber = 0;
+  }
 
-const response = await post('https://localhost:7065/api/User', data)
+  const response = await post("User", data);
 
-if(response.status === 422){
-    return response
-}
+  if (response.status === 422) {
+    return response;
+  }
 
-return redirect('/register/success')
+  return redirect("/register/success");
 }

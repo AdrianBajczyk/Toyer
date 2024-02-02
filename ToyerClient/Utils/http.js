@@ -22,12 +22,14 @@ export async function get(urlRoute) {
 }
 
 
-export async function post(urlRoute, reqBody) {
+export async function post(urlRoute, reqBody, withCredentials=false) {
   try {
     const response = await axios.post(urlRoute, JSON.stringify(reqBody), {
       headers: { "Content-Type": "application/json" },
+      withCredentials: withCredentials
     });
     return response.data;
+
   } catch (error) {
     if (error.response && !excludedStatusCodes.includes(error.response.status)) {
       throw new Response(JSON.stringify(error.response.data.error), {

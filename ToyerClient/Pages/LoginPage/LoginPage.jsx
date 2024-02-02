@@ -1,12 +1,8 @@
-import { useActionData, useNavigate } from "react-router-dom";
 import { post } from "../../Utils/http.js";
 import LoginForm from "../../Components/LoginForm/LoginForm.jsx";
-import { useEffect } from "react";
+import { redirect } from "react-router-dom";
 
 export default function LoginPage() {
-  const actionData = useActionData();
-  const navigate = useNavigate();
-
   return (
     <>
       <LoginForm />
@@ -23,7 +19,9 @@ export const action =
     if (response.status !== 200) {
       return response;
     }
-    userCtx.setUser({ email: data.email, token: response.token });
+    userCtx.setUser({ email: data.email, id: response.id ,token: response.token });
     userCtx.logIn();
+    
+    console.log(userCtx)
     return response;
   };

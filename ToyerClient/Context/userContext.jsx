@@ -26,6 +26,7 @@ function userReducer(state, action) {
       ...state,
       user: {
         email: action.payload.email,
+        id: action.payload.id,
         token: action.payload.token,
       },
     };

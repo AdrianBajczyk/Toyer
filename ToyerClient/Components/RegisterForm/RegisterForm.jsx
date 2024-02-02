@@ -166,7 +166,6 @@ export function RegisterForm() {
   }, [state]);
 
   useEffect(() => {
-    console.log(postal);
     setValidPostal(POSTAL_REGEX.test(postal));
   }, [postal]);
 
@@ -198,336 +197,337 @@ export function RegisterForm() {
   ]);
 
   return (
-    <>{(actionData && !actionData.errors) ? (
-    <section>
-        <>DUPA</>
-    </section> ) : (
-    <section>
-      <p
-        ref={errRef}
-        className={errMsg ? "errmsg" : "offscreen"}
-        aria-live="assertive"
-      >
-        {errMsg}
-      </p>
-      <h1>Register</h1>
-      <CustomForm className="FormClass" method="post">
-        <Input
-          type="text"
-          label="Username:"
-          name="UserName"
-          id="UserNameInput"
-          ref={userRef}
-          onChange={(e) => setUser(e.target.value)}
-          value={user}
-          required
-          aria-invalid={validUser ? "false" : "true"}
-          aria-describedby="uidnote"
-          onFocus={() => setUserFocus(true)}
-          onBlur={() => setUserFocus(false)}
-          validInput={validUser}
-        />
-        <UserNote
-          isInputFocus={userFocus}
-          isInputValid={validUser}
-          currentInput={user}
-        />
-        <Input
-          type="password"
-          label="Password:"
-          name="Password"
-          id="PasswordInput"
-          ref={userRef}
-          onChange={(e) => setPwd(e.target.value)}
-          value={pwd}
-          required
-          aria-invalid={validPwd ? "false" : "true"}
-          aria-describedby="pwdnote"
-          onFocus={() => setPwdFocus(true)}
-          onBlur={() => setPwdFocus(false)}
-          validInput={validPwd}
-        />
-        <PwdNote
-          isInputFocus={pwdFocus}
-          isInputValid={validPwd}
-          currentInput={pwd}
-        />
-        <Input
-          type="password"
-          label="Confirm password:"
-          name="ConfirmPassword"
-          id="ConfirmPasswordInput"
-          ref={userRef}
-          onChange={(e) => setConfirmPwd(e.target.value)}
-          value={confirmPwd}
-          required
-          aria-invalid={validConfirm ? "false" : "true"}
-          aria-describedby="confirmnote"
-          onFocus={() => setConfirmFocus(true)}
-          onBlur={() => setConfirmFocus(false)}
-          validInput={validConfirm}
-        />
-        <PwdConfirmNote
-          isInputFocus={confirmFocus}
-          isInputValid={validConfirm}
-        />
-        <Input
-          type="text"
-          label="Name"
-          name="Name"
-          id="NameInput"
-          ref={userRef}
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-          required
-          aria-invalid={validName ? "false" : "true"}
-          aria-describedby="propnote"
-          onFocus={() => setNameFocus(true)}
-          onBlur={() => setNameFocus(false)}
-          validInput={validName}
-        />
-        <PropNote
-          isInputFocus={nameFocus}
-          isInputValid={validName}
-          currentInput={name}
-        />
-        <Input
-          type="text"
-          label="Surname"
-          name="Surname"
-          id="SurnameInput"
-          ref={userRef}
-          onChange={(e) => setSurname(e.target.value)}
-          value={surname}
-          required
-          aria-invalid={validSurname ? "false" : "true"}
-          aria-describedby="propnote"
-          onFocus={() => setSurnameFocus(true)}
-          onBlur={() => setSurnameFocus(false)}
-          validInput={validSurname}
-        />
-        <PropNote
-          isInputFocus={surnameFocus}
-          isInputValid={validSurname}
-          currentInput={surname}
-        />
-        <Input
-          type="email"
-          label="Email"
-          name="Email"
-          id="EmailInput"
-          ref={userRef}
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-          required
-          aria-invalid={validEmail ? "false" : "true"}
-          aria-describedby="emailnote"
-          onFocus={() => setEmailFocus(true)}
-          onBlur={() => setEmailFocus(false)}
-          validInput={validEmail}
-        />
-        <EmailNote
-          isInputFocus={emailFocus}
-          isInputValid={validEmail}
-          currentInput={email}
-        />
-        <Input
-          type="date"
-          label="Birth date:"
-          name="BirthDate"
-          id="BirthDateInput"
-          ref={userRef}
-          onChange={(e) => setBirthDate(e.target.value)}
-          value={birthDate}
-          required
-          aria-invalid={validBirthDate ? "false" : "true"}
-          aria-describedby="datenote"
-          onFocus={() => setBirthDateFocus(true)}
-          onBlur={() => setBirthDateFocus(false)}
-          validInput={validBirthDate}
-        />
-        <DateNote
-          isInputFocus={birthDateFocus}
-          isInputValid={validBirthDate}
-          currentInput={birthDate}
-        />
-        <Input
-          type="text"
-          label="Street"
-          name="Street"
-          id="StreetInput"
-          ref={userRef}
-          onChange={(e) => setStreet(e.target.value)}
-          value={street}
-          required
-          aria-invalid={validStreet ? "false" : "true"}
-          aria-describedby="propnote"
-          onFocus={() => setStreetFocus(true)}
-          onBlur={() => setStreetFocus(false)}
-          validInput={validStreet}
-        />
-        <PropNote
-          isInputFocus={streetFocus}
-          isInputValid={validStreet}
-          currentInput={street}
-        />
-        <Input
-          type="text"
-          label="Street number"
-          name="StreetNumber"
-          id="StreetNumberInput"
-          ref={userRef}
-          onChange={(e) => setStreetNum(e.target.value)}
-          value={streetNum}
-          required
-          aria-invalid={validStreetNum ? "false" : "true"}
-          aria-describedby="numnote"
-          onFocus={() => setStreetNumFocus(true)}
-          onBlur={() => setStreetNumFocus(false)}
-          validInput={validStreetNum}
-        />
-        <NumNote
-          isInputFocus={streetNumFocus}
-          isInputValid={validStreetNum}
-          currentInput={streetNum}
-        />
-        <Input
-          type="text"
-          label="Unit number:"
-          name="UnitNumber"
-          id="UnitNumberInput"
-          ref={userRef}
-          onChange={(e) => setUnitNum(e.target.value)}
-          value={unitNum}
-          aria-invalid={validUnitNum ? "false" : "true"}
-          aria-describedby="numnote"
-          onFocus={() => setUnitNumFocus(true)}
-          onBlur={() => setUnitNumFocus(false)}
-          validInput={validUnitNum}
-        />
-        <NumNote
-          isInputFocus={unitNumFocus}
-          isInputValid={validUnitNum}
-          currentInput={unitNum}
-        />
-        <Input
-          type="text"
-          label="City"
-          name="City"
-          id="CityInput"
-          ref={userRef}
-          onChange={(e) => setCity(e.target.value)}
-          value={city}
-          required
-          aria-invalid={validCity ? "false" : "true"}
-          aria-describedby="propnote"
-          onFocus={() => setCityFocus(true)}
-          onBlur={() => setCityFocus(false)}
-          validInput={validCity}
-        />
-        <PropNote
-          isInputFocus={cityFocus}
-          isInputValid={validCity}
-          currentInput={city}
-        />
-        <Input
-          type="text"
-          label="State"
-          name="State"
-          id="StateInput"
-          ref={userRef}
-          onChange={(e) => setState(e.target.value)}
-          value={state}
-          aria-invalid={validState ? "false" : "true"}
-          aria-describedby="propnote"
-          onFocus={() => setStateFocus(true)}
-          onBlur={() => setStateFocus(false)}
-          validInput={validState}
-        />
-        <PropNote
-          isInputFocus={stateFocus}
-          isInputValid={validState}
-          currentInput={state}
-        />
-        <Input
-          type="text"
-          label="Postal code:"
-          name="PostalCode"
-          id="PostalCodeInput"
-          ref={userRef}
-          onChange={(e) => setPostal(e.target.value)}
-          value={postal}
-          required
-          aria-invalid={validPostal ? "false" : "true"}
-          aria-describedby="postalnote"
-          onFocus={() => setPostalFocus(true)}
-          onBlur={() => setPostalFocus(false)}
-          validInput={validPostal}
-        />
-        <PostalNote
-          isInputFocus={postalFocus}
-          isInputValid={validPostal}
-          currentInput={postal}
-        />
-        <Input
-          type="text"
-          label="Country:"
-          name="Country"
-          id="CountryInput"
-          ref={userRef}
-          onChange={(e) => setCountry(e.target.value)}
-          value={country}
-          required
-          aria-invalid={validCountry ? "false" : "true"}
-          aria-describedby="propnote"
-          onFocus={() => setCountryFocus(true)}
-          onBlur={() => setCountryFocus(false)}
-          validInput={validCountry}
-        />
-        <PropNote
-          isInputFocus={countryFocus}
-          isInputValid={validCountry}
-          currentInput={country}
-        />
-        <Input
-          type="tel"
-          label="Phone:"
-          name="PhoneNumber"
-          id="PhoneInput"
-          ref={userRef}
-          onChange={(e) => setPhone(e.target.value)}
-          value={phone}
-          aria-invalid={validPhone ? "false" : "true"}
-          aria-describedby="phonenote"
-          onFocus={() => setPhoneFocus(true)}
-          onBlur={() => setPhoneFocus(false)}
-          validInput={validPhone}
-        />
-        <PhoneNote
-          isInputFocus={phoneFocus}
-          isInputValid={validPhone}
-          currentInput={phone}
-        />
-        <Button element="button" disabled={isSubmitting || isSubmitBlocked}>
-          {isSubmitting ? "Submitting" : "Register"}
-        </Button>
-      </CustomForm>
-      {actionData && actionData.error && typeof actionData.error === 'object'(
-        <ul>
-          {Object.entries(actionData.error).map(([key, value]) => (
-            <li key={key}>
-              <h3>{key}</h3>
-              <p>{value}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-      {
-        actionData && actionData.error && typeof actionData.error === 'string' &&(
-          <p>{actionData.error}</p>
-        
-      )}
-    </section> )}</>
+    <>
+      <section>
+        <h1>Register</h1>
+        <CustomForm className="FormClass" method="post">
+          <Input
+            type="text"
+            label="Username:"
+            name="UserName"
+            id="UserNameInput"
+            ref={userRef}
+            onChange={(e) => setUser(e.target.value)}
+            value={user}
+            required
+            aria-invalid={validUser ? "false" : "true"}
+            aria-describedby="uidnote"
+            onFocus={() => setUserFocus(true)}
+            onBlur={() => setUserFocus(false)}
+            validInput={validUser}
+          />
+          <UserNote
+            isInputFocus={userFocus}
+            isInputValid={validUser}
+            currentInput={user}
+          />
+          <Input
+            type="password"
+            label="Password:"
+            name="Password"
+            id="PasswordInput"
+            ref={userRef}
+            onChange={(e) => setPwd(e.target.value)}
+            value={pwd}
+            required
+            aria-invalid={validPwd ? "false" : "true"}
+            aria-describedby="pwdnote"
+            onFocus={() => setPwdFocus(true)}
+            onBlur={() => setPwdFocus(false)}
+            validInput={validPwd}
+          />
+          <PwdNote
+            isInputFocus={pwdFocus}
+            isInputValid={validPwd}
+            currentInput={pwd}
+          />
+          <Input
+            type="password"
+            label="Confirm password:"
+            name="ConfirmPassword"
+            id="ConfirmPasswordInput"
+            ref={userRef}
+            onChange={(e) => setConfirmPwd(e.target.value)}
+            value={confirmPwd}
+            required
+            aria-invalid={validConfirm ? "false" : "true"}
+            aria-describedby="confirmnote"
+            onFocus={() => setConfirmFocus(true)}
+            onBlur={() => setConfirmFocus(false)}
+            validInput={validConfirm}
+          />
+          <PwdConfirmNote
+            isInputFocus={confirmFocus}
+            isInputValid={validConfirm}
+          />
+          <Input
+            type="text"
+            label="Name"
+            name="Name"
+            id="NameInput"
+            ref={userRef}
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+            required
+            aria-invalid={validName ? "false" : "true"}
+            aria-describedby="propnote"
+            onFocus={() => setNameFocus(true)}
+            onBlur={() => setNameFocus(false)}
+            validInput={validName}
+          />
+          <PropNote
+            isInputFocus={nameFocus}
+            isInputValid={validName}
+            currentInput={name}
+          />
+          <Input
+            type="text"
+            label="Surname"
+            name="Surname"
+            id="SurnameInput"
+            ref={userRef}
+            onChange={(e) => setSurname(e.target.value)}
+            value={surname}
+            required
+            aria-invalid={validSurname ? "false" : "true"}
+            aria-describedby="propnote"
+            onFocus={() => setSurnameFocus(true)}
+            onBlur={() => setSurnameFocus(false)}
+            validInput={validSurname}
+          />
+          <PropNote
+            isInputFocus={surnameFocus}
+            isInputValid={validSurname}
+            currentInput={surname}
+          />
+          <Input
+            type="email"
+            label="Email"
+            name="Email"
+            id="EmailInput"
+            ref={userRef}
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            required
+            aria-invalid={validEmail ? "false" : "true"}
+            aria-describedby="emailnote"
+            onFocus={() => setEmailFocus(true)}
+            onBlur={() => setEmailFocus(false)}
+            validInput={validEmail}
+          />
+          <EmailNote
+            isInputFocus={emailFocus}
+            isInputValid={validEmail}
+            currentInput={email}
+          />
+          <Input
+            type="date"
+            label="Birth date:"
+            name="BirthDate"
+            id="BirthDateInput"
+            ref={userRef}
+            onChange={(e) => setBirthDate(e.target.value)}
+            value={birthDate}
+            required
+            aria-invalid={validBirthDate ? "false" : "true"}
+            aria-describedby="datenote"
+            onFocus={() => setBirthDateFocus(true)}
+            onBlur={() => setBirthDateFocus(false)}
+            validInput={validBirthDate}
+          />
+          <DateNote
+            isInputFocus={birthDateFocus}
+            isInputValid={validBirthDate}
+            currentInput={birthDate}
+          />
+          <Input
+            type="text"
+            label="Street"
+            name="Street"
+            id="StreetInput"
+            ref={userRef}
+            onChange={(e) => setStreet(e.target.value)}
+            value={street}
+            required
+            aria-invalid={validStreet ? "false" : "true"}
+            aria-describedby="propnote"
+            onFocus={() => setStreetFocus(true)}
+            onBlur={() => setStreetFocus(false)}
+            validInput={validStreet}
+          />
+          <PropNote
+            isInputFocus={streetFocus}
+            isInputValid={validStreet}
+            currentInput={street}
+          />
+          <Input
+            type="text"
+            label="Street number"
+            name="StreetNumber"
+            id="StreetNumberInput"
+            ref={userRef}
+            onChange={(e) => setStreetNum(e.target.value)}
+            value={streetNum}
+            required
+            aria-invalid={validStreetNum ? "false" : "true"}
+            aria-describedby="numnote"
+            onFocus={() => setStreetNumFocus(true)}
+            onBlur={() => setStreetNumFocus(false)}
+            validInput={validStreetNum}
+          />
+          <NumNote
+            isInputFocus={streetNumFocus}
+            isInputValid={validStreetNum}
+            currentInput={streetNum}
+          />
+          <Input
+            type="text"
+            label="Unit number:"
+            name="UnitNumber"
+            id="UnitNumberInput"
+            ref={userRef}
+            onChange={(e) => setUnitNum(e.target.value)}
+            value={unitNum}
+            aria-invalid={validUnitNum ? "false" : "true"}
+            aria-describedby="numnote"
+            onFocus={() => setUnitNumFocus(true)}
+            onBlur={() => setUnitNumFocus(false)}
+            validInput={validUnitNum}
+          />
+          <NumNote
+            isInputFocus={unitNumFocus}
+            isInputValid={validUnitNum}
+            currentInput={unitNum}
+          />
+          <Input
+            type="text"
+            label="City"
+            name="City"
+            id="CityInput"
+            ref={userRef}
+            onChange={(e) => setCity(e.target.value)}
+            value={city}
+            required
+            aria-invalid={validCity ? "false" : "true"}
+            aria-describedby="propnote"
+            onFocus={() => setCityFocus(true)}
+            onBlur={() => setCityFocus(false)}
+            validInput={validCity}
+          />
+          <PropNote
+            isInputFocus={cityFocus}
+            isInputValid={validCity}
+            currentInput={city}
+          />
+          <Input
+            type="text"
+            label="State"
+            name="State"
+            id="StateInput"
+            ref={userRef}
+            onChange={(e) => setState(e.target.value)}
+            value={state}
+            aria-invalid={validState ? "false" : "true"}
+            aria-describedby="propnote"
+            onFocus={() => setStateFocus(true)}
+            onBlur={() => setStateFocus(false)}
+            validInput={validState}
+          />
+          <PropNote
+            isInputFocus={stateFocus}
+            isInputValid={validState}
+            currentInput={state}
+          />
+          <Input
+            type="text"
+            label="Postal code:"
+            name="PostalCode"
+            id="PostalCodeInput"
+            ref={userRef}
+            onChange={(e) => setPostal(e.target.value)}
+            value={postal}
+            required
+            aria-invalid={validPostal ? "false" : "true"}
+            aria-describedby="postalnote"
+            onFocus={() => setPostalFocus(true)}
+            onBlur={() => setPostalFocus(false)}
+            validInput={validPostal}
+          />
+          <PostalNote
+            isInputFocus={postalFocus}
+            isInputValid={validPostal}
+            currentInput={postal}
+          />
+          <Input
+            type="text"
+            label="Country:"
+            name="Country"
+            id="CountryInput"
+            ref={userRef}
+            onChange={(e) => setCountry(e.target.value)}
+            value={country}
+            required
+            aria-invalid={validCountry ? "false" : "true"}
+            aria-describedby="propnote"
+            onFocus={() => setCountryFocus(true)}
+            onBlur={() => setCountryFocus(false)}
+            validInput={validCountry}
+          />
+          <PropNote
+            isInputFocus={countryFocus}
+            isInputValid={validCountry}
+            currentInput={country}
+          />
+          <Input
+            type="tel"
+            label="Phone:"
+            name="PhoneNumber"
+            id="PhoneInput"
+            ref={userRef}
+            onChange={(e) => setPhone(e.target.value)}
+            value={phone}
+            aria-invalid={validPhone ? "false" : "true"}
+            aria-describedby="phonenote"
+            onFocus={() => setPhoneFocus(true)}
+            onBlur={() => setPhoneFocus(false)}
+            validInput={validPhone}
+          />
+          <PhoneNote
+            isInputFocus={phoneFocus}
+            isInputValid={validPhone}
+            currentInput={phone}
+          />
+          <Button element="button" disabled={isSubmitting || isSubmitBlocked}>
+            {isSubmitting ? "Submitting" : "Register"}
+          </Button>
+        </CustomForm>
+        {actionData &&
+          actionData.error &&
+          typeof actionData.error === "object" && (
+            <ul
+              className={actionData.error ? "errmsg" : "offscreen"}
+              aria-live="assertive"
+            >
+              {Object.entries(actionData.error).map(([key, value]) => (
+                <li key={key}>
+                  <h3>{key}</h3>
+                  <p>{value}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        {actionData &&
+          actionData.error &&
+          typeof actionData.error === "string" && (
+            <p
+              className={actionData.error ? "errmsg" : "offscreen"}
+              aria-live="assertive"
+            >
+              {actionData.error}
+            </p>
+          )}
+      </section>
+    </>
   );
 }
 
