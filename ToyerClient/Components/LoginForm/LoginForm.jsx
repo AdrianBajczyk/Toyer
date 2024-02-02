@@ -16,7 +16,6 @@ export default function LoginForm() {
   const [pwd, setPwd] = useState("");
   const [emptyPwd, setNotEmptyPwd] = useState(true);
 
-
   useEffect(() => {
     setValidEmail(EMAIL_REGEX.test(email));
   }, [email]);
@@ -25,14 +24,19 @@ export default function LoginForm() {
     setNotEmptyPwd(pwd.length > 0);
   }, [pwd]);
 
+  const resetForm = () => {
+    setEmail("");
+    setValidEmail(false);
+    setPwd("");
+    setNotEmptyPwd(false);
+  };
 
-
-  const isSubmitting = navigation.state === "submitting"
+  const isSubmitting = navigation.state === "submitting";
   const isSubmittBlocked = !validEmail || !emptyPwd;
 
   return (
     <section>
-      <CustomForm method="post">
+      <CustomForm method="post" onSubmit={() => {setEmail(''); setPwd('')}}>
         <Input
           type="email"
           label="Email"
