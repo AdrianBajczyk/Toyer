@@ -36,7 +36,7 @@ export default function LoginForm() {
         <Input
           type="email"
           label="Email"
-          name="Email"
+          name="email"
           id="EmailInput"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
@@ -46,7 +46,7 @@ export default function LoginForm() {
         <Input
           type="password"
           label="Password"
-          name="Password"
+          name="password"
           id="PasswordInput"
           onChange={(e) => setPwd(e.target.value)}
           value={pwd}

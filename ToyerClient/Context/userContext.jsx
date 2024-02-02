@@ -5,17 +5,7 @@ const initialState = {
   isLoggedIn: false,
 };
 
-const UserContext = createContext(null);
-
-export function useUserContext() {
-  const userCtx = useContext(UserContext);
-
-  if (userCtx === null) {
-    throw new Error("Fatal Error. Unexpected behavior. User context is null.");
-  }
-
-  return userCtx;
-}
+export const UserContext = createContext(null);
 
 function userReducer(state, action) {
   //switch case (lepsza wydajność - malutka, ale zawsze :D)(cukier składniowy)
@@ -37,7 +27,6 @@ function userReducer(state, action) {
       user: {
         email: action.payload.email,
         token: action.payload.token,
-        refreshToken: action.payload.refreshToken,
       },
     };
   }
