@@ -35,7 +35,7 @@ public class TokenService : ITokenService
 
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
-        Console.WriteLine(_configuration["IssuerSigningKey"]);
+       
 
         var tokenValidationParameters = new TokenValidationParameters
         {

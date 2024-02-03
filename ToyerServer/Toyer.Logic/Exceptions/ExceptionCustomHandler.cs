@@ -28,6 +28,7 @@ public sealed class ExceptionCustomHandler(ILogger<ExceptionCustomHandler> logge
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = exception switch
         {
+            ForbiddenException => StatusCodes.Status403Forbidden,
             AuthenticationException => StatusCodes.Status401Unauthorized,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             AuthorizationException => StatusCodes.Status401Unauthorized,
@@ -38,6 +39,7 @@ public sealed class ExceptionCustomHandler(ILogger<ExceptionCustomHandler> logge
 
         var responseMessage = exception switch
         {
+            ForbiddenException => "Forbidden",
             AuthenticationException => "Unauthorized",
             UnauthorizedAccessException => "Unauthorized",
             AuthorizationException => "Unauthorized",
