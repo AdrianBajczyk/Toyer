@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Toyer.Data.Entities;
+using System.Linq;
 
 namespace Toyer.Logic.Services.Authorization.Token;
 
@@ -20,11 +21,11 @@ public class TokenService : ITokenService
         _configuration = configuration;
     }
 
-    public string GenerateAccessToken(User user, string role)
+    public string GenerateAccessToken(User user, IList<string> roles)
     {
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
         var token = CreateJwtToken(
-            CreateClaims(user, role),
+            CreateClaims(user, roles),
             CreateSigningCredentials(),
             expiration
         );
@@ -70,7 +71,7 @@ public class TokenService : ITokenService
 
 
 
-    private List<Claim> CreateClaims(User user, string role)
+    private List<Claim> CreateClaims(User user, IList<string> roles)
     {
         try
         {
@@ -85,9 +86,9 @@ public class TokenService : ITokenService
 
             };
 
-            if (role != null)
+            if (roles.Any())
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             }
 
             return claims;

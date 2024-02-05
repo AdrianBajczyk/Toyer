@@ -8,6 +8,7 @@ public class AuthenticationResponse
     public string Message { get; set; }
     public string Id { get; set; }
     public string? Token { get; set; }
+    public IList<string?> Roles { get; set; }
     public override string ToString()
     {
         return JsonSerializer.Serialize(this);

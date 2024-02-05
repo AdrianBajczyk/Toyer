@@ -48,7 +48,7 @@ public class UserController(IUserRepository userRepository,
     [AllowAnonymous]
     public async Task<IActionResult> Authenticate([FromBody] UserLogin request)
     {
-        var (accessToken, refreshToken, userId) = await _userRepository.LoginAsync(request.Email, request.Password);
+        var (refreshToken, response) = await _userRepository.LoginAsync(request.Email, request.Password);
 
         Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
         {
@@ -57,13 +57,7 @@ public class UserController(IUserRepository userRepository,
             SameSite = SameSiteMode.Lax,
         });
 
-        return Ok(new AuthenticationResponse()
-        {
-            Status = 200,
-            Message = "Success.",
-            Id = userId,
-            Token = accessToken,
-        });
+        return Ok(response);
     }
 
     /// <summary>

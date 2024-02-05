@@ -120,7 +120,7 @@ public class SqlUserRepository : IUserRepository
          await _userManager.UpdateAsync(userToUpdate);
     }
 
-    public async Task<(string accessToken, string refreshToken, string userId)> LoginAsync(string email, string password)
+    public async Task<(string ,AuthenticationResponse)> LoginAsync(string email, string password)
     {
         var user = await _userManager.Users.Include(u => u.RefreshTokenModel).FirstOrDefaultAsync(u => u.Email == email)
             ?? throw new InvalidUserOrPasswordException();
@@ -129,13 +129,20 @@ public class SqlUserRepository : IUserRepository
         if (!isPasswordValid) throw new InvalidUserOrPasswordException();
 
         var roles = await _userManager.GetRolesAsync(user);
-        var accessToken = _tokenService.GenerateAccessToken(user, roles[0]);
+        var accessToken = _tokenService.GenerateAccessToken(user, roles);
         var refreshToken = _tokenService.GenerateRefreshToken();
         await UpdateUsersRefreshToken(user, refreshToken);
 
         if (!user.EmailConfirmed) throw new EmailNotConfirmedException();
 
-        return (accessToken, refreshToken, user.Id);
+        return (refreshToken, new AuthenticationResponse()
+        {
+            Id = user.Id,
+            Status = 200,
+            Message = "Success",
+            Token = accessToken,
+            Roles = roles,
+        });
     }
 
     private async Task UpdateUsersRefreshToken(User user, string refreshToken)
