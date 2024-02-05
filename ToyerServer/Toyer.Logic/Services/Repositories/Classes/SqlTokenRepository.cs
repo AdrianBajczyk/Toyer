@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Authentication;
 using System.Security.Claims;
@@ -37,10 +38,12 @@ public class SqlTokenRepository(ITokenService tokenService, UsersDbContext users
 
     public async Task RevokeAsync()
     {
-        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new AuthenticationException();
+        var refreshTokenCookie = _httpContextAccessor.HttpContext?.Request?.Cookies["refreshToken"] ?? throw new AuthenticationException();
 
-        var user = await _userRepository.GetUserByIdAsync(userId);
-        user.RefreshTokenModel = new();
+        var refreshToken = await _usersDbContext.RefreshTokens.SingleOrDefaultAsync(t => t.RefreshToken == refreshTokenCookie) ?? throw new AuthenticationException();
+        _usersDbContext.RefreshTokens.Remove(refreshToken);
         await _usersDbContext.SaveChangesAsync();
+
+        return;
     }
 }
