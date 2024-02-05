@@ -25,7 +25,7 @@ public class SqlTokenRepository(ITokenService tokenService, UsersDbContext users
         if (userTokens is null || userTokens.RefreshToken != refreshToken || userTokens.RefreshTokenExpiryTime <= DateTime.Now) throw new AuthenticationException();
 
         var user = await _userRepository.GetUserByIdAsync(userId);
-        var role = principal.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)!.Value ?? throw new AuthenticationException();
+        var role = (IList<string>)principal.Claims.Where(c => c.Type == ClaimTypes.Role)!.ToList() ?? throw new AuthenticationException();
 
         var newAccessToken = _tokenService.GenerateAccessToken(user, role);
         var newRefreshToken = _tokenService.GenerateRefreshToken();
