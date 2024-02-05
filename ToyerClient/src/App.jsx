@@ -1,12 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.jsx";
-import RootLayout from "../Pages/RootLayout/RootLayout.jsx";
+import RootLayout from "../Components/Layouts/RootLayout/RootLayout.jsx";
 import HomePage from "../Pages/HomePage/HomePage.jsx";
 import LoginPage from "../Pages/LoginPage/LoginPage.jsx";
 import RegisterPage, {
   action as registerAction,
 } from "../Pages/RegisterPage/RegisterPage.jsx";
-import DevicesRootLayout from "../Pages/DevicesRoot/DevicesRoot.jsx";
+import DevicesRootLayout from "../Components/Layouts/DevicesRoot.jsx";
 import DevicesPage, {
   loader as devicesLoader,
 } from "../Pages/DevicesPage/DevicesPage.jsx";
@@ -15,10 +15,10 @@ import DeviceDetails, {
 } from "../Pages/DeviceDetails/DeviceDetails.jsx";
 import RegisterSuccess from "../Pages/RegisterSuccess/RegisterSuccess.jsx";
 import User from "../Pages/UserPage/User.jsx";
-
+import RequireAuth from "../Components/ReguireAuth.jsx";
+import Unauthorized from "../Pages/UnauthorizedPage/Unauthorized.jsx";
 
 function App() {
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -29,7 +29,7 @@ function App() {
         { path: "login", element: <LoginPage /> },
         { path: "register", element: <RegisterPage />, action: registerAction },
         { path: "register/success", element: <RegisterSuccess /> },
-        { path: "user", element: <User /> },
+        { path: "unauthorized", element: <Unauthorized /> },
 
         //   { path: "/profile", element: <Profile /> },
         {
@@ -39,6 +39,10 @@ function App() {
             { index: true, element: <DevicesPage />, loader: devicesLoader },
             { path: ":id", element: <DeviceDetails />, loader: deviceLoader },
           ],
+        },
+        {
+          element: <RequireAuth allowedRoles={["Employee"]} />,
+          children: [{ path: "user", element: <User /> }],
         },
       ],
     },

@@ -24,6 +24,7 @@ function userReducer(state, action) {
         email: action.payload.email,
         id: action.payload.id,
         token: action.payload.token,
+        roles: action.payload.roles
       },
     };
   }

@@ -4,7 +4,7 @@ import Button from "../UI/Button.jsx";
 import { useState, useEffect, useRef } from "react";
 import axios from "../../src/Api/axios.js";
 import useUserContext from "../../Hooks/useUserContext.js";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const EMAIL_REGEX = /^[\w\-\.]+@([\w-]+\.)+[a-z]{2,3}$/;
 
@@ -50,6 +50,7 @@ export default function LoginForm() {
         email: email,
         id: response.data.id,
         token: response.data.token,
+        roles: response.data.roles,
       });
       setEmail("");
       setPassword("");
@@ -60,11 +61,11 @@ export default function LoginForm() {
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 422) {
-        setErrMsg("Missing Username or Password");
+        setErrMsg("Format not valid");
       } else if (err.response?.status === 401) {
         setErrMsg("Unauthorized");
       } else {
-        setErrMsg("Login Failed");
+        setErrMsg("Unexpected error. Login Failed");
       }
     } finally {
       errRef.current.focus();
