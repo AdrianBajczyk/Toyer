@@ -1,13 +1,21 @@
-import { post } from "../../Utils/http.js";
 import LoginForm from "../../Components/LoginForm/LoginForm.jsx";
-import { redirect } from "react-router-dom";
+import useLogout from "../../Hooks/useLogout.js";
+import useUserContext from "../../Hooks/useUserContext.js";
 
 export default function LoginPage() {
+
+  const logout = useLogout();
+  const userCtx = useUserContext();
+
+  const handleLogout = async () =>{
+    await logout();
+  }
+
   return (
     <>
-      <LoginForm />
+      <LoginForm>
+      <button disabled={!userCtx.isLoggedIn} onClick={handleLogout}>Logout</button>
+      </LoginForm>
     </>
   );
 }
-
-

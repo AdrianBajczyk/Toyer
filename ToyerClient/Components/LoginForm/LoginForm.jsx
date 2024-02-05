@@ -4,11 +4,11 @@ import Button from "../UI/Button.jsx";
 import { useState, useEffect, useRef } from "react";
 import axios from "../../src/Api/axios.js";
 import useUserContext from "../../Hooks/useUserContext.js";
-import { useNavigate, useLocation } from "react-router-dom";
 
+import { useNavigate, useLocation } from "react-router-dom";
 const EMAIL_REGEX = /^[\w\-\.]+@([\w-]+\.)+[a-z]{2,3}$/;
 
-export default function LoginForm() {
+export default function LoginForm({children}) {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -112,6 +112,7 @@ export default function LoginForm() {
       <Button element="link" to={"/register"} disabled={isSubmitting}>
         Create new user
       </Button>
+      {children}
     </section>
   );
 }

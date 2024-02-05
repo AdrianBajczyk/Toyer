@@ -25,6 +25,7 @@ function App() {
       errorElement: <ErrorPage />,
       element: <RootLayout />,
       children: [
+        //PUBLIC ROUTES
         { index: true, element: <HomePage /> },
         { path: "login", element: <LoginPage /> },
         { path: "register", element: <RegisterPage />, action: registerAction },
@@ -40,6 +41,8 @@ function App() {
             { path: ":id", element: <DeviceDetails />, loader: deviceLoader },
           ],
         },
+
+        // PROTECTED ROUTES
         {
           element: <RequireAuth allowedRoles={["Employee"]} />,
           children: [{ path: "user", element: <User /> }],

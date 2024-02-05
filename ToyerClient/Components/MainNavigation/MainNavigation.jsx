@@ -5,8 +5,8 @@ import classes from "./MainNavigation.module.css";
 const links = [
   { id: "l1", to: "/", name: "Home" },
   { id: "l2", to: "/devices", name: "Devices" },
-  { id: "l3", to: "/login", name: "Login" },
-  { id: "l4", to: "/user", name: "User" },
+  { id: "l3", to: "/user", name: "User" },
+  { id: "l4", to: "/login", name: "Login" },
 ];
 
 function MainNavigation() {
