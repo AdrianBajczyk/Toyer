@@ -1,21 +1,37 @@
-import { useLoaderData } from "react-router-dom";
 import UsersList from "../../Components/UsersList/UsersList";
-import {get} from "../../Utils/http.js"
-
+import useAxiosPrivate from "../../Hooks/useAxiosPrivate";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const User = () => {
+  const [users, setUsers] = useState();
+  const axiosPrivate = useAxiosPrivate();
 
-    const users = useLoaderData();
-    console.log(users)
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  return (
-    <UsersList users={users}/>
-  )
-}
+  useEffect(() => {
+    let isMounted = true;
 
-export default User
+    const getUsers = async () => {
+      try {
+        const response = await axiosPrivate.get("/User");
+        console.log(response.data);
+        isMounted && setUsers(response.data);
+      } catch (err) {
+        console.log(err);
+        navigate("/login", { state: { from: location }, replace: true });
+      }
+    };
 
-export async function loader() {
-    return await get(`User`);
-  
-  }
+    getUsers();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  return users && <UsersList users={users} />;
+};
+
+export default User;

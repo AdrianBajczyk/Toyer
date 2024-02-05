@@ -10,18 +10,4 @@ export default function LoginPage() {
   );
 }
 
-export const action =
-  (userCtx) =>
-  async ({ request }) => {
-    const formData = await request.formData();
-    const data = Object.fromEntries(formData);
-    const response = await post("https://localhost:7065/api/User/Login", data);
-    if (response.status !== 200) {
-      return response;
-    }
-    userCtx.setUser({ email: data.email, id: response.id ,token: response.token });
-    userCtx.logIn();
-    
-    console.log(userCtx)
-    return response;
-  };
+

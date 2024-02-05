@@ -1,19 +1,28 @@
 import CustomForm from "../UI/CustomForm.jsx";
 import Input from "../UI/Input/Input.jsx";
 import Button from "../UI/Button.jsx";
-import { useActionData, useNavigation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import axios from "../../src/Api/axios.js";
+import useUserContext from "../../Hooks/useUserContext.js";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const EMAIL_REGEX = /^[\w\-\.]+@([\w-]+\.)+[a-z]{2,3}$/;
 
 export default function LoginForm() {
-  const actionData = useActionData();
-  const navigation = useNavigation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  const userCtx = useUserContext();
+  const errRef = useRef();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
 
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
 
-  const [pwd, setPwd] = useState("");
+  const [password, setPassword] = useState("");
   const [emptyPwd, setNotEmptyPwd] = useState(true);
 
   useEffect(() => {
@@ -21,17 +30,60 @@ export default function LoginForm() {
   }, [email]);
 
   useEffect(() => {
-    setNotEmptyPwd(pwd.length > 0);
-  }, [pwd]);
+    setNotEmptyPwd(password.length > 0);
+  }, [password]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const response = await axios.post(
+        "User/Login",
+        JSON.stringify({ email, password }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log(JSON.stringify(response?.data));
+      userCtx.setUser({
+        email: email,
+        id: response.data.id,
+        token: response.data.token,
+      });
+      setEmail("");
+      setPassword("");
+      navigate(from, { replace: true });
+    } catch (err) {
+      console.log(err);
+      userCtx.logOut();
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 422) {
+        setErrMsg("Missing Username or Password");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+    } finally {
+      errRef.current.focus();
+      setIsSubmitting(false);
+    }
+  };
 
-
-  const isSubmitting = navigation.state === "submitting";
   const isSubmittBlocked = !validEmail || !emptyPwd;
 
   return (
     <section>
-      <CustomForm method="post" >
+      <p
+        ref={errRef}
+        className={errMsg ? "errmsg" : "offscreen"}
+        aria-live="assertive"
+      >
+        {errMsg}
+      </p>
+      <CustomForm onSubmit={handleSubmit}>
         <Input
           type="email"
           label="Email"
@@ -47,8 +99,8 @@ export default function LoginForm() {
           label="Password"
           name="password"
           id="PasswordInput"
-          onChange={(e) => setPwd(e.target.value)}
-          value={pwd}
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
           required
           validInput={emptyPwd}
         />
@@ -59,22 +111,6 @@ export default function LoginForm() {
       <Button element="link" to={"/register"} disabled={isSubmitting}>
         Create new user
       </Button>
-      {actionData &&
-        actionData.error &&
-        typeof actionData.error === "object" && (
-          <ul>
-            {Object.entries(actionData.error).map(([key, value]) => (
-              <li key={key}>
-                <h3>{key}</h3>
-                <p>{value}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      {actionData &&
-        actionData.error &&
-        typeof actionData.error === "string" && <p className={actionData.error ? "errmsg" : "offscreen"}
-        aria-live="assertive">{actionData.error}</p>}
     </section>
   );
 }
