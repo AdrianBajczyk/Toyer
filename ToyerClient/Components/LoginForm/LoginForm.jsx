@@ -4,11 +4,11 @@ import Button from "../UI/Button.jsx";
 import { useState, useEffect, useRef } from "react";
 import axios from "../../src/Api/axios.js";
 import useUserContext from "../../Hooks/useUserContext.js";
-
+import classes from "./LoginForm.module.css"
 import { useNavigate, useLocation } from "react-router-dom";
 const EMAIL_REGEX = /^[\w\-\.]+@([\w-]+\.)+[a-z]{2,3}$/;
 
-export default function LoginForm({children}) {
+export default function LoginForm({ children, onHide }) {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -54,6 +54,7 @@ export default function LoginForm({children}) {
       });
       setEmail("");
       setPassword("");
+      onHide();
       navigate(from, { replace: true });
     } catch (err) {
       console.log(err);
@@ -76,8 +77,8 @@ export default function LoginForm({children}) {
   const isSubmittBlocked = !validEmail || !emptyPwd;
 
   return (
-    <section>
-      <p
+    <section className={classes.loginForm}>
+      {!userCtx.isLoggedIn ? <><p
         ref={errRef}
         className={errMsg ? "errmsg" : "offscreen"}
         aria-live="assertive"
@@ -109,10 +110,9 @@ export default function LoginForm({children}) {
           {isSubmitting ? "Submitting..." : "Login"}
         </Button>
       </CustomForm>
-      <Button element="link" to={"/register"} disabled={isSubmitting}>
+      <Button element="link" to={"/register"} disabled={isSubmitting} onClick={()=>onHide()}>
         Create new user
-      </Button>
-      {children}
+      </Button></> : <>{children}</>}
     </section>
   );
 }

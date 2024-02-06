@@ -200,7 +200,7 @@ export function RegisterForm() {
     <>
       <section>
         <h1>Register</h1>
-        <CustomForm className="FormClass" method="post">
+        <CustomForm method="post">
           <Input
             type="text"
             label="Username:"

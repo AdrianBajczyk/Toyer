@@ -28,7 +28,6 @@ function App() {
       children: [
         //PUBLIC ROUTES
         { index: true, element: <HomePage /> },
-        { path: "login", element: <LoginPage /> },
         { path: "register", element: <RegisterPage />, action: registerAction },
         { path: "register/success", element: <RegisterSuccess /> },
         { path: "unauthorized", element: <Unauthorized /> },
