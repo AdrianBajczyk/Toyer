@@ -17,6 +17,7 @@ import RegisterSuccess from "../Pages/RegisterSuccess/RegisterSuccess.jsx";
 import User from "../Pages/UserPage/User.jsx";
 import RequireAuth from "../Components/ReguireAuth.jsx";
 import Unauthorized from "../Pages/UnauthorizedPage/Unauthorized.jsx";
+import Spinner from "../Components/Spinner/Spinner.jsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -31,6 +32,7 @@ function App() {
         { path: "register", element: <RegisterPage />, action: registerAction },
         { path: "register/success", element: <RegisterSuccess /> },
         { path: "unauthorized", element: <Unauthorized /> },
+        { path: "spinner", element: <Spinner /> },
 
         //   { path: "/profile", element: <Profile /> },
         {
