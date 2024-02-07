@@ -22,9 +22,8 @@ public record PersonalInfoDto
     [Display(Name = "Phone number")]
     public string? PhoneNumber { get; set; }
 
-    [Required(ErrorMessage = "Email address is required")]
     [DataType(DataType.EmailAddress)]
     [EmailAddress(ErrorMessage = "Invalid email address")]
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
 }
