@@ -1,0 +1,10 @@
+.registerContainer {
+  width: 100%;
+  max-width: 30vw;
+  min-width: 20em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.4);
+}

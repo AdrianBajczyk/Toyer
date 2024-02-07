@@ -10,6 +10,7 @@ import DateInput from "../ValidatedFormInputs/DateInput.jsx";
 import NumberInput from "../ValidatedFormInputs/NumberInput.jsx";
 import PostalCodeInput from "../ValidatedFormInputs/PostalCodeInput.jsx";
 import PhoneInput from "../ValidatedFormInputs/PhoneInput.jsx";
+import classes from "./RegisterForm.module.css"
 
 export function RegisterForm() {
   const navigation = useNavigation();
@@ -53,7 +54,7 @@ export function RegisterForm() {
 
   return (
     <>
-      <section>
+      <section className={classes.registerContainer}>
         <h1>Register</h1>
         <CustomForm method="post">
           <UserNameInput

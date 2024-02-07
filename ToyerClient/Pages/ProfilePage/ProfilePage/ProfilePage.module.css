@@ -1,0 +1,47 @@
+.settingsOptions {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsHeader {
+  padding: 1rem;
+  text-align: center;
+}
+
+.settingsOptionsDescription {
+  padding: 0.5rem;
+}
+
+.settingsUnit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 7em;
+}
+
+.settingsContainer {
+  width: 100%;
+  max-width: 30vw;
+  min-width: 20em;
+  min-height: 20em;
+  padding: 1rem;
+  background-color: rgb(21, 95, 168);
+}
+
+.description {
+  font-size: 18px;
+}
+
+.subnaviagationContainer {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.navLink {
+  text-decoration: none;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}

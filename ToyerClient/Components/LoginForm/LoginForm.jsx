@@ -77,7 +77,7 @@ export default function LoginForm({ children, onHide }) {
   const isSubmittBlocked = !validEmail || !emptyPwd;
 
   return (
-    <section className={classes.loginForm}>
+    <section className={classes.loginContainer}>
       {!userCtx.isLoggedIn ? <><p
         ref={errRef}
         className={errMsg ? "errmsg" : "offscreen"}

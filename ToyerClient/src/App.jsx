@@ -17,7 +17,9 @@ import User from "../Pages/UserPage/User.jsx";
 import RequireAuth from "../Components/ReguireAuth.jsx";
 import Unauthorized from "../Pages/UnauthorizedPage/Unauthorized.jsx";
 import Spinner from "../Components/Spinner/Spinner.jsx";
-import ProfilePage from "../Pages/ProfilePage/ProfilePage.jsx";
+import ProfilePage from "../Pages/ProfilePage/ProfilePage/ProfilePage.jsx";
+import PersonalDataPage from "../Pages/ProfilePage/PersonalDataPage/PersonalDataPage.jsx";
+import AdressDataPage from "../Pages/ProfilePage/AddressDataPage/AdressDataPage.jsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -44,12 +46,20 @@ function App() {
 
         // PROTECTED ROUTES
         {
-          element: <RequireAuth allowedRoles={["Employee"]} />,
-          children: [{ path: "user", element: <User />, }],
+          element: <RequireAuth allowedRoles={["Employee", "Administrator"]} />,
+          children: [{ path: "user", element: <User /> }],
         },
         {
-          element: <RequireAuth allowedRoles={["Employee", "RegisteredUser", "Administrator"]} />,
-          children: [{ path: "profile", element: <ProfilePage />, }],
+          element: (
+            <RequireAuth
+              allowedRoles={["Employee", "RegisteredUser", "Administrator"]}
+            />
+          ),
+          children: [
+            { path: "profile", element: <ProfilePage /> },
+            { path: "profile/personals", element: <PersonalDataPage /> },
+            { path: "profile/address", element: <AdressDataPage /> },
+          ],
         },
       ],
     },
