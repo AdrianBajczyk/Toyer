@@ -58,17 +58,18 @@ input,
 textarea {
   font-family: "Nunito", sans-serif;
   font-size: 22px;
-  padding: 0.25rem;
+  padding: 0.3rem;
   border-radius: 0.5rem;
 }
 
 label,
-input {
-  margin: 0.3em;
+input,
+textarea {
+  margin-bottom: 0.4em;
 }
 
 .generalButton {
-  padding: 0.5rem;
+  padding: 0.5em;
   margin: 0.3em;
 }
 

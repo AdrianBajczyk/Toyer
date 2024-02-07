@@ -8,10 +8,10 @@ const RequireAuth = ({ allowedRoles }) => {
 
     return (
         userCtx?.user?.roles?.find(role => allowedRoles?.includes(role))
-            ? <Outlet />
+            ? <Outlet/>
             : userCtx?.isLoggedIn
                 ? <Navigate to="/unauthorized" state={{ from: location }} replace />
-                : <Navigate to="/login" state={{ from: location }} replace />
+                : <Navigate to="/" state={{ from: location }} replace />
     );
 }
 

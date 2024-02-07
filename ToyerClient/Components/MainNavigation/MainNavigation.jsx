@@ -49,7 +49,6 @@ function MainNavigation() {
           )}
         />
         <div>
-          
           <span
             className={classes.iconContainer}
             aria-label="userLogin"

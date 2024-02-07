@@ -16,7 +16,10 @@ export default function LoginPage({onHide}) {
   return (
     <>
       <LoginForm onHide={onHide}>
-        {userCtx.isLoggedIn ? <Button onClick={handleLogout}>Logout</Button> : <></>}
+        {userCtx.isLoggedIn ? <>
+          <Button onClick={()=> onHide()} element="link" to={"/profile"}>Profile</Button>
+          <Button onClick={handleLogout}>Logout</Button>
+        </> : <></>}
       </LoginForm>
     </>
   );

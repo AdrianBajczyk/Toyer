@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.jsx";
 import RootLayout from "../Components/Layouts/RootLayout/RootLayout.jsx";
 import HomePage from "../Pages/HomePage/HomePage.jsx";
-import LoginPage from "../Pages/LoginPage/LoginPage.jsx";
 import RegisterPage, {
   action as registerAction,
 } from "../Pages/RegisterPage/RegisterPage.jsx";
@@ -18,6 +17,7 @@ import User from "../Pages/UserPage/User.jsx";
 import RequireAuth from "../Components/ReguireAuth.jsx";
 import Unauthorized from "../Pages/UnauthorizedPage/Unauthorized.jsx";
 import Spinner from "../Components/Spinner/Spinner.jsx";
+import ProfilePage from "../Pages/ProfilePage/ProfilePage.jsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -33,7 +33,6 @@ function App() {
         { path: "unauthorized", element: <Unauthorized /> },
         { path: "spinner", element: <Spinner /> },
 
-        //   { path: "/profile", element: <Profile /> },
         {
           path: "devices",
           element: <DevicesRootLayout />,
@@ -46,7 +45,11 @@ function App() {
         // PROTECTED ROUTES
         {
           element: <RequireAuth allowedRoles={["Employee"]} />,
-          children: [{ path: "user", element: <User /> }],
+          children: [{ path: "user", element: <User />, }],
+        },
+        {
+          element: <RequireAuth allowedRoles={["Employee", "RegisteredUser", "Administrator"]} />,
+          children: [{ path: "profile", element: <ProfilePage />, }],
         },
       ],
     },
