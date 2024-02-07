@@ -32,6 +32,8 @@ public class UserMappings : IUserMapings
         userLongDto.UserPersonalInfo = _mapper.Map<PersonalInfoDto>(createdUser.PersonalInfo);
         userLongDto.UserAddress = _mapper.Map<AddressDto>(createdUser.PersonalInfo!.Address);
         userLongDto.UserPresentShort = _mapper.Map<UserPresentShortDto>(createdUser);
+        userLongDto.UserPersonalInfo.PhoneNumber = createdUser.PhoneNumber;
+        userLongDto.UserPersonalInfo.Email = createdUser.Email!;
         return userLongDto;
     }
 

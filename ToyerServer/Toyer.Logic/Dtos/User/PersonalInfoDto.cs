@@ -17,4 +17,14 @@ public record PersonalInfoDto
     [Display(Name = "Birth date")]
     public DateOnly? BirthDate { get; set; }
 
+    [RegularExpression(@"^\(\+\d{2}\) \d{3}-\d{3}-\d{3}$", ErrorMessage = "Invalid phone number format")]
+    [DisplayFormat(DataFormatString = "{0:###-###-####}", ApplyFormatInEditMode = true)]
+    [Display(Name = "Phone number")]
+    public string? PhoneNumber { get; set; }
+
+    [Required(ErrorMessage = "Email address is required")]
+    [DataType(DataType.EmailAddress)]
+    [EmailAddress(ErrorMessage = "Invalid email address")]
+    public string Email { get; set; }
+
 }
