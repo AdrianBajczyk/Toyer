@@ -8,28 +8,31 @@ const useAxiosPrivate = () => {
   const userCtx = useUserContext();
 
   useEffect(() => {
-    console.log("in");
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
+        console.log("inreqest");
         if (!config.headers["Authorization"]) {
-          console.log("inreqest");
-          console.log("user"+ userCtx.user.token);
+          console.log("firstRequest");
+          console.log("user" + userCtx.user.token);
           config.headers["Authorization"] = `Bearer ${userCtx.user.token}`;
         }
         return config;
       },
-      (error) => 
-      {
-      console.log(error)
-      Promise.reject(error)
+      (error) => {
+        console.log(error);
+        Promise.reject(error);
       }
     );
 
     const responseIntercept = axiosPrivate.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        console.log("inResponse");
+        return response;
+      },
       async (error) => {
         const prevRequest = error?.config;
-        if (error?.response?.status === 403 && !prevRequest?.sent) {
+        if (error?.response?.status === 401 && !prevRequest?.sent) {
+          console.log("inRetry");
           prevRequest.sent = true;
           const newAccessToken = await refresh();
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;

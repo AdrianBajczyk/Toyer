@@ -1,0 +1,65 @@
+.settingsHeader {
+  padding: 1rem;
+  text-align: center;
+}
+
+.settingsContainer {
+  width: 100%;
+  max-width: 40vw;
+  min-width: 20em;
+  min-height: 20em;
+  padding: 1rem;
+  background-color: rgb(21, 95, 168);
+}
+
+.subnaviagationContainer {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.navLink {
+  text-decoration: none;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+
+.profileDataObject {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 5vh;
+}
+
+.dataObjectsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: space-around;
+}
+
+.namePar {
+  min-width: 5rem;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  background-color: rgb(199, 226, 255);
+  border-radius: 50%;
+  color: black;
+  border-width: 5px;
+  border-color: rgb(0, 0, 0);
+}
+
+.iconContainer:hover{
+    background-color: rgb(168, 206, 247);
+    cursor: pointer;
+}

@@ -4,6 +4,7 @@ import axios from "../src/Api/axios.js";
 const useRefreshToken = () => {
   const userCtx = useUserContext();
   const refresh = async () => {
+    console.log("useRefresh")
     const response = await axios.post(
       "/Token",
       { Token: userCtx.user.token },
