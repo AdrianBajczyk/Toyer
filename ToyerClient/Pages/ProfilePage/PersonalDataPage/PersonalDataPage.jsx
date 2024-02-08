@@ -5,7 +5,7 @@ import useUserContext from "../../../Hooks/useUserContext";
 import { useState, useEffect, useRef } from "react";
 import List from "../../../Components/UI/List";
 import { IonIcon } from "@ionic/react";
-import { ellipsisHorizontal, save } from "ionicons/icons";
+import { ellipsisHorizontal, checkmark, close } from "ionicons/icons";
 import InputSelector from "../../../Components/ValidatedFormInputs/InputSelector";
 
 const PersonalDataPage = () => {
@@ -14,7 +14,8 @@ const PersonalDataPage = () => {
   const userCtx = useUserContext();
 
   const [activeItemId, setActiveItemId] = useState(null);
-  const [isValid, setIsValid] = useState(false);
+  const [invalidItemId, setInvalidItemId] = useState(null);
+  const [profileUpdated, setProfileUpdated] = useState(false);
 
   const userRef = useRef();
 
@@ -37,18 +38,55 @@ const PersonalDataPage = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [profileUpdated]);
 
   const handleIconClick = (key) => {
-    setActiveItemId(key);
+    if (activeItemId === key) {
+      setActiveItemId(null);
+      setInvalidItemId(null);
+    } else {
+      setActiveItemId(key);
+    }
   };
 
-  const handleIconAccept = () => {
-    console.log("pierogi");
+  const handleIconAccept = (key, value) => {
+    const requestObject = { [key]: value };
+
+    const url = () => {
+      switch (key) {
+        case "email":
+          return "/User/Conctact/";
+        case "phoneNumber":
+          return "/User/Conctact/";
+        default:
+          return "/User/PersonalInfo/";
+      }
+    };
+
+    console.log(url());
+    console.log(url() + userCtx.user.id);
+    const updateProfile = async () => {
+      try {
+        const response = await axiosPrivate.put(
+          `${url() + userCtx.user.id}`,
+          JSON.stringify(requestObject),
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+        setProfileUpdated((prev) => !prev);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    updateProfile();
+    setActiveItemId(null);
   };
 
   const handleValidityChange = (inputName, isValid) => {
-    setIsValid(isValid);
+    !isValid ? setInvalidItemId(inputName) : setInvalidItemId(null);
   };
 
   useEffect(() => {
@@ -83,6 +121,7 @@ const PersonalDataPage = () => {
                     <InputSelector
                       name={convertCamelCaseToPascalCase(key)}
                       userRef={userRef}
+                      checkIcon={false}
                       onValidityChange={(inputName, isValid) =>
                         handleValidityChange(inputName, isValid)
                       }
@@ -96,16 +135,28 @@ const PersonalDataPage = () => {
                     </>
                   )}
                   <span
-                    className={classes.iconContainer}
-                    aria-label="userLogin"
+                    className={
+                      invalidItemId === convertCamelCaseToPascalCase(key)
+                        ? classes.iconContainerNotAllowed
+                        : activeItemId === key
+                        ? classes.iconContainerAllowed
+                        : classes.iconContainer
+                    }
                     onClick={
-                      activeItemId === key
-                        ? () => handleIconAccept()
+                      activeItemId === key &&
+                      !(invalidItemId === convertCamelCaseToPascalCase(key))
+                        ? () => handleIconAccept(key, userRef.current.value)
                         : () => handleIconClick(key)
                     }
                   >
                     <IonIcon
-                      icon={activeItemId === key ? save : ellipsisHorizontal}
+                      icon={
+                        invalidItemId === convertCamelCaseToPascalCase(key)
+                          ? close
+                          : activeItemId === key
+                          ? checkmark
+                          : ellipsisHorizontal
+                      }
                       size="medium"
                     ></IonIcon>
                   </span>
@@ -145,16 +196,14 @@ function convertCamelCaseToTitleCase(camelCaseString) {
 }
 
 function convertCamelCaseToPascalCase(camelCaseString) {
-    let word= '';
+  let word = "";
 
-    for (let i = 0; i < camelCaseString.length; i++) {
-        
-        if(i===0){
-            word += camelCaseString[i].toUpperCase()
-        } else {
-            word += camelCaseString[i]
-        }
-
+  for (let i = 0; i < camelCaseString.length; i++) {
+    if (i === 0) {
+      word += camelCaseString[i].toUpperCase();
+    } else {
+      word += camelCaseString[i];
     }
-    return word
+  }
+  return word;
 }
