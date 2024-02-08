@@ -19,8 +19,7 @@ import Unauthorized from "../Pages/UnauthorizedPage/Unauthorized.jsx";
 import Spinner from "../Components/Spinner/Spinner.jsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage/ProfilePage.jsx";
 import PersonalDataPage from "../Pages/ProfilePage/PersonalDataPage/PersonalDataPage.jsx";
-import AdressDataPage from "../Pages/ProfilePage/AddressDataPage/AdressDataPage.jsx";
-
+import AddressDataPage from "../Pages/ProfilePage/AddressDataPage/AddressDataPage.jsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -58,7 +57,7 @@ function App() {
           children: [
             { path: "profile", element: <ProfilePage /> },
             { path: "profile/personals", element: <PersonalDataPage /> },
-            { path: "profile/address", element: <AdressDataPage /> },
+            { path: "profile/address", element: <AddressDataPage /> },
           ],
         },
       ],

@@ -24,8 +24,8 @@ const ProfilePage = () => {
           </div>
           <div className={classes.settingsUnit}>
             <div className={classes.settingsOptionsDescription}>
-              <h3 className={classes.descriptionHeader}>Shipping Addresses</h3>
-              <p className={classes.description}>Manage Your Addresses</p>
+              <h3 className={classes.descriptionHeader}>Addresses</h3>
+              <p className={classes.description}>Manage Your private and shipping addressess</p>
             </div>
             <Link to="address">CHANGE</Link>
           </div>
