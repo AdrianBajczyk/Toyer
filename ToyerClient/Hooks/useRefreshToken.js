@@ -13,7 +13,11 @@ const useRefreshToken = () => {
         withCredentials: true,
       }
     );
-    userCtx.setUser({ token: response.data.token });
+    const updatedUser = {
+      ...userCtx.user,
+      token: response.data.token,
+    };
+    userCtx.setUser(updatedUser);
 
     return response.data.token;
   };
