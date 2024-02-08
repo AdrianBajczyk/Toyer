@@ -21,7 +21,7 @@ public class TokenService : ITokenService
         _configuration = configuration;
     }
 
-    public string GenerateAccessToken(User user, IList<string> roles)
+    public string GenerateAccessToken(User user, List<string> roles)
     {
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
         var token = CreateJwtToken(
@@ -71,7 +71,7 @@ public class TokenService : ITokenService
 
 
 
-    private List<Claim> CreateClaims(User user, IList<string> roles)
+    private List<Claim> CreateClaims(User user, List<string> roles)
     {
         try
         {

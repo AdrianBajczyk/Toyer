@@ -129,7 +129,7 @@ public class SqlUserRepository : IUserRepository
         if (!isPasswordValid) throw new InvalidUserOrPasswordException();
 
         var roles = await _userManager.GetRolesAsync(user);
-        var accessToken = _tokenService.GenerateAccessToken(user, roles);
+        var accessToken = _tokenService.GenerateAccessToken(user, (List<string>)roles);
         var refreshToken = _tokenService.GenerateRefreshToken();
         await UpdateUsersRefreshToken(user, refreshToken);
 

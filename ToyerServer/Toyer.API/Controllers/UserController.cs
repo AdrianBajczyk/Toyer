@@ -159,7 +159,7 @@ public class UserController(IUserRepository userRepository,
     [HttpPut("Address/{userId}")]
     [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateAddressByIdAsync([FromRoute] string userId, [FromForm] AddressDto addressUpdatesDtoFromUser)
+    public async Task<IActionResult> UpdateAddressByIdAsync([FromRoute] string userId, [FromBody] AddressDto addressUpdatesDtoFromUser)
     {
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
@@ -174,7 +174,7 @@ public class UserController(IUserRepository userRepository,
     [HttpPut("PersonalInfo/{userId}")]
     [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePersonalInfoByIdAsync([FromRoute] string userId, [FromForm] PersonalInfoDto personalInfoUpdates)
+    public async Task<IActionResult> UpdatePersonalInfoByIdAsync([FromRoute] string userId, [FromBody] PersonalInfoDto personalInfoUpdates)
     {
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
@@ -190,7 +190,7 @@ public class UserController(IUserRepository userRepository,
     [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateContactInfoByIdAsync([FromRoute] string userId, [FromForm] ContactDto contactUpdates)
+    public async Task<IActionResult> UpdateContactInfoByIdAsync([FromRoute] string userId, [FromBody] ContactDto contactUpdates)
     {
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.EditPermission);
         if (!authorizationResult.Succeeded) throw new AccessException();
