@@ -95,6 +95,7 @@ export default function LoginForm({ children, onHide }) {
           value={email}
           required
           validInput={validEmail}
+          checkIcon={false}
         />
         <Input
           type="password"
@@ -105,6 +106,7 @@ export default function LoginForm({ children, onHide }) {
           value={password}
           required
           validInput={emptyPwd}
+          checkIcon={false}
         />
         <Button element="button" disabled={isSubmittBlocked || isSubmitting}>
           {isSubmitting ? "Submitting..." : "Login"}

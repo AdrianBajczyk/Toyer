@@ -5,21 +5,21 @@ import { useActionData, useNavigation } from "react-router-dom";
 import classes from "./RegisterForm.module.css";
 import InputSelector from "../ValidatedFormInputs/InputSelector.jsx";
 
-const inputNames = [
-  "UserName",
-  "NewPassword",
-  "Name",
-  "Surname",
-  "Email",
-  "BirthDate",
-  "Street",
-  "StreetNumber",
-  "UnitNumber",
-  "City",
-  "State",
-  "PostalCode",
-  "Country",
-  "PhoneNumber",
+const inputs = [
+  {name:"UserName", optional:false},
+  {name:"NewPassword", optional:false},
+  {name:"Name", optional:false},
+  {name:"Surname", optional:false},
+  {name:"Email", optional:false},
+  {name:"BirthDate", optional:false},
+  {name:"Street", optional:false},
+  {name:"StreetNumber", optional:false},
+  {name:"UnitNumber", optional:true},
+  {name:"City", optional:false},
+  {name:"State", optional:true},
+  {name:"PostalCode", optional:false},
+  {name:"Country", optional:false},
+  {name:"PhoneNumber", optional:true},
 ];
 
 export function RegisterForm() {
@@ -66,10 +66,11 @@ export function RegisterForm() {
       <section className={classes.registerContainer}>
         <h1>Register</h1>
         <CustomForm method="post">
-          {inputNames.map((name) => (
+          {inputs.map((input) => (
             <InputSelector
               userRef={userRef}
-              name={name}
+              name={input.name}
+              optional={input.optional}
               onValidityChange={(inputName, isValid) =>
                 handleValidityChange(inputName, isValid)
               }

@@ -4,7 +4,7 @@ import DateNote from "../UI/InputNotes/DateNote.jsx";
 import { useState, useEffect } from "react";
 import Input from "../UI/Input/Input.jsx";
 
-const DateInput = ({ userRef, onValidityChange }) => {
+const DateInput = ({ userRef, onValidityChange, ...props }) => {
   const [birthDate, setBirthDate] = useState("");
   const [validBirthDate, setValidBirthDate] = useState(false);
   const [birthDateFocus, setBirthDateFocus] = useState(false);
@@ -27,7 +27,7 @@ const DateInput = ({ userRef, onValidityChange }) => {
     <>
       <Input
         type="date"
-        label="Birth date:"
+        label="Birth Date:"
         name="BirthDate"
         id="BirthDateInput"
         ref={userRef}
@@ -39,6 +39,7 @@ const DateInput = ({ userRef, onValidityChange }) => {
         onFocus={() => setBirthDateFocus(true)}
         onBlur={() => setBirthDateFocus(false)}
         validInput={validBirthDate}
+        {...props}
       />
       <DateNote
         isInputFocus={birthDateFocus}

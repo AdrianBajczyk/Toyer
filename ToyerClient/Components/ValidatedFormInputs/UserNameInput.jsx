@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 
-const UserNameInput = ({ userRef, onValidityChange }) => {
+const UserNameInput = ({ userRef, onValidityChange, ...props }) => {
   const [user, setUser] = useState("");
   const [validUser, setValidUser] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
@@ -35,6 +35,7 @@ const UserNameInput = ({ userRef, onValidityChange }) => {
         onFocus={() => setUserFocus(true)}
         onBlur={() => setUserFocus(false)}
         validInput={validUser}
+        {...props}
       />
       <UserNote
         isInputFocus={userFocus}

@@ -5,7 +5,7 @@ import PwdConfirmNote from "../UI/InputNotes/PwdConfirmNote";
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-const NewPasswordInput = ({userRef, onValidityChange}) => {
+const NewPasswordInput = ({userRef, onValidityChange, ...props}) => {
 
   const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
@@ -45,6 +45,7 @@ const NewPasswordInput = ({userRef, onValidityChange}) => {
         onFocus={() => setPwdFocus(true)}
         onBlur={() => setPwdFocus(false)}
         validInput={validPwd}
+        {...props}
       />
       <PwdNote
         isInputFocus={pwdFocus}

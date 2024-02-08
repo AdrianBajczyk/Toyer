@@ -9,6 +9,7 @@ const ProperNameInput = ({
   name,
   optional = false,
   onValidityChange,
+  ...props
 }) => {
   const [input, setInput] = useState("");
   const [validInput, setValidInput] = useState(false);
@@ -43,6 +44,7 @@ const ProperNameInput = ({
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
         validInput={validInput}
+        {...props}
       />
       <PropNote
         isInputFocus={inputFocus}

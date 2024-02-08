@@ -4,7 +4,7 @@ import Input from "../UI/Input/Input";
 
 const POSTAL_REGEX = /^(?=(?:[^-]*-?[^-]*){0,1}$)[A-Z0-9-]{5,10}$/;
 
-const PostalCodeInput = ({ userRef, onValidityChange }) => {
+const PostalCodeInput = ({ userRef, onValidityChange, ...props }) => {
   const [postal, setPostal] = useState("");
   const [validPostal, setValidPostal] = useState(false);
   const [postalFocus, setPostalFocus] = useState(false);
@@ -23,7 +23,7 @@ const PostalCodeInput = ({ userRef, onValidityChange }) => {
     <>
       <Input
         type="text"
-        label="Postal code:"
+        label="Postal Code:"
         name="PostalCode"
         id="PostalCodeInput"
         ref={userRef}
@@ -35,6 +35,7 @@ const PostalCodeInput = ({ userRef, onValidityChange }) => {
         onFocus={() => setPostalFocus(true)}
         onBlur={() => setPostalFocus(false)}
         validInput={validPostal}
+        {...props}
       />
       <PostalNote
         isInputFocus={postalFocus}

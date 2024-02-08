@@ -4,7 +4,7 @@ import EmailNote from "../UI/InputNotes/EmailNote";
 
 const EMAIL_REGEX = /^[\w\-\.]+@([\w-]+\.)+[a-z]{2,3}$/;
 
-const EmailInput = ({ userRef, onValidityChange  }) => {
+const EmailInput = ({ userRef, onValidityChange, ...props  }) => {
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
@@ -35,6 +35,7 @@ const EmailInput = ({ userRef, onValidityChange  }) => {
         onFocus={() => setEmailFocus(true)}
         onBlur={() => setEmailFocus(false)}
         validInput={validEmail}
+        {...props}
       />
       <EmailNote
         isInputFocus={emailFocus}

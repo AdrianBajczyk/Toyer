@@ -17,12 +17,14 @@ const InputSelector = ({ name, ...props }) => {
       return <PhoneInput {...props} />;
     case "BirthDate":
       return <DateInput {...props} />;
-    case "StreetNumber" || "UnitNumber":
-        return <NumberInput name={name} {...props} />
+    case "StreetNumber" :
+      return <NumberInput name={name} {...props} />;
+    case "UnitNumber":
+      return <NumberInput name={name} {...props} />;
     case "UserName":
-        return <UserNameInput {...props}/>
+      return <UserNameInput {...props} />;
     case "PostalCode":
-        return <PostalCodeInput {...props}/>
+      return <PostalCodeInput {...props} />;
     default:
       return <ProperNameInput name={name} {...props} />;
   }

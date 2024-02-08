@@ -4,7 +4,7 @@ import Input from "../UI/Input/Input";
 
 const DIGIT_REGEX = /^\d{1,4}$/;
 
-const NumberInput = ({ userRef, name, onValidityChange, optional = false }) => {
+const NumberInput = ({ userRef, name, onValidityChange, optional = false, ...props }) => {
   const [num, setNum] = useState("");
   const [validNum, setValidNum] = useState(false);
   const [numFocus, setNumFocus] = useState(false);
@@ -40,6 +40,7 @@ const NumberInput = ({ userRef, name, onValidityChange, optional = false }) => {
         onFocus={() => setNumFocus(true)}
         onBlur={() => setNumFocus(false)}
         validInput={validNum}
+        {...props}
       />
       <NumNote
         isInputFocus={numFocus}
