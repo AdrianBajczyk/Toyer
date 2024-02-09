@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Input from "../UI/Input/Input";
 import PwdNote from "../UI/InputNotes/PwdNote";
 import PwdConfirmNote from "../UI/InputNotes/PwdConfirmNote";
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-const NewPasswordInput = ({userRef, onValidityChange, ...props}) => {
-
+const NewPasswordInput = ({ userRef, onValidityChange, ...props }) => {
   const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
@@ -16,16 +15,19 @@ const NewPasswordInput = ({userRef, onValidityChange, ...props}) => {
   const [confirmFocus, setConfirmFocus] = useState(false);
 
   useEffect(() => {
-    setValidPwd(PWD_REGEX.test(pwd));
-    setValidConfirm(pwd === confirmPwd && confirmPwd);
     if (PWD_REGEX.test(pwd)) {
       setValidPwd(true);
-    } else if (pwd === confirmPwd && confirmPwd) {
-      setValidConfirm(true);
-    } else if (validPwd && validConfirm) {
-      onValidityChange("Password", true)
+      if (pwd === confirmPwd && confirmPwd) {
+        onValidityChange("Password", true);
+        setValidConfirm(true);
+      } else {
+        setValidConfirm(false);
+        onValidityChange("Password", false);
+      }
     } else {
-      onValidityChange("Password", false)
+      setValidPwd(false);
+      setValidConfirm(false);
+      onValidityChange("Password", false);
     }
   }, [pwd, confirmPwd]);
 
@@ -67,7 +69,11 @@ const NewPasswordInput = ({userRef, onValidityChange, ...props}) => {
         onBlur={() => setConfirmFocus(false)}
         validInput={validConfirm}
       />
-      <PwdConfirmNote isInputFocus={confirmFocus} currentInput={confirmPwd} isInputValid={validConfirm} />
+      <PwdConfirmNote
+        isInputFocus={confirmFocus}
+        currentInput={confirmPwd}
+        isInputValid={validConfirm}
+      />
     </>
   );
 };
