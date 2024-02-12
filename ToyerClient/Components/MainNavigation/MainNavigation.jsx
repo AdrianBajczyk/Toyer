@@ -3,7 +3,7 @@ import List from "../UI/List.jsx";
 import classes from "./MainNavigation.module.css";
 import useUserContext from "../../Hooks/useUserContext.js";
 import { IonIcon } from "@ionic/react";
-import { peopleOutline } from "ionicons/icons";
+import { peopleOutline, people } from "ionicons/icons";
 import { useState } from "react";
 import LoginPage from "../../Pages/LoginPage/LoginPage.jsx";
 import ToyerLogo from "../../src/Asserts/ToyerLogo.jsx";
@@ -25,6 +25,15 @@ function MainNavigation() {
 
   const handleHide = () => {
     setUserIconActive(false);
+  };
+
+  const [icon, setIcon] = useState(peopleOutline); 
+  const handleMouseEnter = () => {
+    setIcon(people); 
+  };
+
+  const handleMouseLeave = () => {
+    setIcon(peopleOutline); 
   };
 
   return (
@@ -57,13 +66,17 @@ function MainNavigation() {
           )}
         />
         <div>
-          <span
-            className={classes.iconContainer}
-            aria-label="userLogin"
-            onClick={handleIconClick}
-          >
-            <IonIcon icon={peopleOutline} size="large"></IonIcon>
-          </span>
+
+            <IonIcon
+              className={classes.iconContainer}
+              aria-label="userLogin"
+              onClick={handleIconClick}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              icon={icon}
+              size="large"
+            ></IonIcon>
+
           {userIconActive ? (
             <>
               <div
