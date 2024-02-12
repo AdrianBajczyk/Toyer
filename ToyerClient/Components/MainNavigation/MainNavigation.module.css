@@ -1,6 +1,5 @@
 .header {
-  max-width: 60rem;
-  margin: auto;
+  margin-bottom: 5rem;
   padding: 2rem;
   display: flex;
   justify-content: center;
@@ -26,9 +25,9 @@
   justify-content: center;
   width: 2.8em;
   height: 2.8em;
-  position: absolute;
+  /* position: absolute;
   top: 3%;
-  left: 95%;
+  left: 95%; */
   background-color: rgb(27, 121, 216);
   border-radius: 50%;
 }
@@ -50,4 +49,15 @@
   flex-direction: row-reverse;
   justify-content: end;
   align-items: start;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+}
+
+.logo:hover{
+cursor: pointer;
 }
