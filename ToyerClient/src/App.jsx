@@ -20,6 +20,7 @@ import Spinner from "../Components/Spinner/Spinner.jsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage/ProfilePage.jsx";
 import PersonalDataPage from "../Pages/ProfilePage/PersonalDataPage/PersonalDataPage.jsx";
 import AddressDataPage from "../Pages/ProfilePage/AddressDataPage/AddressDataPage.jsx";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -64,7 +65,7 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router}></RouterProvider>;
 }
 
 export default App;

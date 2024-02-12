@@ -15,6 +15,7 @@ html {
 body {
   min-height: 100vh;
   background-color: dodgerblue;
+  background-image: url(/src/Asserts/Images/ToyerBackground.jpg);
 }
 
 main {
@@ -22,6 +23,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
 }
 
 Form {
