@@ -58,6 +58,9 @@ public class SqlUserRepository : IUserRepository
 
     public async Task<User> RegisterNewUserAsync(User newUser, string password, string redirectUrl)
     {
+        var existingUser = await _userManager.FindByEmailAsync(newUser.Email); 
+        if(existingUser != null) throw new UserEmailTakenException(); 
+
         await _userManager.CreateAsync(newUser);
 
         await _userManager.AddToRoleAsync(newUser, "RegisteredUser");
@@ -114,7 +117,14 @@ public class SqlUserRepository : IUserRepository
         var userToUpdate = await GetUserByIdAsync(userId) 
             ?? throw new UserNotFoundException(userId);
 
-        if (!string.IsNullOrWhiteSpace(email)) await _userManager.SetEmailAsync(userToUpdate, email);
+        
+
+        if (!string.IsNullOrWhiteSpace(email)) 
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser != null) throw new UserEmailTakenException();
+            await _userManager.SetEmailAsync(userToUpdate, email);
+        }
         if (!string.IsNullOrWhiteSpace(phoneNumber)) await _userManager.SetPhoneNumberAsync(userToUpdate, phoneNumber);
 
          await _userManager.UpdateAsync(userToUpdate);
