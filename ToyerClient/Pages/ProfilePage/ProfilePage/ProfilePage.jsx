@@ -11,7 +11,7 @@ const ProfilePage = () => {
         →<p>User</p>
       </div>
       <section className={classes.settingsContainer}>
-        <h2 className={classes.settingsHeader}>Account Settings</h2>
+        <h2 className={classes.settingsHeader}>Settings</h2>
         <div className={classes.settingsOptions}>
           <div className={classes.settingsUnit}>
             <div className={classes.settingsOptionsDescription}>
@@ -25,9 +25,27 @@ const ProfilePage = () => {
           <div className={classes.settingsUnit}>
             <div className={classes.settingsOptionsDescription}>
               <h3 className={classes.descriptionHeader}>Addresses</h3>
-              <p className={classes.description}>Manage Your private and shipping addressess</p>
+              <p className={classes.description}>
+                Manage Your private and shipping addressess
+              </p>
             </div>
             <Link to="address">CHANGE</Link>
+          </div>
+        </div>
+      </section>
+      <section className={classes.settingsContainer}>
+        <h2 className={classes.settingsHeader}>Operations</h2>
+        <div className={classes.settingsOptions}>
+          <div className={classes.settingsUnit}>
+            <div className={classes.settingsOptionsDescription}>
+              <h3 className={classes.descriptionHeader}>Delete</h3>
+              <p className={classes.description}>
+                Unassigns all devices from current account and deletes it.
+              </p>
+            </div>
+            <Link className={classes.warningLink} to="delete">
+              PROCEED
+            </Link>
           </div>
         </div>
       </section>

@@ -1,0 +1,22 @@
+.messageContainer {
+  width: 100%;
+  max-width: 50vw;
+  min-width: 30em;
+  min-height: 15em;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.subnaviagationContainer {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.navLink {
+  text-decoration: none;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}

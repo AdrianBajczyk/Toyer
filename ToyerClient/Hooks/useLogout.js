@@ -6,7 +6,6 @@ const useLogout = () => {
 
   const logout = async () => {
     try {
-        console.log("logout")
       const response = await axios.post(
         "/Token/End",
         {},

@@ -20,10 +20,10 @@
 }
 
 .settingsContainer {
+  margin: 1rem;
   width: 100%;
   max-width: 30vw;
   min-width: 20em;
-  min-height: 20em;
   padding: 1rem;
   background-color: rgba(0, 0, 0, 0.4);
 }
@@ -45,3 +45,6 @@
 .navLink:hover {
   text-decoration: underline;
 }
+
+
+

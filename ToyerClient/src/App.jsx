@@ -21,6 +21,7 @@ import ProfilePage from "../Pages/ProfilePage/ProfilePage/ProfilePage.jsx";
 import PersonalDataPage from "../Pages/ProfilePage/PersonalDataPage/PersonalDataPage.jsx";
 import AddressDataPage from "../Pages/ProfilePage/AddressDataPage/AddressDataPage.jsx";
 import EmailConfirmed from "../Pages/EmailConfirmed/EmailConfirmed.jsx";
+import DeleteAccountPage from "../Pages/ProfilePage/DeleteAccountPage/DeleteAccountPage.jsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -61,6 +62,7 @@ function App() {
             { path: "profile", element: <ProfilePage /> },
             { path: "profile/personals", element: <PersonalDataPage /> },
             { path: "profile/address", element: <AddressDataPage /> },
+            { path: "profile/delete", element: <DeleteAccountPage/>}
           ],
         },
       ],
