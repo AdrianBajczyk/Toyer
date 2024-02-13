@@ -48,13 +48,13 @@ function App() {
 
         // PROTECTED ROUTES
         {
-          element: <RequireAuth allowedRoles={["Employee", "Administrator"]} />,
+          element: <RequireAuth allowedRoles={import.meta.env.VITE_EMPLOYEE_ROLE} />,
           children: [{ path: "user", element: <User /> }],
         },
         {
           element: (
             <RequireAuth
-              allowedRoles={["Employee", "RegisteredUser", "Administrator"]}
+              allowedRoles={import.meta.env.VITE_USER_ROLE}
             />
           ),
           children: [

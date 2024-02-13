@@ -10,8 +10,9 @@ import ToyerLogo from "../../src/Asserts/ToyerLogo.jsx";
 
 const links = [
   { id: "l2", to: "/devices", name: "Devices" },
-  { id: "l3", to: "/user", name: "User" },
+  { id: "l3", to: "/user", name: "User", requiredRoles: [] },
   { id: "l5", to: "/spinner", name: "Spiner" },
+  { id: "l6", to: "/", name: "Contact" },
 ];
 
 function MainNavigation() {
@@ -27,13 +28,13 @@ function MainNavigation() {
     setUserIconActive(false);
   };
 
-  const [icon, setIcon] = useState(peopleOutline); 
+  const [icon, setIcon] = useState(peopleOutline);
   const handleMouseEnter = () => {
-    setIcon(people); 
+    setIcon(people);
   };
 
   const handleMouseLeave = () => {
-    setIcon(peopleOutline); 
+    setIcon(peopleOutline);
   };
 
   return (
@@ -66,16 +67,15 @@ function MainNavigation() {
           )}
         />
         <div>
-
-            <IonIcon
-              className={classes.iconContainer}
-              aria-label="userLogin"
-              onClick={handleIconClick}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              icon={icon}
-              size="large"
-            ></IonIcon>
+          <IonIcon
+            className={classes.iconContainer}
+            aria-label="userLogin"
+            onClick={handleIconClick}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            icon={icon}
+            size="large"
+          ></IonIcon>
 
           {userIconActive ? (
             <>
