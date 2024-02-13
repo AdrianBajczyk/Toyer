@@ -9,7 +9,7 @@
   min-width: 30em;
   min-height: 25em;
   padding: 1rem;
-  background-color: rgb(21, 95, 168);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .subnaviagationContainer {

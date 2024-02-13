@@ -25,7 +25,7 @@
   min-width: 20em;
   min-height: 20em;
   padding: 1rem;
-  background-color: rgb(21, 95, 168);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .description {
