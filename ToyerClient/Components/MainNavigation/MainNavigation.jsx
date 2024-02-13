@@ -10,7 +10,7 @@ import ToyerLogo from "../../src/Asserts/ToyerLogo.jsx";
 
 const links = [
   { id: "l2", to: "/devices", name: "Devices" },
-  { id: "l3", to: "/user", name: "User", requiredRoles: [] },
+  { id: "l3", to: "/user", name: "User", requiredRoles: import.meta.env.VITE_EMPLOYEE_ROLE },
   { id: "l5", to: "/spinner", name: "Spiner" },
   { id: "l6", to: "/", name: "Contact" },
 ];
@@ -52,18 +52,18 @@ function MainNavigation() {
           items={links}
           className={classes.list}
           renderItem={(link) => (
-            <li key={link.id}>
-              <NavLink
-                id={link.id}
-                to={link.to}
-                className={({ isActive }) =>
-                  isActive ? classes.active : undefined
-                }
-                end
-              >
-                {link.name}
-              </NavLink>
-            </li>
+            (!link.requiredRoles || userCtx?.user?.roles?.some(role => link.requiredRoles.includes(role))) && (
+              <li key={link.id}>
+                <NavLink
+                  id={link.id}
+                  to={link.to}
+                  className={({ isActive }) => (isActive ? classes.active : undefined)}
+                  end
+                >
+                  {link.name}
+                </NavLink>
+              </li>
+            )
           )}
         />
         <div>
