@@ -56,13 +56,13 @@ public class SqlUserRepository : IUserRepository
             : users;
     }
 
-    public async Task<User> RegisterNewUserAsync(User newUser, string password)
+    public async Task<User> RegisterNewUserAsync(User newUser, string password, string redirectUrl)
     {
         await _userManager.CreateAsync(newUser);
 
         await _userManager.AddToRoleAsync(newUser, "RegisteredUser");
         await _userManager.AddPasswordAsync(newUser, password);
-        await SendConfimationLinkByEmailAsync(newUser);
+        await SendConfimationLinkByEmailAsync(newUser, redirectUrl);
 
         return newUser;
     }
@@ -174,13 +174,13 @@ public class SqlUserRepository : IUserRepository
 
     }
 
-    public async Task ResendEmailConfirmationLink(string userEmail)
+    public async Task ResendEmailConfirmationLink(string userEmail, string redirectUrl)
     {
         var user = await _userManager.FindByEmailAsync(userEmail) 
             ?? throw new UserNotFoundException("userEmail");
 
 
-        await SendConfimationLinkByEmailAsync(user);
+        await SendConfimationLinkByEmailAsync(user, redirectUrl);
     }
 
     public async Task SendPasswordResetLink(string email)
@@ -196,11 +196,11 @@ public class SqlUserRepository : IUserRepository
         await _emailSender.SendEmailAsync(message);
     }
 
-    private async Task SendConfimationLinkByEmailAsync(User user)
+    private async Task SendConfimationLinkByEmailAsync(User user, string redirectUrl)
     {
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-        var confirmationLink = _generator.GetUriByAction(_httpAccessor.HttpContext, action: "ConfirmEmail", controller: "User", values: new { token, email = user.Email }) 
+        var confirmationLink = _generator.GetUriByAction(_httpAccessor.HttpContext, action: "ConfirmEmail", controller: "User", values: new { token, email = user.Email, redirectUrl }) 
             ?? throw new HttpContextException("Email confirmation link error.");
 
         var message = new EmailMessage(new string[] { user.Email }, "Confirmation email link", confirmationLink);

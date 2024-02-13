@@ -32,11 +32,11 @@ public class UserController(IUserRepository userRepository,
     [AllowAnonymous]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateNewUserAsync([FromBody] UserCreateDto newUserDto)
+    public async Task<IActionResult> CreateNewUserAsync([FromBody] UserCreateDto newUserDto, [FromHeader(Name = "Redirect-Url")] string redirectUrl)
     {
 
 
-        var result = await _userRepository.RegisterNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password);
+        var result = await _userRepository.RegisterNewUserAsync(_mappings.UserCreateDtoToUser(newUserDto), newUserDto.Password, redirectUrl);
 
         return CreatedAtAction(nameof(CreateNewUserAsync), new CustomResponse { message = $"User: {newUserDto.UserName} created.", status = 201 });
     }
@@ -65,12 +65,12 @@ public class UserController(IUserRepository userRepository,
     /// </summary>
     [HttpPost("Email")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     
-    public async Task<IActionResult> ResendEmailConfirmationLink([FromForm] UserEmail userInput)
+    public async Task<IActionResult> ResendEmailConfirmationLink([FromForm] UserEmail userInput, string redirectUrl)
     {
-        await _userRepository.ResendEmailConfirmationLink(userInput.Email);
+        await _userRepository.ResendEmailConfirmationLink(userInput.Email, redirectUrl);
 
         return NoContent();
     }
@@ -81,14 +81,14 @@ public class UserController(IUserRepository userRepository,
     /// </summary>
     [HttpGet("Email")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(PersonalInfoDto), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status308PermanentRedirect)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ConfirmEmail(string token, string email)
+    public async Task<IActionResult> ConfirmEmail(string token, string email, string redirectUrl)
     {
         await _userRepository.ConfirmEmailAsync(token, email);
 
-        return NoContent();
+        return Redirect(redirectUrl);
     }
 
     ///// <summary>
