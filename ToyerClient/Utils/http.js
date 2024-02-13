@@ -4,7 +4,6 @@ const excludedStatusCodes = [422, 401];
 
 export async function get(urlRoute) {
   try {
-    console.log("dupa")
     const response = await axios.get(urlRoute);
     return response.data;
   } catch (error) {
@@ -22,22 +21,34 @@ export async function get(urlRoute) {
   }
 }
 
-
-export async function post(urlRoute, reqBody, withCredentials=false) {
+export async function post(
+  urlRoute,
+  reqBody,
+  redirectUrl = "",
+  withCredentials = false
+) {
   try {
     const response = await axios.post(urlRoute, JSON.stringify(reqBody), {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: withCredentials
+      headers: {
+        "Content-Type": "application/json",
+        "Redirect-Url": redirectUrl,
+      },
+      withCredentials: withCredentials,
     });
     return response.data;
-
   } catch (error) {
-    if (error.response && !excludedStatusCodes.includes(error.response.status)) {
+    if (
+      error.response &&
+      !excludedStatusCodes.includes(error.response.status)
+    ) {
       throw new Response(JSON.stringify(error.response.data.error), {
         status: error.response.data.status,
         statusText: error.response.data.message,
       });
-    } else if (error.request && !excludedStatusCodes.includes(error.request.status)) {
+    } else if (
+      error.request &&
+      !excludedStatusCodes.includes(error.request.status)
+    ) {
       throw new Response("No response. Server is offline. Try again later.", {
         status: 500,
         statusText: "Connection error.",

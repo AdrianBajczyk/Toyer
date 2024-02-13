@@ -20,6 +20,7 @@ import Spinner from "../Components/Spinner/Spinner.jsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage/ProfilePage.jsx";
 import PersonalDataPage from "../Pages/ProfilePage/PersonalDataPage/PersonalDataPage.jsx";
 import AddressDataPage from "../Pages/ProfilePage/AddressDataPage/AddressDataPage.jsx";
+import EmailConfirmed from "../Pages/EmailConfirmed/EmailConfirmed.jsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -34,6 +35,7 @@ function App() {
         { path: "register/success", element: <RegisterSuccess /> },
         { path: "unauthorized", element: <Unauthorized /> },
         { path: "spinner", element: <Spinner /> },
+        { path: "email/confirm", element: <EmailConfirmed/>},
 
         {
           path: "devices",

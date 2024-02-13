@@ -14,7 +14,9 @@ export async function action({ request }) {
     data.UnitNumber = 0;
   }
 
-  const response = await post("User", data);
+  const redirectUrl = window.location.origin + '/email/confirm';
+
+  const response = await post("User", data,  redirectUrl );
 
   if (response.status === 422) {
     return response;

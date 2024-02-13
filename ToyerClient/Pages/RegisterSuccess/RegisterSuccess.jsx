@@ -1,12 +1,13 @@
-import Button from "../../Components/UI/Button"
+import Typewriter from "../../Utils/typewriter"
 
 const RegisterSuccess = () => {
+
+  const textArray = ["Success.", "Email authorization link has been send.", "Use it before first login attempt."];
+  const speed = 50;
+
   return (
     <>
-    <h1>Success. </h1>
-    <h2>Email authorization link has been send.</h2>
-    <h3>Use it before first login attempt.</h3>
-    <Button element='link' to='/login'>Login</Button>
+    <Typewriter textArray={textArray} speed={speed}/>
     </>
   )
 }
