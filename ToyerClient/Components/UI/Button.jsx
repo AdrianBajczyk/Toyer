@@ -4,7 +4,6 @@ export default function Button(props) {
   const linkStyle = {
     textDecoration: "none",
     color: "inherit",
-    cursor: "auto",
   };
 
   if (props.element === "link") {
