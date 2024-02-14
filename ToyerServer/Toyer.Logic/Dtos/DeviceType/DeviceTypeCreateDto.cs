@@ -11,4 +11,7 @@ public record DeviceTypeCreateDto
     [Required(ErrorMessage = "The description is required.")]
     [StringLength(60, ErrorMessage = "Description cannot exceed 60 characters.")]
     public string Description { get; set; }
+
+    [StringLength(200, ErrorMessage = "URL cannot exceed 200 characters.")]
+    public string? ImageUrl { get; set; }
 }

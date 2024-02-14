@@ -109,6 +109,7 @@ public class SqlUserRepository : IUserRepository
         var userToDelete = await GetUserByIdAsync(userId) 
             ?? throw new UserNotFoundException(userId);
 
+
         await _userManager.DeleteAsync(userToDelete);
     }
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Toyer.Data.Context;
 
@@ -11,9 +12,11 @@ using Toyer.Data.Context;
 namespace Toyer.Data.Migrations
 {
     [DbContext(typeof(ToyerDbContext))]
-    partial class ToyerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240214101302_14.02.2024-ImgUrlToDeviceTypeAdded")]
+    partial class _14022024ImgUrlToDeviceTypeAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
