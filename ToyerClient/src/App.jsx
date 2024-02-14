@@ -37,7 +37,6 @@ function App() {
         { path: "unauthorized", element: <Unauthorized /> },
         { path: "spinner", element: <Spinner /> },
         { path: "email/confirm", element: <EmailConfirmed/>},
-
         {
           path: "devices",
           element: <DevicesRootLayout />,

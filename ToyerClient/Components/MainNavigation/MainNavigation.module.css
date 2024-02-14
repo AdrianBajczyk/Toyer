@@ -29,8 +29,6 @@
   cursor: pointer;
 }
 
-
-
 .loginBackground {
   position: absolute;
   top: 0%;
@@ -42,6 +40,7 @@
   flex-direction: row-reverse;
   justify-content: end;
   align-items: start;
+  z-index: 1;
 }
 
 nav {
