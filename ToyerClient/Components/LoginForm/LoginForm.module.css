@@ -10,4 +10,5 @@
   flex-direction: column;
   justify-content: center;
   padding: 1rem;
+  z-index: 2;
 }
