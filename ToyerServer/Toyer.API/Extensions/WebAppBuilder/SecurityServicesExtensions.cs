@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Toyer.Logic.Services.Authorization.AuthorizationHandlers;
 using Toyer.Logic.Services.Authorization.Token;
 
 namespace Toyer.API.Extensions.WebAppBuilder;
 
-public static class AuthenticationServicesExtensions
+public static class SecurityServicesExtensions
 {
-    public static IServiceCollection AddCustomAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCustomSecurityServices(this IServiceCollection services, IConfiguration configuration)
     {
+        //JWT
         services.AddScoped<ITokenService, TokenService>();
 
         var issuer = configuration["TokenValidationParameters:Issuer"];
@@ -46,8 +49,25 @@ public static class AuthenticationServicesExtensions
             });
 
 
-        
+        //POLICIES
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowLocalHost",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials(); // Allow cookies
+                });
+        });
 
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Production", policy => policy.RequireRole("Employee", "Administrator"));
+        });
+
+        services.AddTransient<IAuthorizationHandler, PermissionHandler>();
 
         return services;
     }
