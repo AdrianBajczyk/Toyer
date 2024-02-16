@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.jsx";
 import RootLayout from "../Components/Layouts/RootLayout/RootLayout.jsx";
 import HomePage from "../Pages/HomePage/HomePage.jsx";
@@ -26,7 +30,7 @@ import DeleteAccountPage from "../Pages/ProfilePage/DeleteAccountPage/DeleteAcco
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: "",
       errorElement: <ErrorPage />,
       element: <RootLayout />,
       children: [
@@ -36,7 +40,7 @@ function App() {
         { path: "register/success", element: <RegisterSuccess /> },
         { path: "unauthorized", element: <Unauthorized /> },
         { path: "spinner", element: <Spinner /> },
-        { path: "email/confirm", element: <EmailConfirmed/>},
+        { path: "email/confirm", element: <EmailConfirmed /> },
         {
           path: "devices",
           element: <DevicesRootLayout />,
@@ -45,30 +49,29 @@ function App() {
             { path: ":id", element: <DeviceDetails />, loader: deviceLoader },
           ],
         },
-
         // PROTECTED ROUTES
         {
-          element: <RequireAuth allowedRoles={import.meta.env.VITE_EMPLOYEE_ROLE} />,
+          element: (
+            <RequireAuth allowedRoles={import.meta.env.VITE_EMPLOYEE_ROLE} />
+          ),
           children: [{ path: "user", element: <User /> }],
         },
         {
           element: (
-            <RequireAuth
-              allowedRoles={import.meta.env.VITE_USER_ROLE}
-            />
+            <RequireAuth allowedRoles={import.meta.env.VITE_USER_ROLE} />
           ),
           children: [
             { path: "profile", element: <ProfilePage /> },
             { path: "profile/personals", element: <PersonalDataPage /> },
             { path: "profile/address", element: <AddressDataPage /> },
-            { path: "profile/delete", element: <DeleteAccountPage/>}
+            { path: "profile/delete", element: <DeleteAccountPage /> },
           ],
         },
       ],
     },
   ]);
 
-  return <RouterProvider router={router}></RouterProvider>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;

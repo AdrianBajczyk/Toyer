@@ -1,5 +1,6 @@
 import classes from "./DevicesList.module.css";
 
+
 function DevicesList({ deviceTypes }) {
 
   return (
@@ -7,8 +8,9 @@ function DevicesList({ deviceTypes }) {
       {console.log(deviceTypes)}
       <section className={classes.cardsBox}>
         {deviceTypes.map((device) => (
-          <div
+          <div key={`deviceType-${device.id}`}
             className={classes.cardContainer}
+
           >
             <div className={classes.card}>
               <span
