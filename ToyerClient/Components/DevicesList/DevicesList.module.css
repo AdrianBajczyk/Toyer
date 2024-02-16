@@ -12,6 +12,7 @@
   height: 300px;
   perspective: 20vw;
   z-index: 0;
+  transition: 500ms;
 }
 
 .card {
@@ -49,11 +50,12 @@
 }
 
 .cardContainerExpanded {
-    background-color: transparent;
-    width: 430px;
-    height: 500px;
-    perspective: 20vw;
-    z-index: 0;
+  background-color: transparent;
+  width: 95vw;
+  height: 63vh;
+  perspective: 20vw;
+  z-index: 0;
+  transition: 500ms;
 }
 
 .cardFlipped {

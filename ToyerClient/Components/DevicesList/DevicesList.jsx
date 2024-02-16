@@ -25,7 +25,7 @@ function DevicesList({ deviceTypes }) {
   return (
     <>
       <section className={classes.cardsBox}>
-        {deviceTypes.map((device) => {
+        {deviceTypes.map((device, index) => {
           const isExpanded = expandedCardId === device.id;
           return (
             <div
@@ -35,6 +35,7 @@ function DevicesList({ deviceTypes }) {
               }`}
               onClick={() => handleContainerClick(device.id)}
               onMouseEnter={handleContainerHover}
+              style={{ order: isExpanded ? -1 : index, display: expandedCardId && !isExpanded ? 'none' : null}}
             >
               <div
                 className={`${classes.card} ${
@@ -48,6 +49,7 @@ function DevicesList({ deviceTypes }) {
                 <span className={classes.cardBack}>
                   <h3>{device.name}</h3>
                   <p>{device.description}</p>
+                  {isExpanded ? <>DUPA</> : <></>}
                 </span>
               </div>
             </div>
