@@ -13,9 +13,7 @@ import DevicesRootLayout from "../Components/Layouts/DevicesRoot.jsx";
 import DevicesPage, {
   loader as devicesLoader,
 } from "../Pages/DevicesPage/DevicesPage.jsx";
-import DeviceDetails, {
-  loader as deviceLoader,
-} from "../Pages/DeviceDetails/DeviceDetails.jsx";
+import DeviceDetails from "../Pages/DeviceDetails/DeviceDetails.jsx";
 import RegisterSuccess from "../Pages/RegisterSuccess/RegisterSuccess.jsx";
 import User from "../Pages/UserPage/User.jsx";
 import RequireAuth from "../Components/ReguireAuth.jsx";
@@ -45,8 +43,17 @@ function App() {
           path: "devices",
           element: <DevicesRootLayout />,
           children: [
-            { index: true, element: <DevicesPage />, loader: devicesLoader },
-            { path: ":id", element: <DeviceDetails />, loader: deviceLoader },
+            {
+              path: "",
+              element: <DevicesPage />,
+              loader: devicesLoader,
+              children: [
+                {
+                  path: ":id",
+                  element: <DeviceDetails />
+                },
+              ],
+            },
           ],
         },
         // PROTECTED ROUTES

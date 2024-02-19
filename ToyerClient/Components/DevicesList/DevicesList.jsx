@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import classes from "./DevicesList.module.css";
+import DeviceDetials from "../../Pages/DeviceDetails/DeviceDetails";
+import { Navigate, Outlet } from "react-router-dom";
 
 function DevicesList({ deviceTypes }) {
   const [expandedCardId, setExpandedCardId] = useState(null);
@@ -49,7 +51,7 @@ function DevicesList({ deviceTypes }) {
                 <span className={classes.cardBack}>
                   <h3>{device.name}</h3>
                   <p>{device.description}</p>
-                  {isExpanded ? <>DUPA</> : <></>}
+                  {isExpanded ? <DeviceDetials id={device.id}/> : <></>}
                 </span>
               </div>
             </div>

@@ -8,6 +8,7 @@ export async function get(urlRoute) {
     return response.data;
   } catch (error) {
     if (error.response) {
+      console.log(error)
       throw new Response(`${error.response.data.error}`, {
         status: error.response.data.status,
         statusText: error.response.data.message,

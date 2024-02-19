@@ -52,7 +52,7 @@
 .cardContainerExpanded {
   background-color: transparent;
   width: 95vw;
-  height: 63vh;
+  min-height: 27rem;
   perspective: 20vw;
   z-index: 0;
   transition: 500ms;
