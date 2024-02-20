@@ -1,7 +1,6 @@
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate,
 } from "react-router-dom";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.jsx";
 import RootLayout from "../Components/Layouts/RootLayout/RootLayout.jsx";
@@ -24,6 +23,10 @@ import PersonalDataPage from "../Pages/ProfilePage/PersonalDataPage/PersonalData
 import AddressDataPage from "../Pages/ProfilePage/AddressDataPage/AddressDataPage.jsx";
 import EmailConfirmed from "../Pages/EmailConfirmed/EmailConfirmed.jsx";
 import DeleteAccountPage from "../Pages/ProfilePage/DeleteAccountPage/DeleteAccountPage.jsx";
+import ParticlesBackground from "../Components/ParticlesBackground.jsx";
+
+
+
 
 function App() {
   const router = createBrowserRouter([
@@ -50,7 +53,7 @@ function App() {
               children: [
                 {
                   path: ":id",
-                  element: <DeviceDetails />
+                  element: <DeviceDetails />,
                 },
               ],
             },
@@ -78,7 +81,14 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+
+  return (
+    <>
+      <ParticlesBackground/>
+      <RouterProvider router={router} />
+    </>
+  );
+
 }
 
 export default App;

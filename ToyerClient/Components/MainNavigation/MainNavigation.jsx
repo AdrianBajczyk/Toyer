@@ -9,14 +9,15 @@ import LoginPage from "../../Pages/LoginPage/LoginPage.jsx";
 import ToyerLogo from "../../src/Asserts/ToyerLogo.jsx";
 
 const links = [
-  { id: "l2", to: "devices", name: "Devices" },
+  { id: "l1", to: "devices", name: "Devices" },
+  { id: "l2", to: "devices", name: "Author" },
+  { id: "l3", to: "devices", name: "Contact" },
   {
-    id: "l3",
+    id: "lp1",
     to: "user",
     name: "User",
     requiredRoles: import.meta.env.VITE_EMPLOYEE_ROLE,
   },
-  { id: "l5", to: "spinner", name: "Spiner" },
 ];
 
 function MainNavigation() {
