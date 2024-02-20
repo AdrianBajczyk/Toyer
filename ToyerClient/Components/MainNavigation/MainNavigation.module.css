@@ -27,9 +27,14 @@ nav ul li a::after {
   transition: 0.5s;
 }
 
-.list a:hover::after,
-.list a.active::after {
+.list a:hover::after {
   width: 100%;
+  
+}
+
+.list a.active::after {
+  width: 80%;
+  left: 10%;
 }
 
 .iconContainer {
