@@ -7,16 +7,29 @@
 
 .list {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
 }
 
-.list a {
+nav ul li a {
   text-decoration: none;
+  position: relative;
 }
 
-.list a:hover,
-.list a.active {
-  text-decoration: underline;
+nav ul li a::after {
+  content: "";
+  width: 0;
+  height: 3px;
+  border-radius: 20%;
+  background: white;
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  transition: 0.5s;
+}
+
+.list a:hover::after,
+.list a.active::after {
+  width: 100%;
 }
 
 .iconContainer {

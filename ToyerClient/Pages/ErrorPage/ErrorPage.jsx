@@ -1,18 +1,24 @@
 import { useRouteError, isRouteErrorResponse } from "react-router";
 import MainNavigation from "../../Components/MainNavigation/MainNavigation.jsx";
+import Typewriter from "../../Utils/typewriter.jsx";
 
 function ErrorPage() {
   const error = useRouteError();
 
   if (isRouteErrorResponse(error)) {
+    const textArray = [
+      error.status.toString(),
+      error.statusText,
+      error.data.toString(),
+    ];
+
+    const speed = 70;
 
     return (
       <>
         <MainNavigation />
         <main>
-          <h1>{error.status}</h1>
-          <h2>{error.statusText}</h2> 
-          <h3>{error.data}</h3>
+          <Typewriter textArray={textArray} speed={speed} />
         </main>
       </>
     );
