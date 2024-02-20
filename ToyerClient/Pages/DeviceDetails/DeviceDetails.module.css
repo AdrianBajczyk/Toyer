@@ -1,0 +1,41 @@
+@keyframes decreaseBlur {
+  from {
+    filter: blur(10px);
+  }
+  to {
+    filter: blur(0px);
+  }
+}
+
+.blurredText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6rem;
+  gap: 2rem 0rem;
+  animation: decreaseBlur 1s ease forwards;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  border: 1px solid white;
+  padding: 8px;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+td {
+  border: 1px solid white;
+  padding: 8px;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.25);
+}

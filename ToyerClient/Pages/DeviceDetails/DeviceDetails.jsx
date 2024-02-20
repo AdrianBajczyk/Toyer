@@ -1,34 +1,33 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../../Components/UI/Button.jsx";
 import { get } from "../../Utils/http.js";
 import { useEffect, useRef, useState } from "react";
+import Spinner from "../../Components/Spinner/Spinner.jsx";
+import classes from "./DeviceDetails.module.css";
 
 export default function DeviceDetials({ id }) {
-  const navigate = useNavigate();
-
   const abortControllerRef = useRef(null);
 
   const [deviceDetails, setDeviceDetails] = useState();
-  const [isLoading, setIsLoding] = useState();
+  const [isLoading, setIsLoding] = useState(null);
+  const [err, setErr] = useState(null);
 
   useEffect(() => {
-    let isMounted = true;
-    // abortControllerRef.current?.abort();
     abortControllerRef.current = new AbortController();
-    abortControllerRef.current?.abort();
-    console.log(abortControllerRef.current.signal)
+    setIsLoding(true);
+
+    console.log(abortControllerRef.current?.signal);
 
     const getUsers = async () => {
-      setIsLoding(true);
-
       try {
-        const response = await get(`/DeviceType/${id}`, {
-          signal: abortControllerRef.current?.signal,
-        });
-        isMounted && setDeviceDetails(response);
-        console.log(response);
-      } catch (err) {
-        console.log(err);
+        const response = await get(
+          `/DeviceType/${id}`,
+          abortControllerRef.current?.signal
+        );
+        setDeviceDetails(response);
+      } catch (error) {
+        console.log("device details error:");
+        console.log(error);
+        setErr(error);
       } finally {
         setIsLoding(false);
       }
@@ -37,7 +36,7 @@ export default function DeviceDetials({ id }) {
     getUsers();
 
     return () => {
-      isMounted = false;
+      abortControllerRef.current.abort();
     };
   }, []);
 
@@ -45,21 +44,29 @@ export default function DeviceDetials({ id }) {
 
   return (
     <>
-      {isLoading ? (
-        <>Loading...</>
-      ) : deviceDetails ? (
-        <div>
-          <p>{deviceDetails.orders[0].description}</p>
-          <p>DUPA</p>
-          <p>DUPA</p>
-          <Button
-            element="button"
-            onClick={() => navigate("..", { relative: "path" })}
-          >
-            Back
-          </Button>
-        </div>
-      ) : <></>}
+      {err ? (
+        <div>{err.statusText} Try again later...</div>
+      ) : isLoading ? (
+        <Spinner height={"400"} width={"400"} />
+      ) : (
+        deviceDetails && (
+          <div className={classes.blurredText}>
+            <h2>{deviceDetails.name}</h2>
+            <p>{deviceDetails.description}</p>
+            <h3>Awailable commands:</h3>
+            <table>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+                {deviceDetails.orders.map((order) => {
+                  return <tr><td>{order.name}</td><td>{order.description}</td></tr>;
+                })}
+            </table>
+
+          </div>
+        )
+      )}
     </>
   );
 }

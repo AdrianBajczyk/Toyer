@@ -39,6 +39,7 @@ const useAxiosPrivate = () => {
           console.log(prevRequest);
           return axiosPrivate(prevRequest);
         }
+        console.log(error);
         return Promise.reject(error);
       }
     );

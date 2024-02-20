@@ -2,13 +2,14 @@ import axios from "../src/Api/axios";
 
 const excludedStatusCodes = [422, 401];
 
-export async function get(urlRoute) {
+export async function get(urlRoute, signal) {
+  console.log(signal)
   try {
-    const response = await axios.get(urlRoute);
+    const response = await axios.get(urlRoute, {} ,{ signal: signal } );
     return response.data;
   } catch (error) {
     if (error.response) {
-      console.log(error)
+      console.log("errorHttp" + error);
       throw new Response(`${error.response.data.error}`, {
         status: error.response.data.status,
         statusText: error.response.data.message,

@@ -1,16 +1,16 @@
-import { Rings } from 'react-loader-spinner'
+import { Rings } from "react-loader-spinner";
 
-const Spinner = () => {
+const Spinner = ({ height, width }) => {
   return (
     <Rings
-    visible={true}
-    height="600"
-    width="600"
-    color="#FFFFFF"
-    ariaLabel="rings-loading"
-    wrapperStyle={{}}
-    wrapperClass=""
-/>
+      visible={true}
+      height={height}
+      width={width}
+      color="#FFFFFF"
+      ariaLabel="rings-loading"
+      wrapperStyle={{}}
+      wrapperClass="spinner"
+    />
   );
 };
 

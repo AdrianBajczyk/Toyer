@@ -3,8 +3,11 @@ import classes from "./DevicesList.module.css";
 import DeviceDetials from "../../Pages/DeviceDetails/DeviceDetails";
 import { Navigate, Outlet } from "react-router-dom";
 
+const renderDelay = 700
+
 function DevicesList({ deviceTypes }) {
   const [expandedCardId, setExpandedCardId] = useState(null);
+  const [renderChildComponent, setRenderChildComponent] = useState(false);
   const [hoverAllowed, setHoverAllowed] = useState(true);
 
   const handleContainerHover = () => {
@@ -12,15 +15,19 @@ function DevicesList({ deviceTypes }) {
       setHoverAllowed(false);
       setTimeout(() => {
         setHoverAllowed(true);
-      }, 700);
+      }, renderDelay);
     }
   };
 
   const handleContainerClick = (deviceId) => {
     if (expandedCardId === deviceId) {
       setExpandedCardId(null);
+      setRenderChildComponent(false); 
     } else if (hoverAllowed) {
       setExpandedCardId(deviceId);
+      setTimeout(() => {
+        setRenderChildComponent(true); 
+      }, renderDelay);
     }
   };
 
@@ -37,7 +44,10 @@ function DevicesList({ deviceTypes }) {
               }`}
               onClick={() => handleContainerClick(device.id)}
               onMouseEnter={handleContainerHover}
-              style={{ order: isExpanded ? -1 : index, display: expandedCardId && !isExpanded ? 'none' : null}}
+              style={{
+                order: isExpanded ? -1 : index,
+                display: expandedCardId && !isExpanded ? "none" : null,
+              }}
             >
               <div
                 className={`${classes.card} ${
@@ -49,9 +59,7 @@ function DevicesList({ deviceTypes }) {
                   style={{ backgroundImage: `url(${device.imageUrl})` }}
                 />
                 <span className={classes.cardBack}>
-                  <h3>{device.name}</h3>
-                  <p>{device.description}</p>
-                  {isExpanded ? <DeviceDetials id={device.id}/> : <></>}
+                  {!isExpanded ? <h3>{device.name}</h3> : renderChildComponent ? <DeviceDetials id={device.id} /> : <></>}
                 </span>
               </div>
             </div>

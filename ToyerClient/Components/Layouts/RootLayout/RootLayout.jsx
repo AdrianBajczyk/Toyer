@@ -12,7 +12,7 @@ function RootLayout() {
     <>
       <MainNavigation />
       <main>
-        {isLoading ? <Spinner></Spinner> : <Outlet />}
+        {isLoading ? <Spinner height={'600'} width={'600'}/> : <Outlet />}
         
       </main>
     </>

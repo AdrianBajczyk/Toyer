@@ -14,8 +14,9 @@ html {
 
 body {
   min-height: 100vh;
-  background-color: dodgerblue;
   background-image: url(/src/Asserts/Images/ToyerBackground.jpg);
+  background-size: cover;
+  background-position: center;
 }
 
 main {
