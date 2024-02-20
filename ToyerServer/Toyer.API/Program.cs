@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
 using Toyer.API.Extensions.WebAppBuilder;
 using Toyer.Logic.Exceptions;
-using Toyer.Logic.Services.Authorization.AuthorizationHandlers;
 
 
 #region WebAppBuilder
@@ -29,6 +27,9 @@ builder.Services.AddCustomMvcs();
 #region WebAppMiddleware
 
 var app = builder.Build();
+
+//Artificial delay
+//app.UseDelay(TimeSpan.FromSeconds(3));
 
 app.UseMiddleware<ExceptionCustomHandler>();
 
