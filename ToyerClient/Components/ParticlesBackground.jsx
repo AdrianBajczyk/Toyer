@@ -2,7 +2,7 @@ import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import { useCallback } from "react";
 
-const ParticlesBackground = () => {
+const ParticlesBackground = ({ children }) => {
   const particlesInit = useCallback(async (engine) => {
     await loadSlim(engine);
   }, []);
@@ -14,7 +14,12 @@ const ParticlesBackground = () => {
       options={{
         autoPlay: true,
         fpsLimit: 120,
+        backgroundMode:{
+          enable:true,
+          zIndex: -3,
+        },
         interactivity: {
+          detect_on: "window",
           events: {
             onhover: {
               enable: true,
@@ -67,6 +72,7 @@ const ParticlesBackground = () => {
         detectRetina: true,
       }}
     />
+
   );
 };
 
