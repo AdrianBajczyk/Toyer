@@ -1,0 +1,36 @@
+.menuContainer {
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-radius: 25px;
+  margin-top: 3rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+menu li a {
+  text-decoration: none;
+  position: relative;
+}
+
+menu li a::after {
+  content: "";
+  width: 0;
+  height: 3px;
+  border-radius: 20%;
+  background: white;
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  transition: 0.5s;
+}
+
+.menuContainer a:hover::after {
+  width: 100%;
+}
+
+.menuContainer a.active::after {
+  width: 80%;
+  left: 10%;
+}

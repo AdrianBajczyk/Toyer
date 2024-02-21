@@ -6,6 +6,7 @@ import ProperNameInput from "./ProperNameInput";
 import UserNameInput from "./UserNameInput";
 import DateInput from "./DateInput";
 import PostalCodeInput from "./PostalCodeInput";
+import GuidInput from "./GuidInput";
 
 const InputSelector = ({ name, ...props }) => {
   switch (name) {
@@ -25,6 +26,8 @@ const InputSelector = ({ name, ...props }) => {
       return <UserNameInput {...props} />;
     case "PostalCode":
       return <PostalCodeInput {...props} />;
+    case "Guid":
+      return <GuidInput {...props}/>;
     default:
       return <ProperNameInput name={name} {...props} />;
   }

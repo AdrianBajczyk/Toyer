@@ -14,8 +14,8 @@ const ParticlesBackground = ({ children }) => {
       options={{
         autoPlay: true,
         fpsLimit: 120,
-        backgroundMode:{
-          enable:true,
+        backgroundMode: {
+          enable: true,
           zIndex: -3,
         },
         interactivity: {
@@ -39,7 +39,7 @@ const ParticlesBackground = ({ children }) => {
             color: "#4363ff",
             distance: 90,
             enable: true,
-            opacity: 0.4,
+            opacity: 0.2,
             width: 1,
           },
           move: {
@@ -60,7 +60,7 @@ const ParticlesBackground = ({ children }) => {
             value: 120,
           },
           opacity: {
-            value: 0.2,
+            value: 0.3,
           },
           shape: {
             type: "circle",
@@ -72,7 +72,6 @@ const ParticlesBackground = ({ children }) => {
         detectRetina: true,
       }}
     />
-
   );
 };
 
