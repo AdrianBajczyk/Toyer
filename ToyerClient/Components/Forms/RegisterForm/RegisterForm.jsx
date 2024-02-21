@@ -1,30 +1,30 @@
-import CustomForm from "../UI/CustomForm.jsx";
-import Button from "../UI/Button.jsx";
+import CustomForm from "../../UI/CustomForm.jsx";
+import Button from "../../UI/Button.jsx";
 import { useState, useEffect, useRef } from "react";
 import { useActionData, useNavigation } from "react-router-dom";
 import classes from "./RegisterForm.module.css";
-import InputSelector from "../ValidatedFormInputs/InputSelector.jsx";
+import InputSelector from "../../ValidatedFormInputs/InputSelector.jsx";
 
 const inputs = [
-  {name:"UserName", optional:false},
-  {name:"NewPassword", optional:false},
-  {name:"Name", optional:false},
-  {name:"Surname", optional:false},
-  {name:"Email", optional:false},
-  {name:"BirthDate", optional:false},
-  {name:"Street", optional:false},
-  {name:"StreetNumber", optional:false},
-  {name:"UnitNumber", optional:true},
-  {name:"City", optional:false},
-  {name:"State", optional:true},
-  {name:"PostalCode", optional:false},
-  {name:"Country", optional:false},
-  {name:"PhoneNumber", optional:true},
+  { name: "UserName", optional: false },
+  { name: "NewPassword", optional: false },
+  { name: "Name", optional: false },
+  { name: "Surname", optional: false },
+  { name: "Email", optional: false },
+  { name: "BirthDate", optional: false },
+  { name: "Street", optional: false },
+  { name: "StreetNumber", optional: false },
+  { name: "UnitNumber", optional: true },
+  { name: "City", optional: false },
+  { name: "State", optional: true },
+  { name: "PostalCode", optional: false },
+  { name: "Country", optional: false },
+  { name: "PhoneNumber", optional: true },
 ];
 
 export function RegisterForm() {
-  const navigation = useNavigation();
   const actionData = useActionData();
+  const navigation = useNavigation();
 
   const isSubmitting = navigation.state === "submitting";
   const userRef = useRef();

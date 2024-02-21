@@ -1,5 +1,5 @@
 import { Outlet, useNavigation } from "react-router-dom";
-import MainNavigation from "../../MainNavigation/MainNavigation";
+import MainNavigation from '../../Navigations/MainNavigation/MainNavigation';
 import Spinner from "../../Spinner/Spinner";
 
 function RootLayout() {

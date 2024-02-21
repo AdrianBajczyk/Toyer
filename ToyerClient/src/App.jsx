@@ -5,11 +5,10 @@ import HomePage from "../Pages/HomePage/HomePage.jsx";
 import RegisterPage, {
   action as registerAction,
 } from "../Pages/RegisterPage/RegisterPage.jsx";
-import DevicesRootLayout from "../Components/Layouts/DevicesRoot.jsx";
+import DevicesRootLayout from "../Components/Layouts/DevicesRoot/DevicesRoot.jsx";
 import DevicesPage, {
   loader as devicesLoader,
 } from "../Pages/DevicesPage/DevicesPage.jsx";
-import DeviceDetails from "../Pages/DeviceDetails/DeviceDetails.jsx";
 import RegisterSuccess from "../Pages/RegisterSuccess/RegisterSuccess.jsx";
 import User from "../Pages/UserPage/User.jsx";
 import RequireAuth from "../Components/ReguireAuth.jsx";
@@ -21,6 +20,8 @@ import AddressDataPage from "../Pages/ProfilePage/AddressDataPage/AddressDataPag
 import EmailConfirmed from "../Pages/EmailConfirmed/EmailConfirmed.jsx";
 import DeleteAccountPage from "../Pages/ProfilePage/DeleteAccountPage/DeleteAccountPage.jsx";
 import ParticlesBackground from "../Components/ParticlesBackground.jsx";
+import OwnedDevicesNavigation from "../Components/Layouts/OwnedDevicesLayout/OwnedDevicesLayout.jsx";
+import AssignDeviceWindow from "../Components/Windows/AssignDeviceWindow/AssignDeviceWindow.jsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -44,12 +45,6 @@ function App() {
               path: "",
               element: <DevicesPage />,
               loader: devicesLoader,
-              children: [
-                {
-                  path: ":id",
-                  element: <DeviceDetails />,
-                },
-              ],
             },
           ],
         },
@@ -69,6 +64,10 @@ function App() {
             { path: "profile/personals", element: <PersonalDataPage /> },
             { path: "profile/address", element: <AddressDataPage /> },
             { path: "profile/delete", element: <DeleteAccountPage /> },
+            { path: "ownedDevices", element: <OwnedDevicesNavigation />, children:[
+              { path: "", element: <></> },
+              { path: "assigment", element: <AssignDeviceWindow/> }
+            ] },
           ],
         },
       ],
@@ -77,9 +76,8 @@ function App() {
 
   return (
     <>
-      <ParticlesBackground>
-      </ParticlesBackground>
-        <RouterProvider router={router} />
+      <ParticlesBackground></ParticlesBackground>
+      <RouterProvider router={router} />
     </>
   );
 }

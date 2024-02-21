@@ -1,5 +1,5 @@
 import { useRouteError, isRouteErrorResponse } from "react-router";
-import MainNavigation from "../../Components/MainNavigation/MainNavigation.jsx";
+import MainNavigation from "../../Components/Navigations/MainNavigation/MainNavigation.jsx";
 import Typewriter from "../../Utils/typewriter.jsx";
 
 function ErrorPage() {

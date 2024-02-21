@@ -1,4 +1,4 @@
-import DevicesNavigation from "../DevicesNavigation/DevicesNavigation.jsx";
+import DevicesNavigation from "../../Navigations/DevicesNavigation/DevicesNavigation.jsx";
 import { Outlet } from "react-router-dom";
 
 function DevicesRootLayout() {

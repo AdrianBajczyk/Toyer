@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import RegisterForm from "../../Components/RegisterForm/RegisterForm";
+import RegisterForm from "../../Components/Forms/RegisterForm/RegisterForm.jsx";
 import { post } from "../../Utils/http.js";
 
 export default function RegisterPage() {
@@ -14,9 +14,9 @@ export async function action({ request }) {
     data.UnitNumber = 0;
   }
 
-  const redirectUrl = window.location.origin + '/email/confirm';
+  const redirectUrl = window.location.origin + "/email/confirm";
 
-  const response = await post("User", data,  redirectUrl );
+  const response = await post("User", data, redirectUrl);
 
   if (response.status === 422) {
     return response;

@@ -1,19 +1,25 @@
 import { NavLink, useNavigate, useNavigation } from "react-router-dom";
-import List from "../UI/List.jsx";
+import List from "../../UI/List.jsx";
 import classes from "./MainNavigation.module.css";
-import useUserContext from "../../Hooks/useUserContext.js";
+import useUserContext from "../../../Hooks/useUserContext.js";
 import { IonIcon } from "@ionic/react";
 import { peopleOutline, people } from "ionicons/icons";
 import { useState } from "react";
-import LoginPage from "../../Pages/LoginPage/LoginPage.jsx";
-import ToyerLogo from "../../src/Asserts/ToyerLogo.jsx";
+import LoginWindow from "../../Windows/LoginWindow/LoginWindow.jsx";
+import ToyerLogo from "../../../src/Asserts/ToyerLogo.jsx";
 
 const links = [
-  { id: "l1", to: "devices", name: "Devices" },
+  { id: "l1", to: "devices", name: "Offer" },
   // { id: "l2", to: "devices", name: "Author" },
   // { id: "l3", to: "devices", name: "Contact" },
   {
-    id: "lp1",
+    id: "lu1",
+    to: "ownedDevices",
+    name: "Your devices",
+    requiredRoles: import.meta.env.VITE_USER_ROLE,
+  },
+  {
+    id: "le1",
     to: "user",
     name: "User",
     requiredRoles: import.meta.env.VITE_EMPLOYEE_ROLE,
@@ -93,7 +99,7 @@ function MainNavigation() {
                 className={classes.loginBackground}
                 onClick={handleHide}
               ></div>
-              <LoginPage onHide={handleHide} />
+              <LoginWindow onHide={handleHide} />
             </>
           ) : (
             <></>

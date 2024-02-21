@@ -1,5 +1,4 @@
 .header {
-  margin-bottom: 5rem;
   padding: 2rem;
   display: flex;
   justify-content: center;
@@ -29,7 +28,6 @@ nav ul li a::after {
 
 .list a:hover::after {
   width: 100%;
-  
 }
 
 .list a.active::after {
