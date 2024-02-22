@@ -28,6 +28,7 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<Device, DeviceCreateDto>().ReverseMap();
         CreateMap<Device, DevicePresentDto>().ReverseMap();
+        CreateMap<Device, DevicePresentShortDto>().ReverseMap();
         CreateMap<Device, DeviceNameUpdateDto>().ReverseMap();
     }
 }

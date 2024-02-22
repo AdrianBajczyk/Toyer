@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
 using Toyer.Logic.Exceptions.FailResponses.Derived.Device;
@@ -21,13 +22,13 @@ public class SqlDeviceAssignmentRepository(IUserRepository userRepository, IDevi
         var device = await _deviceRepository.GetDeviceByIdAsync(deviceId) 
             ?? throw new DeviceNotFoundException(deviceId);
 
-        if (_toyerDbContext.UsersDevices.Any(r => r.DevicesIds.Contains(deviceId))) 
+        if (_toyerDbContext.UsersDevices.Any(r => r.Devices.Contains(device))) 
             throw new DeviceIsAssignedException(deviceId);
 
         var relation =  await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.UserId == userId);
         if (relation == null) await CreateRelationId(userId);
 
-        relation!.DevicesIds.Add(deviceId);
+        relation!.Devices.Add(device);
         await _toyerDbContext.SaveChangesAsync();
     }
 
@@ -42,17 +43,20 @@ public class SqlDeviceAssignmentRepository(IUserRepository userRepository, IDevi
         var relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.UserId == userId)
             ?? throw new UserHasNoDeviceException(userId, deviceId);
 
-        if (!relation.DevicesIds.Contains(deviceId))
+        if (!relation.Devices.Contains(device))
             throw new UserHasNoDeviceException(userId, deviceId);
 
-        relation.DevicesIds.Remove(deviceId);
+        relation.Devices.Remove(device);
         await _toyerDbContext.SaveChangesAsync();
     }
 
     public async Task DeleteDeviceAsync(string deviceId)
     {
-        var relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.DevicesIds.Contains(deviceId));
-        relation?.DevicesIds.Remove(deviceId);
+        var device = await _deviceRepository.GetDeviceByIdAsync(deviceId)
+            ?? throw new DeviceNotFoundException(deviceId);
+
+        var relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.Devices.Contains(device));
+        relation?.Devices.Remove(device);
     }
 
     public async Task DeleteUserAsync(string userId)
@@ -63,7 +67,10 @@ public class SqlDeviceAssignmentRepository(IUserRepository userRepository, IDevi
 
     public async Task<string> GetUserIdByAssignedDeviceId(string deviceId)
     {
-        var relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.DevicesIds.Contains(deviceId)) 
+        var device = await _deviceRepository.GetDeviceByIdAsync(deviceId)
+            ?? throw new DeviceNotFoundException(deviceId);
+
+        var relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.Devices.Contains(device)) 
             ?? throw new DeviceIsUnassignedException(deviceId);
 
         return relation.UserId;
@@ -73,5 +80,23 @@ public class SqlDeviceAssignmentRepository(IUserRepository userRepository, IDevi
     {
         await _toyerDbContext.UsersDevices.AddAsync(new UserDevices() { UserId = userId });
         await _toyerDbContext.SaveChangesAsync();
+    }
+
+    public async Task<UserDevices> GetAllDevicesAssignedToUser(string userId)
+    {
+        var user = await _userRepository.GetUserByIdAsync(userId)
+            ?? throw new UserNotFoundException(userId);
+
+        var userDevices = await _toyerDbContext.UsersDevices
+        .Include(ud => ud.Devices) 
+        .ThenInclude(d => d.DeviceType) 
+        .ThenInclude(dt => dt.Orders)                          
+        .SingleOrDefaultAsync(ud => ud.UserId == userId)
+        ?? throw new UserHasNoDevicesException(userId);
+
+        await Console.Out.WriteLineAsync("USER DEVICES");
+        await Console.Out.WriteLineAsync(userDevices.Devices.ToString());
+
+        return userDevices;
     }
 }

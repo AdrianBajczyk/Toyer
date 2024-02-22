@@ -82,7 +82,7 @@ public class DeviceController(IDeviceMappings mappings,
     /// Updates device name by id.
     /// </summary>
     [HttpPut("{deviceId}")]
-    [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatedDeviceNameByIdAsync([FromRoute] string deviceId, [FromForm]DeviceNameUpdateDto nameUpdate)
     {

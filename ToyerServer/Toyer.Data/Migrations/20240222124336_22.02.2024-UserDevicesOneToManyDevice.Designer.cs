@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Toyer.Data.Context;
 
@@ -11,9 +12,11 @@ using Toyer.Data.Context;
 namespace Toyer.Data.Migrations
 {
     [DbContext(typeof(ToyerDbContext))]
-    partial class ToyerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240222124336_22.02.2024-UserDevicesOneToManyDevice")]
+    partial class _22022024UserDevicesOneToManyDevice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,6 +61,9 @@ namespace Toyer.Data.Migrations
 
                     b.Property<string>("UserDevicesUserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserFK")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

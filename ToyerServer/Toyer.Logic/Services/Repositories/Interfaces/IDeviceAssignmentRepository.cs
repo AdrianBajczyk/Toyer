@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Toyer.Data.Entities;
 using Toyer.Logic.Responses;
 
 namespace Toyer.Logic.Services.Repositories.Interfaces
@@ -10,5 +11,6 @@ namespace Toyer.Logic.Services.Repositories.Interfaces
         Task DeleteUserAsync(string userId);
         Task DeleteDeviceAsync(string deviceId);
         Task<string> GetUserIdByAssignedDeviceId(string deviceId);
+        Task<UserDevices> GetAllDevicesAssignedToUser(string userId);
     }
 }

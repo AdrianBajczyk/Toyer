@@ -6,5 +6,5 @@ public record UserDevices
 {
     [Key]
     public string UserId { get; set; }
-    public List<string?> DevicesIds { get; set; } = new();
+    public List<Device?> Devices { get; set; } = new();
 }

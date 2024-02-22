@@ -14,16 +14,17 @@ namespace Toyer.API.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-public class DeviceAssignController(IDeviceAssignmentRepository deviceAssignRepository, IAuthorizationService authorizationService) : ControllerBase
+public class DeviceAssignController(IDeviceAssignmentRepository deviceAssignRepository, IAuthorizationService authorizationService, IUserDevicesMappings mappins) : ControllerBase
 {
     private readonly IDeviceAssignmentRepository _deviceAssignRepository = deviceAssignRepository;
     private readonly IAuthorizationService _authorizationService = authorizationService;
+    private readonly IUserDevicesMappings _userDevicesMappins = mappins;
 
     /// <summary>
     /// Assigns device to user.
     /// </summary>
     [HttpPost("{deviceId}/user/{userId}")]
-    [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AssignDeviceToUserAsync([FromRoute] string deviceId, [FromRoute] string userId)
     {
@@ -33,10 +34,10 @@ public class DeviceAssignController(IDeviceAssignmentRepository deviceAssignRepo
     }
 
     /// <summary>
-    /// Unssigns device from user.
+    /// Unassigns device from user.
     /// </summary>
     [HttpDelete("{deviceId}/user/{userId}")]
-    [ProducesResponseType(typeof(DevicePresentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UnassignDeviceFromUserAsync([FromRoute] string deviceId, [FromRoute] string userId)
     {
@@ -48,5 +49,21 @@ public class DeviceAssignController(IDeviceAssignmentRepository deviceAssignRepo
         await _deviceAssignRepository.UnassignDeviceFromUserAsync(deviceId, userId);
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Get all devices assigned to speciffic user.
+    /// </summary>
+    [HttpGet("{userId}")]
+    [ProducesResponseType(typeof(IEnumerable<DevicePresentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CustomResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllDevicesAssignedToUser([FromRoute] string userId)
+    {
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, userId, PermissionRequirements.ReadPermission);
+        if (!authorizationResult.Succeeded) throw new AccessException();
+
+        var userDevices = await _deviceAssignRepository.GetAllDevicesAssignedToUser(userId);
+
+        return Ok(_userDevicesMappins.UserDevicesToUserDevicesPresentDto(userDevices));
     }
 }
