@@ -13,6 +13,7 @@
     "@tsparticles/react": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-error-boundary": "^4.0.12",
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.21.3",
     "react-tsparticles": "^2.12.2",
