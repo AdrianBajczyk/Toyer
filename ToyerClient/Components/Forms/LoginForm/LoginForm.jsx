@@ -6,6 +6,7 @@ import axios from "../../../src/Api/axios.js";
 import useUserContext from "../../../Hooks/useUserContext.js";
 import classes from "./LoginForm.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
+
 const EMAIL_REGEX = /^[\w\-\.]+@([\w-]+\.)+[a-z]{2,3}$/;
 
 export default function LoginForm({ children, onHide }) {
@@ -13,8 +14,8 @@ export default function LoginForm({ children, onHide }) {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  const userCtx = useUserContext();
   const errRef = useRef();
+  const userCtx = useUserContext();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errMsg, setErrMsg] = useState("");
@@ -57,16 +58,11 @@ export default function LoginForm({ children, onHide }) {
       onHide();
       navigate(from, { replace: true });
     } catch (err) {
-      console.log(err);
       userCtx.logOut();
       if (!err?.response) {
         setErrMsg("No Server Response");
-      } else if (err.response?.status === 422) {
-        setErrMsg("Format not valid");
-      } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorized");
-      } else {
-        setErrMsg("Unexpected error. Login Failed");
+      }  else {
+        setErrMsg(err.response.data.error);
       }
     } finally {
       errRef.current.focus();
