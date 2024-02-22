@@ -4,7 +4,7 @@ import GuidNote from "../UI/InputNotes/GuidNote";
 
 const GUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
 
-const GuidInput = ({ userRef, onValidityChange, ...props  }) => {
+const GuidInput = ({ userRef, onValidityChange, optional=false,...props  }) => {
     const [guid, setGuid] = useState("");
     const [validGuid, setValidGuid] = useState(false);
     const [guidFocus, setGuidFocus] = useState(false);
@@ -31,7 +31,7 @@ const GuidInput = ({ userRef, onValidityChange, ...props  }) => {
       ref={userRef}
       onChange={(e) => setGuid(e.target.value)}
       value={guid}
-      required={true}
+      required={!optional}
       aria-invalid={validGuid ? "false" : "true"}
       aria-describedby="numnote"
       onFocus={() => setGuidFocus(true)}

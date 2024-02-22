@@ -4,7 +4,7 @@ import DateNote from "../UI/InputNotes/DateNote.jsx";
 import { useState, useEffect } from "react";
 import Input from "../UI/Input/Input.jsx";
 
-const DateInput = ({ userRef, onValidityChange, ...props }) => {
+const DateInput = ({ userRef, onValidityChange, optional=false,...props }) => {
   const [birthDate, setBirthDate] = useState("");
   const [validBirthDate, setValidBirthDate] = useState(false);
   const [birthDateFocus, setBirthDateFocus] = useState(false);
@@ -33,7 +33,7 @@ const DateInput = ({ userRef, onValidityChange, ...props }) => {
         ref={userRef}
         onChange={(e) => setBirthDate(e.target.value)}
         value={birthDate}
-        required
+        required={!optional}
         aria-invalid={validBirthDate ? "false" : "true"}
         aria-describedby="datenote"
         onFocus={() => setBirthDateFocus(true)}

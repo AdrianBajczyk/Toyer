@@ -66,8 +66,9 @@ export function RegisterForm() {
       <section className={classes.registerContainer}>
         <h1>Register</h1>
         <CustomForm method="post">
-          {inputs.map((input) => (
+          {inputs.map((input, index) => (
             <InputSelector
+              key={input.name+index}
               userRef={userRef}
               name={input.name}
               optional={input.optional}

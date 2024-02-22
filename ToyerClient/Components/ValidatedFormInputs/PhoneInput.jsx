@@ -33,6 +33,7 @@ const PhoneInput = ({ userRef, onValidityChange, optional=false,...props }) => {
         ref={userRef}
         onChange={(e) => setPhone(e.target.value)}
         value={phone}
+        required={!optional}
         aria-invalid={validPhone ? "false" : "true"}
         aria-describedby="phonenote"
         onFocus={() => setPhoneFocus(true)}

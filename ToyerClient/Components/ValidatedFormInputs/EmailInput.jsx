@@ -4,7 +4,7 @@ import EmailNote from "../UI/InputNotes/EmailNote";
 
 const EMAIL_REGEX = /^[\w\-\.]+@([\w-]+\.)+[a-z]{2,3}$/;
 
-const EmailInput = ({ userRef, onValidityChange, ...props  }) => {
+const EmailInput = ({ userRef, onValidityChange, optional=false, ...props  }) => {
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
@@ -29,7 +29,7 @@ const EmailInput = ({ userRef, onValidityChange, ...props  }) => {
         ref={userRef}
         onChange={(e) => setEmail(e.target.value)}
         value={email}
-        required
+        required={!optional}
         aria-invalid={validEmail ? "false" : "true"}
         aria-describedby="emailnote"
         onFocus={() => setEmailFocus(true)}

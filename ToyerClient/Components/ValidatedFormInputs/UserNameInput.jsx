@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 
-const UserNameInput = ({ userRef, onValidityChange, ...props }) => {
+const UserNameInput = ({ userRef, onValidityChange, optional=false, ...props }) => {
   const [user, setUser] = useState("");
   const [validUser, setValidUser] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
@@ -29,7 +29,7 @@ const UserNameInput = ({ userRef, onValidityChange, ...props }) => {
         ref={userRef}
         onChange={(e) => setUser(e.target.value)}
         value={user}
-        required
+        required={!optional}
         aria-invalid={validUser ? "false" : "true"}
         aria-describedby="uidnote"
         onFocus={() => setUserFocus(true)}

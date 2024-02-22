@@ -41,7 +41,7 @@ const NumberInput = ({
         ref={userRef}
         onChange={(e) => setNum(e.target.value)}
         value={num}
-        required={optional ? false : true}
+        required={!optional}
         aria-invalid={validNum ? "false" : "true"}
         aria-describedby="numnote"
         onFocus={() => setNumFocus(true)}

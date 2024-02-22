@@ -60,7 +60,7 @@ export default function DeviceDetials({ id }) {
                 <th>Description</th>
               </tr>
                 {deviceDetails.orders.map((order) => {
-                  return <tr><td>{order.name}</td><td>{order.description}</td></tr>;
+                  return <tr key={`order-${order.id}`}><td>{order.name}</td><td>{order.description}</td></tr>;
                 })}
             </table>
 

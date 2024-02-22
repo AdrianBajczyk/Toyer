@@ -38,7 +38,7 @@ const ProperNameInput = ({
         ref={userRef}
         onChange={(e) => setInput(e.target.value)}
         value={input}
-        required={optional ? false : true}
+        required={!optional}
         aria-invalid={validInput ? "false" : "true"}
         aria-describedby="propnote"
         onFocus={() => setInputFocus(true)}

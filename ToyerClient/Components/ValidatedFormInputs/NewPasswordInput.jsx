@@ -5,7 +5,7 @@ import PwdConfirmNote from "../UI/InputNotes/PwdConfirmNote";
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-const NewPasswordInput = ({ userRef, onValidityChange, ...props }) => {
+const NewPasswordInput = ({ userRef, onValidityChange, optional=false,...props }) => {
   const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
@@ -41,7 +41,7 @@ const NewPasswordInput = ({ userRef, onValidityChange, ...props }) => {
         ref={userRef}
         onChange={(e) => setPwd(e.target.value)}
         value={pwd}
-        required
+        required={!optional}
         aria-invalid={validPwd ? "false" : "true"}
         aria-describedby="pwdnote"
         onFocus={() => setPwdFocus(true)}
@@ -62,7 +62,7 @@ const NewPasswordInput = ({ userRef, onValidityChange, ...props }) => {
         ref={userRef}
         onChange={(e) => setConfirmPwd(e.target.value)}
         value={confirmPwd}
-        required
+        required={!optional}
         aria-invalid={validConfirm ? "false" : "true"}
         aria-describedby="confirmnote"
         onFocus={() => setConfirmFocus(true)}
