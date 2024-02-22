@@ -18,7 +18,6 @@ const AssignDeviceForm = () => {
   const userCtx = useUserContext();
 
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const errRef = useRef();
@@ -52,7 +51,7 @@ const AssignDeviceForm = () => {
         }
       );
 
-      navigate(from, { replace: true });
+      navigate("/ownedDevices", { replace: true });
     } catch (error) {
       console.log(error.response.data);
       if (!error?.response) {
@@ -102,6 +101,12 @@ const AssignDeviceForm = () => {
             {isSubmitting ? "Submitting" : "Register"}
           </Button>
         </CustomForm>
+        <Button
+          element="button"
+          onClick={() => navigate("/ownedDevices", { replace: true })}
+        >
+          BACK
+        </Button>
       </section>
     </>
   );
