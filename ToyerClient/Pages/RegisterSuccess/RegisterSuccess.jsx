@@ -1,4 +1,5 @@
-import Typewriter from "../../Utils/typewriter"
+import Typewriter from "../../Utils/typewriter";
+import classes from './RegisterSuccess.module.css'
 
 const RegisterSuccess = () => {
 
@@ -6,9 +7,9 @@ const RegisterSuccess = () => {
   const speed = 50;
 
   return (
-    <>
+    <div className={classes.textContainer}>
     <Typewriter textArray={textArray} speed={speed}/>
-    </>
+    </div>
   )
 }
 

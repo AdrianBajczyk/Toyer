@@ -1,4 +1,5 @@
 import Typewriter from "../../Utils/typewriter";
+import classes from "./EmailConfirmed.module.css";
 
 const EmailConfirmed = () => {
   const textArray = ["Success.", "Email Confirmed.", "You may login now."];
@@ -6,7 +7,9 @@ const EmailConfirmed = () => {
 
   return (
     <>
-      <Typewriter textArray={textArray} speed={speed} />
+      <div className={classes.textContainer}>
+        <Typewriter textArray={textArray} speed={speed} />
+      </div>
     </>
   );
 };

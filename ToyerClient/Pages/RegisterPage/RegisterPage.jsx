@@ -1,9 +1,14 @@
 import { redirect } from "react-router-dom";
 import RegisterForm from "../../Components/Forms/RegisterForm/RegisterForm.jsx";
 import { post } from "../../Utils/http.js";
+import classes from './RegisterPage.module.css'
 
 export default function RegisterPage() {
-  return <RegisterForm />;
+  return (
+    <div className={classes.registerForm}>
+      <RegisterForm />
+    </div>
+  );
 }
 
 export async function action({ request }) {
