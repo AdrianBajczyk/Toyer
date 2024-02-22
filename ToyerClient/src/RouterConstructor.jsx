@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import ErrorPage from "../Pages/ErrorPage/ErrorPage.jsx";
+import ErrorElementPage from "../Pages/ErrorPage/ErrorElementPage/ErrorElementPage.jsx";
 import RootLayout from "../Components/Layouts/RootLayout/RootLayout.jsx";
 import HomePage from "../Pages/HomePage/HomePage.jsx";
 import RegisterPage, {
@@ -21,11 +21,12 @@ import EmailConfirmed from "../Pages/EmailConfirmed/EmailConfirmed.jsx";
 import DeleteAccountPage from "../Pages/ProfilePage/DeleteAccountPage/DeleteAccountPage.jsx";
 import OwnedDevicesNavigation from "../Components/Layouts/OwnedDevicesLayout/OwnedDevicesLayout.jsx";
 import AssignDeviceWindow from "../Components/Windows/AssignDeviceWindow/AssignDeviceWindow.jsx";
+import OwnedDevicesPage from "../Pages/OwnedDevicesPage/OwnedDevicesPage.jsx";
 
 export const router = createBrowserRouter([
   {
     path: "",
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorElementPage />,
     element: <RootLayout />,
     children: [
       //PUBLIC ROUTES
@@ -64,8 +65,8 @@ export const router = createBrowserRouter([
             path: "ownedDevices",
             element: <OwnedDevicesNavigation />,
             children: [
-              { path: "", element: <></> },
               { path: "assigment", element: <AssignDeviceWindow /> },
+              { path: "", element: <OwnedDevicesPage /> },
             ],
           },
         ],

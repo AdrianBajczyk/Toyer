@@ -1,6 +1,6 @@
 import React, { useState, useEffect,} from "react";
 
-const Typewriter = ({ textArray, speed, onEnd=_=>{} }) => {
+const Typewriter = ({ textArray, speed, onEnd=()=>{} }) => {
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [renderedTexts, setRenderedTexts] = useState([]);

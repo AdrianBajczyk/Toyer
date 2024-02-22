@@ -1,9 +1,9 @@
 import { Outlet, useNavigation } from "react-router-dom";
-import MainNavigation from '../../Navigations/MainNavigation/MainNavigation';
+import MainNavigation from "../../Navigations/MainNavigation/MainNavigation";
 import Spinner from "../../Spinner/Spinner";
 
-function RootLayout() {
 
+function RootLayout() {
   const navigation = useNavigation();
 
   const isLoading = navigation.state === "loading" ? true : false;
@@ -12,8 +12,7 @@ function RootLayout() {
     <>
       <MainNavigation />
       <main>
-        {isLoading ? <Spinner height={'600'} width={'600'}/> : <Outlet />}
-        
+          {isLoading ? <Spinner height={"600"} width={"600"} /> : <Outlet />}
       </main>
     </>
   );

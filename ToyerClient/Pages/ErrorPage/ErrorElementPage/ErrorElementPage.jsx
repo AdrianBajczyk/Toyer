@@ -1,9 +1,9 @@
 import { useRouteError, isRouteErrorResponse } from "react-router";
-import MainNavigation from "../../Components/Navigations/MainNavigation/MainNavigation.jsx";
-import Typewriter from "../../Utils/typewriter.jsx";
-import classes from './ErrorPage.module.css'
+import MainNavigation from "../../../Components/Navigations/MainNavigation/MainNavigation.jsx";
+import Typewriter from "../../../Utils/typewriter.jsx";
+import classes from "./ErrorElementPage.module.css";
 
-function ErrorPage() {
+function ErrorElementPage() {
   const error = useRouteError();
 
   if (isRouteErrorResponse(error)) {
@@ -20,14 +20,14 @@ function ErrorPage() {
         <MainNavigation />
         <main>
           <div className={classes.errorTextContainer}>
-          <Typewriter textArray={textArray} speed={speed} />
+            <Typewriter textArray={textArray} speed={speed} />
           </div>
         </main>
       </>
     );
   }
 
-  return <></>;
+  return <>ERROR TEST</>;
 }
 
-export default ErrorPage;
+export default ErrorElementPage;

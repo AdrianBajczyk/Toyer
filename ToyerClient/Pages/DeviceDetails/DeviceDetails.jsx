@@ -15,8 +15,6 @@ export default function DeviceDetials({ id }) {
     abortControllerRef.current = new AbortController();
     setIsLoding(true);
 
-    console.log(abortControllerRef.current?.signal);
-
     const getUsers = async () => {
       try {
         const response = await get(
@@ -40,7 +38,6 @@ export default function DeviceDetials({ id }) {
     };
   }, []);
 
-  useEffect(() => {}, []);
 
   return (
     <>
