@@ -17,6 +17,7 @@ body {
   background-image: url(/src/Asserts/Images/ToyerBackground.jpg);
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
 }
 
 main {
