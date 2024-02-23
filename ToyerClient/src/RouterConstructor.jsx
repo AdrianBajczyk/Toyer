@@ -22,6 +22,7 @@ import DeleteAccountPage from "../Pages/ProfilePage/DeleteAccountPage/DeleteAcco
 import OwnedDevicesNavigation from "../Components/Layouts/OwnedDevicesLayout/OwnedDevicesLayout.jsx";
 import AssignDeviceWindow from "../Components/Windows/AssignDeviceWindow/AssignDeviceWindow.jsx";
 import OwnedDevicesPage from "../Pages/OwnedDevicesPage/OwnedDevicesPage.jsx";
+import OwnedDeviceSelected from "../Pages/OwnedDeviceSelected/OwnedDeviceSelected.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -69,6 +70,7 @@ export const router = createBrowserRouter([
               { path: "", element: <OwnedDevicesPage /> },
             ],
           },
+          {path: "ownedDevices/:id", element:<OwnedDeviceSelected/>}
         ],
       },
     ],
