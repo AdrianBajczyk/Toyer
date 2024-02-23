@@ -10,6 +10,7 @@ const OwnedDeviceSelected = () => {
 
   const [device, setDevice] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSendingOrder, setIsSendingOrder] = useState(false);
 
   const { showBoundary } = useErrorBoundary();
 
@@ -49,46 +50,87 @@ const OwnedDeviceSelected = () => {
     };
   }, []);
 
+  const handleSendOrder = async (orderId) => {
+    const sendOrder = async () => {
+      setIsSendingOrder(true);
+      try {
+        const response = await axiosPrivate.post(
+          `Device/${device.id}/command/${orderId}`,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+        console.log(response);
+      } catch (error) {
+        showBoundary(error);
+      } finally {
+        setIsSendingOrder(false);
+      }
+    };
+
+    sendOrder();
+  };
+
   return isLoading ? (
     <Spinner width={600} height={600} />
   ) : device ? (
     <section className={classes.selectedDevicePageContainer}>
       <div className={classes.deviceInfoContainer}>
-        <span>
-          <h4>Id:</h4>
-          <p>{device.id}</p>
-        </span>
-        <span>
-          <h4>Name:</h4>
-          <p>{device.name}</p>
-        </span>
-        <span>
-          <h4>Model:</h4>
-          <p>{device.deviceTypeDto?.name}</p>
-        </span>
-        <span>
-          <h4>Manufactured in:</h4>
-          <p>{device.dateOfCreation}</p>
-        </span>
-        <span>
-          <h4>Registered in:</h4>
-          <p>{device.dateOfLastRegistration}</p>
-        </span>
+      <h3>Info:</h3>
+        <table>
+          <tbody>
+            <tr>
+              <th>Id:</th>
+              <td>{device.id}</td>
+            </tr>
+            <tr>
+              <th>Name:</th>
+              <td>{device.name}</td>
+            </tr>
+            <tr>
+              <th>Model:</th>
+              <td>{device.deviceTypeDto?.name}</td>
+            </tr>
+            <tr>
+              <th>Manufactured in:</th>
+              <td>{device.dateOfCreation}</td>
+            </tr>
+            <tr>
+              <th>Registered in:</th>
+              <td>{device.dateOfLastRegistration}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div className={classes.deviceDescriptionContainer}>
         <span>{device.deviceTypeDto?.description}</span>
       </div>
       <div className={classes.ordersContainer}>
         <h3>Commands:</h3>
-        <ul>
-          {console.log(device.deviceTypeDto?.orders)}
-          {device.deviceTypeDto?.orders.map((order) => (
-            <li key={`order-${order.id}`}>
-              <span>{order.description}</span>
-              <button>{order.name}</button>
-            </li>
-          ))}
-        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {device.deviceTypeDto?.orders.map((order) => (
+              <tr key={`order-${order.id}`}>
+                <td>{order.description}</td>
+                <td>
+                  <button onClick={() => handleSendOrder(order.id)}>
+                    {order.name}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
   ) : (

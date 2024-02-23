@@ -2,26 +2,30 @@
   padding: 5rem;
   display: grid;
   grid-template-columns: [col-start] 20% [col-1] 20% [col-2] 10% [col-3] 20% [col-4] 20% [col-end];
-  grid-template-rows: [row-start] 20% [row-1] 20% [row-2] 20% [row-3] 20% [row-4] 20% [row-end];
+  grid-template-rows: [row-start] 25% [row-1] 20% [row-2] 20% [row-3] 20% [row-4] 20% [row-end];
   grid-template-areas:
-    "info info . orders orders"
-    "info info . orders orders"
-    "info info . orders orders"
+    "info info info orders orders"
+    "info info info orders orders"
+    "info info info orders orders"
     "desc desc desc desc desc"
     "desc desc desc desc desc";
   column-gap: 1rem;
   row-gap: 1rem;
   place-items: stretch;
-  min-width: 1200px; 
-  max-width: 1800px; 
-  min-height: 600px; 
-  max-height: 800px; 
+  min-width: 1200px;
+  max-width: 1800px;
+  min-height: 600px;
+  max-height: 800px;
 }
 
 .deviceInfoContainer {
   grid-area: info;
   background-color: rgba(0, 0, 0, 0.384);
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 600px;
 }
 
 .deviceDescriptionContainer {
@@ -34,4 +38,48 @@
   grid-area: orders;
   background-color: rgba(0, 0, 0, 0.384);
   padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 600px;
+}
+
+.ordersContainer td {
+  text-align: center;
+}
+
+.ordersContainer button {
+  width: 10em;
+  position: relative;
+  height: 2.5em;
+  border: 3px ridge #149cea;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  transition: 0.2s;
+  border-radius: 0.3em;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ordersContainer button:hover {
+  box-shadow: inset 0px 0px 25px #1479ea;
+}
+
+@keyframes buttonClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.ordersContainer button:active {
+  animation: buttonClick 0.02s forwards;
 }
