@@ -1,10 +1,10 @@
-import classes from "./ErrorBoundraiesPage.module.css";
+import classes from "./ErrorBoundariesPage.module.css";
 import Typewriter from "../../../Utils/typewriter";
 import { useState } from "react";
 
 const speed = 70;
 
-export const ErrorBoundraiesPage = (props) => {
+export const ErrorBoundariesPage = (props) => {
   const { error, resetErrorBoundary } = props;
   const [isTypingComplete, setIsTypingComplete] = useState();
 

@@ -10,7 +10,7 @@ import DevicesPage, {
   loader as devicesLoader,
 } from "../Pages/DevicesPage/DevicesPage.jsx";
 import RegisterSuccess from "../Pages/RegisterSuccess/RegisterSuccess.jsx";
-import User from "../Pages/UserPage/User.jsx";
+import Users from "../Pages/UsersPage/Users.jsx";
 import RequireAuth from "../Components/ReguireAuth.jsx";
 import Unauthorized from "../Pages/UnauthorizedPage/Unauthorized.jsx";
 import Spinner from "../Components/Spinner/Spinner.jsx";
@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
         element: (
           <RequireAuth allowedRoles={import.meta.env.VITE_EMPLOYEE_ROLE} />
         ),
-        children: [{ path: "user", element: <User /> }],
+        children: [{ path: "user", element: <Users /> }],
       },
       {
         element: <RequireAuth allowedRoles={import.meta.env.VITE_USER_ROLE} />,

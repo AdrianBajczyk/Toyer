@@ -21,7 +21,7 @@ const links = [
   {
     id: "le1",
     to: "user",
-    name: "User",
+    name: "Users",
     requiredRoles: import.meta.env.VITE_EMPLOYEE_ROLE,
   },
 ];

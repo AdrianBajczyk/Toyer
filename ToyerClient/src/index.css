@@ -107,3 +107,26 @@ textarea {
 .line {
   display: inline-block;
 }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  border: 1px solid white;
+  padding: 0.3rem 1rem 0.3rem 1rem;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.521);
+}
+
+td {
+  border: 1px solid white;
+  padding: 0.3rem 2rem 0.3rem 2rem;
+  text-align: left;
+  background-color: rgba(85, 85, 85, 0.25);
+}
+
+tr:nth-child(even) {
+  background-color: rgba(201, 201, 201, 0.25);
+}
