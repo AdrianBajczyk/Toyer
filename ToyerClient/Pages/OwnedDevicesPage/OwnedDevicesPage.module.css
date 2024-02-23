@@ -1,3 +1,13 @@
-.devicesPageContainer{
-    margin: 3rem;
+.devicesPageContainer {
+  margin: 3rem;
+}
+
+.devicesContainer {
+  margin: 3rem;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.356);
+}
+
+.selectColumn {
+  width: 100px;
 }
