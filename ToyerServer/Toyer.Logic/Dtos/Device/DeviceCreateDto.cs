@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Toyer.Logic.Dtos.DeviceType;
 
 namespace Toyer.Logic.Dtos.Device;
 

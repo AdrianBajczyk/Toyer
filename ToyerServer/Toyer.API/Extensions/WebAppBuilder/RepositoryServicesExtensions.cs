@@ -14,6 +14,7 @@ public static class RepositoryServicesExtensions
         services.AddScoped<IDeviceRepository, SqlDeviceRepository>();
         services.AddScoped<IDeviceAssignmentRepository, SqlDeviceAssignmentRepository>();
         services.AddScoped<ITokenRepository, SqlTokenRepository>();
+        services.AddScoped<IMessageServiceRepository, MessageServiceRepository>();
 
         return services;
     }

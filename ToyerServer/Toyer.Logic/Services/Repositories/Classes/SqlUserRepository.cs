@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Toyer.Data.Context;
 using Toyer.Data.Entities;
-using Toyer.Logic.Dtos.User;
 using Toyer.Logic.Exceptions.FailResponses.Derived.Server;
 using Toyer.Logic.Exceptions.FailResponses.Derived.User;
 using Toyer.Logic.Responses;

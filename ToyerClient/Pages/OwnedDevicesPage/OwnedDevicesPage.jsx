@@ -9,7 +9,10 @@ import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCheck, faSquare } from "@fortawesome/free-solid-svg-icons";
 
-const textArray = ["You have no assigned devices yet", "If you have one ADD"];
+const textArray = [
+  "You have no assigned devices yet.",
+  "If you have one go ahead and add it.",
+];
 
 const OwnedDevicesPage = () => {
   const [devices, setDevices] = useState([]);
@@ -42,7 +45,11 @@ const OwnedDevicesPage = () => {
         setDevices(response.data);
         console.log(response.data);
       } catch (error) {
-        showBoundary(error);
+        if (error.response?.status === 404) {
+          setDevices([]);
+        } else {
+          showBoundary(error);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -55,7 +62,6 @@ const OwnedDevicesPage = () => {
     };
   }, []);
 
-  // Function to handle icon selection for a specific device
   const handleIconSelection = (deviceId, icon) => {
     setIconSelection((prevSelections) => ({
       ...prevSelections,
@@ -65,7 +71,7 @@ const OwnedDevicesPage = () => {
 
   return isLoading ? (
     <Spinner height={"600"} width={"600"} />
-  ) : devices.length ? (
+  ) : devices.length > 0 ? (
     <div className={classes.devicesContainer}>
       <table>
         <thead>
@@ -104,9 +110,7 @@ const OwnedDevicesPage = () => {
       </table>
     </div>
   ) : (
-    <div className={classes.devicesContainer}>
-      <Typewriter textArray={textArray} speed={60} />
-    </div>
+    <Typewriter textArray={textArray} speed={70} />
   );
 };
 

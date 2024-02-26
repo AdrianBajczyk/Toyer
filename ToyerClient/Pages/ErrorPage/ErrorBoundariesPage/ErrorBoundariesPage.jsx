@@ -12,7 +12,7 @@ export const ErrorBoundariesPage = (props) => {
     setIsTypingComplete(isComplete);
   };
 
-  if (!error.respnse) {
+  if (!error.response) {
     const textArray = [
       "500",
       "Connection error.",
