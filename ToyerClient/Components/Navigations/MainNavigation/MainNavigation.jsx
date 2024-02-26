@@ -11,7 +11,7 @@ import ToyerLogo from "../../../src/Asserts/ToyerLogo.jsx";
 const links = [
   { id: "l1", to: "devices", name: "Offer" },
   // { id: "l2", to: "devices", name: "Author" },
-  // { id: "l3", to: "devices", name: "Contact" },
+   { id: "l2", to: "contact", name: "Contact" },
   {
     id: "lu1",
     to: "ownedDevices",

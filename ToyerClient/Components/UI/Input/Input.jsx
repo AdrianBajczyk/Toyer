@@ -3,9 +3,13 @@ import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Input = forwardRef(function Input(
-  { id, validInput, inputState, label, checkIcon = true, ...props },
+  { id, validInput, inputState, label, checkIcon = true, textarea = false, ...props },
   ref
 ) {
+  const InputComponent = textarea ? 'textarea' : 'input'; 
+
+  const inputClass = textarea ? 'textarea-style' : 'input-style';
+
   return (
     <>
       <label htmlFor={id}>
@@ -23,7 +27,7 @@ const Input = forwardRef(function Input(
           </>
         )}
       </label>
-      <input id={id} name={id} ref={ref} autoComplete="off" {...props} />
+      <InputComponent id={id} name={id} ref={ref} autoComplete="off" className={inputClass} {...props} />
     </>
   );
 });

@@ -3,8 +3,11 @@ import MainNavigation from "../../../Components/Navigations/MainNavigation/MainN
 import Typewriter from "../../../Utils/typewriter.jsx";
 import classes from "./ErrorElementPage.module.css";
 
+const speed = 70;
+
 function ErrorElementPage() {
   const error = useRouteError();
+  console.log(error)
 
   if (isRouteErrorResponse(error)) {
     const textArray = [
@@ -13,8 +16,7 @@ function ErrorElementPage() {
       error.data.toString(),
     ];
 
-    const speed = 70;
-
+    
     return (
       <>
         <MainNavigation />
@@ -27,7 +29,16 @@ function ErrorElementPage() {
     );
   }
 
-  return <>ERROR TEST</>;
+  return (
+    <>
+      <MainNavigation />
+      <main>
+        <div className={classes.errorTextContainer}>
+          <Typewriter textArray={["Unexpected error, please contact support."]} speed={speed} />
+        </div>
+      </main>
+    </>
+  );
 }
 
 export default ErrorElementPage;

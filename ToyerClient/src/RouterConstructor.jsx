@@ -23,6 +23,10 @@ import OwnedDevicesNavigation from "../Components/Layouts/OwnedDevicesLayout/Own
 import AssignDeviceWindow from "../Components/Windows/AssignDeviceWindow/AssignDeviceWindow.jsx";
 import OwnedDevicesPage from "../Pages/OwnedDevicesPage/OwnedDevicesPage.jsx";
 import OwnedDeviceSelected from "../Pages/OwnedDeviceSelected/OwnedDeviceSelected.jsx";
+import EmailPage, {
+  action as sendEmailAction,
+} from "../Pages/EmailPage/EmailPage.jsx";
+import EmailSent from "../Pages/EmailSend/EmailSent.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +41,8 @@ export const router = createBrowserRouter([
       { path: "unauthorized", element: <Unauthorized /> },
       { path: "spinner", element: <Spinner /> },
       { path: "email/confirm", element: <EmailConfirmed /> },
+      { path: "contact", element: <EmailPage />, action: sendEmailAction },
+      { path: "email/success", element: <EmailSent /> },
       {
         path: "devices",
         element: <DevicesRootLayout />,
@@ -70,7 +76,7 @@ export const router = createBrowserRouter([
               { path: "", element: <OwnedDevicesPage /> },
             ],
           },
-          {path: "ownedDevices/:id", element:<OwnedDeviceSelected/>}
+          { path: "ownedDevices/:id", element: <OwnedDeviceSelected /> },
         ],
       },
     ],

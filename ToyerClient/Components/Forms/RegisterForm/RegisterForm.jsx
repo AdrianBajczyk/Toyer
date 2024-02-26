@@ -103,7 +103,7 @@ export function RegisterForm() {
               className={actionData.error ? "errmsg" : "offscreen"}
               aria-live="assertive"
             >
-              {actionData.error}
+              {actionData.error.Message}
             </p>
           )}
       </section>
