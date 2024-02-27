@@ -12,9 +12,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 6rem;
+  padding: 2rem;
   gap: 2rem 0rem;
   animation: decreaseBlur 1s ease forwards;
+  overflow-y: auto;
 }
 
 

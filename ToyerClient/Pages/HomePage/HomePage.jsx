@@ -16,13 +16,12 @@ export default function HomePage() {
       setScrollY(window.scrollY);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
 
   return (
     <div className={classes.homePageContainer}>
@@ -30,7 +29,7 @@ export default function HomePage() {
         <section className={classes.textSectionContainer}>
           <h3>Hello, I'm Adrian.</h3>
           <p>
-            A year ago, I started the process of transitioning towards web
+            In March 2023 I started the process of transitioning towards web
             development. To achieve this, I completed a full-stack web developer
             training organized by the CodeCool group. The website you are
             currently viewing is the result of utilizing the skills acquired
@@ -204,7 +203,10 @@ export default function HomePage() {
           </span>
         </section>
       </div>
-      <button className={scrollY>0 ? classes.scrollButton : classes.buttonHidden} onClick={scrollToTop} >
+      <button
+        className={scrollY > 0 ? classes.scrollButton : classes.buttonHidden}
+        onClick={scrollToTop}
+      >
         ^
       </button>
     </div>
