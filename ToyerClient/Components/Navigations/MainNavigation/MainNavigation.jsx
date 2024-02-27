@@ -11,7 +11,7 @@ import ToyerLogo from "../../../src/Asserts/ToyerLogo.jsx";
 const links = [
   { id: "l1", to: "devices", name: "Offer" },
   // { id: "l2", to: "devices", name: "Author" },
-   { id: "l2", to: "contact", name: "Contact" },
+  { id: "l2", to: "contact", name: "Contact" },
   {
     id: "lu1",
     to: "ownedDevices",
@@ -29,7 +29,9 @@ const links = [
 function MainNavigation() {
   const userCtx = useUserContext();
   const nav = useNavigate();
+
   const [userIconActive, setUserIconActive] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleIconClick = () => {
     setUserIconActive(true);
@@ -59,9 +61,17 @@ function MainNavigation() {
         >
           <ToyerLogo />
         </span>
+        <div
+          className={classes.selectMenu}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <List
           items={links}
-          className={classes.list}
+          className={menuOpen ? classes.open : ""}
           renderItem={(link) =>
             (!link.requiredRoles ||
               userCtx?.user?.roles?.some((role) =>

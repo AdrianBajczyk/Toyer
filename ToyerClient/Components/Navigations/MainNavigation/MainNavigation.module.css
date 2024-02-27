@@ -4,12 +4,20 @@
   justify-content: center;
 }
 
-.list {
+nav {
   display: flex;
-  gap: 2rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+nav ul {
+  display: flex;
 }
 
 nav ul li a {
+  margin-top: 0.5rem;
+  margin-left: 2rem;
   text-decoration: none;
   position: relative;
 }
@@ -26,13 +34,67 @@ nav ul li a::after {
   transition: 0.5s;
 }
 
-.list a:hover::after {
+nav ul li a:hover::after {
   width: 100%;
 }
 
-.list a.active::after {
+nav ul li a.active::after {
   width: 80%;
   left: 10%;
+}
+
+nav .selectMenu {
+  display: none;
+  position: absolute;
+  top: 52px;
+  right: 6rem;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 2.25rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+nav .selectMenu span {
+  height: 0.4rem;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 0.2rem;
+}
+
+@media (max-width: 700px) {
+  nav .selectMenu {
+    display: flex;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav ul {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin: 1rem;
+  }
+
+  .open {
+    display: flex;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  nav ul li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .iconContainer {
+    position: absolute;
+    top: 52px;
+    right: 2rem;
+  }
 }
 
 .iconContainer {
@@ -57,13 +119,6 @@ nav ul li a::after {
   justify-content: end;
   align-items: start;
   z-index: 1;
-}
-
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
 }
 
 .logo:hover {
