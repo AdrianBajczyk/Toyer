@@ -10,6 +10,8 @@ html {
   font-family: "Nunito", sans-serif;
   font-size: 22px;
   color: #fff;
+  scrollbar-color: rgb(99, 99, 99) rgba(255, 255, 255);
+  scrollbar-width: thin;
 }
 
 body {
@@ -26,6 +28,7 @@ main {
   justify-content: center;
   align-items: center;
 }
+
 
 Form {
   display: flex;

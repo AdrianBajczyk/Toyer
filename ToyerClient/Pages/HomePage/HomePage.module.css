@@ -1,0 +1,113 @@
+.homePageContainer {
+  margin: 5rem 0rem 3rem;
+  display: block;
+}
+
+.homePageContainer > .rowContainer:nth-child(even) {
+  margin-left: 5rem;
+}
+
+.rowContainer {
+  margin: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.textSectionContainer {
+  background-color: rgba(0, 0, 0, 0.404);
+  max-width: 40rem;
+  max-height: 20rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2rem;
+  overflow-y: auto;
+}
+
+.techStackContainer {
+  background-color: rgba(0, 0, 0, 0.404);
+  max-width: 30rem;
+  height: auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.authorImg,
+.reasonsImg,
+.motivesImg,
+.developmentImg {
+  width: 30rem;
+  height: 20rem;
+}
+
+.logoImg {
+  width: 3rem;
+}
+
+.CSSImg {
+  width: 2rem;
+}
+
+.CSharpImg,
+.aspImg {
+  width: 4.5rem;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 4rem;
+  height: 4rem;
+  box-shadow: 0 0 10px rgba(117, 177, 255, 0.685);
+}
+
+.buttonHidden {
+  visibility: hidden;
+}
+
+.scrollButton {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  width: 2.5em;
+  height: 2.5em;
+  border: 3px ridge #149cea;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  transition: 0.2s;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.scrollButton:hover {
+  box-shadow: inset 0px 0px 25px #1479ea;
+}
+
+@keyframes buttonClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.scrollButton:active {
+  animation: buttonClick 0.02s forwards;
+}
