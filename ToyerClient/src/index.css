@@ -15,7 +15,6 @@ html {
 }
 
 body {
-  min-height: 100vh;
   background-image: url(/src/Asserts/Images/ToyerBackground.jpg);
   background-size: cover;
   background-position: center;
@@ -28,7 +27,6 @@ main {
   justify-content: center;
   align-items: center;
 }
-
 
 Form {
   display: flex;
@@ -62,8 +60,7 @@ label,
 }
 
 .textarea-style {
-  min-width: 30rem;
-  resize: none;
+  min-width: 20rem;
   min-height: 15rem;
 }
 
