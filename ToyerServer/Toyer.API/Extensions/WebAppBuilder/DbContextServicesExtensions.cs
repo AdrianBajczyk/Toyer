@@ -7,8 +7,8 @@ public static class DbContextServicesExtensions
 {
     public static IServiceCollection AddCustomDbContexts(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(configuration["ToyerLocalConnectionstring"]));
-        services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(configuration["ToyerIdentityLocalConnectionstring"]));
+        services.AddDbContext<ToyerDbContext>(options => options.UseSqlServer(configuration["ToyerAzureSqlConnectionstring"]));
+        services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(configuration["ToyerIdentityAzureSqlConnectionstring"]));
 
         return services;
     }

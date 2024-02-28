@@ -14,7 +14,7 @@ public class UsersContextFatory : IDesignTimeDbContextFactory<UsersDbContext>
                 .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<UsersDbContext>();
-        var connectionString = configuration["ToyerIdentityLocalConnectionstring"];
+        var connectionString = configuration["ToyerIdentityAzureSqlConnectionstring"];
         optionsBuilder.UseSqlServer(connectionString);
 
         return new UsersDbContext(optionsBuilder.Options);

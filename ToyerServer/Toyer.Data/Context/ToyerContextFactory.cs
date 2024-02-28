@@ -15,7 +15,7 @@ public class ToyerContextFactory : IDesignTimeDbContextFactory<ToyerDbContext>
                 .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<ToyerDbContext>();
-        var connectionString = configuration["ToyerLocalConnectionstring"];
+        var connectionString = configuration["ToyerAzureSqlConnectionstring"];
         optionsBuilder.UseSqlServer(connectionString);
 
         return new ToyerDbContext(optionsBuilder.Options);

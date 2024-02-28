@@ -26,7 +26,11 @@ public class SqlDeviceAssignmentRepository(IUserRepository userRepository, IDevi
             throw new DeviceIsAssignedException(deviceId);
 
         var relation =  await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.UserId == userId);
-        if (relation == null) await CreateRelationId(userId);
+        if (relation == null) 
+        { 
+            await CreateRelationId(userId);
+            relation = await _toyerDbContext.UsersDevices.FirstOrDefaultAsync(r => r.UserId == userId);
+        }
 
         relation!.Devices.Add(device);
         await _toyerDbContext.SaveChangesAsync();
