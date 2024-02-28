@@ -34,7 +34,7 @@ public static class SecurityServicesExtensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    
+
                     ClockSkew = TimeSpan.Zero,
                     ValidateAudience = true,
                     ValidateLifetime = true,
@@ -60,6 +60,15 @@ public static class SecurityServicesExtensions
                             .AllowAnyMethod()
                             .AllowCredentials(); // Allow cookies
                 });
+
+            options.AddPolicy("Production",
+        builder =>
+        {
+            builder.WithOrigins("https://toyer.azurewebsites.net")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials(); // Allow cookies
+        });
         });
 
         services.AddAuthorization(options =>

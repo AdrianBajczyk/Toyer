@@ -28,8 +28,6 @@ builder.Services.AddCustomMvcs();
 
 var app = builder.Build();
 
-//Artificial delay
-//app.UseDelay(TimeSpan.FromSeconds(3));
 
 app.UseMiddleware<ExceptionCustomHandler>();
 
@@ -37,13 +35,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    //app.UseDeveloperExceptionPage();
 }
 
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowLocalHost");
+app.UseCors("Production");
 
 app.UseAuthentication();
 app.UseAuthorization();
