@@ -1,7 +1,7 @@
 {
   "name": "toyerclient",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,6 +9,8 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
+  "author": "Adrian Bajczyk",
+  "license": "MIT",
   "dependencies": {
     "@tsparticles/react": "^3.0.0",
     "react": "^18.2.0",
@@ -18,9 +20,7 @@
     "react-router-dom": "^6.21.3",
     "react-tsparticles": "^2.12.2",
     "tsparticles": "^3.2.2",
-    "tsparticles-slim": "^2.12.0"
-  },
-  "devDependencies": {
+    "tsparticles-slim": "^2.12.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -28,9 +28,11 @@
     "@ionic/react": "^7.7.0",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
-    "@vitejs/plugin-react": "^4.2.1",
     "axios": "^1.6.7",
-    "date-fns": "^3.3.1",
+    "date-fns": "^3.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.55.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",

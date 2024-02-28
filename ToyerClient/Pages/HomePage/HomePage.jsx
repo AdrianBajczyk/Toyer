@@ -38,7 +38,7 @@ export default function HomePage() {
         </section>
         <img
           className={classes.authorImg}
-          src="https://i.postimg.cc/bNfW1CJx/Adrian-Home-Small.jpg"
+          src="https://i.postimg.cc/SQMH2FyQ/Adrian-Home-Small.jpg"
           alt="author"
         />
       </div>
@@ -192,6 +192,13 @@ export default function HomePage() {
               className={classes.logoImg}
               src="https://i.postimg.cc/3RQZg0Zt/git-Hub-Logo.png"
               alt="Github"
+            />
+          </span>
+          <span className={classes.logoContainer}>
+            <img
+              className={classes.logoImg}
+              src="https://i.postimg.cc/gjmx6mkS/docker-Logo.png"
+              alt="Docker"
             />
           </span>
           <span className={classes.logoContainer}>
