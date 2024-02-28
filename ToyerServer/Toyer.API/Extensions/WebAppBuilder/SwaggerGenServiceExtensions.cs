@@ -17,7 +17,7 @@ public static class SwaggerGenServiceExtensions
                 Description = "This is a training project summarizing a year of learning in the CodeCool company course. " +
                               "Here you will find a ready-made API that supports remote control of toys powered by a microcontroller with a built-in Wi-Fi module. " +
                               "Each user who has access to the aforementioned device with a unique serial code can create an account and register the device to be able to control it.",
-                TermsOfService = new Uri("https://example.com/terms"),
+                TermsOfService = new Uri("https://mit-license.org/"),
                 Contact = new OpenApiContact
                 {
                     Name = "Admin",
@@ -25,8 +25,8 @@ public static class SwaggerGenServiceExtensions
                 },
                 License = new OpenApiLicense
                 {
-                    Name = "What is my license",
-                    Url = new Uri("https://example.com/license")
+                    Name = "MIT",
+                    Url = new Uri("https://mit-license.org/")
                 }
             });
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
