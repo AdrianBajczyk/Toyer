@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System.Net;
 using Toyer.Data.Entities;
 using Toyer.Logic.Dtos.User;
 

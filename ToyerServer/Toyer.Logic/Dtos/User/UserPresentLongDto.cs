@@ -1,6 +1,4 @@
-﻿using Toyer.Logic.Dtos.Device;
-
-namespace Toyer.Logic.Dtos.User;
+﻿namespace Toyer.Logic.Dtos.User;
 
 
 

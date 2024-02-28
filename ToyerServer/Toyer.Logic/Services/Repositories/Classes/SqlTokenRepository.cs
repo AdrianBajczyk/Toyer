@@ -1,10 +1,8 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Authentication;
 using System.Security.Claims;
 using Toyer.Data.Context;
-using Toyer.Data.Entities;
 using Toyer.Logic.Services.Authorization.Token;
 using Toyer.Logic.Services.Repositories.Interfaces;
 

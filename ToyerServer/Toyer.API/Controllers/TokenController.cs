@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Toyer.Data.Context;
+﻿using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Dtos.Token;
 using Toyer.Logic.Exceptions.FailResponses.Abstract;
 using Toyer.Logic.Responses;

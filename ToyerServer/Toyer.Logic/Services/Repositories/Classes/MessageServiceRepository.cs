@@ -1,5 +1,4 @@
-﻿using Toyer.Data.Entities;
-using Toyer.Logic.Services.EmailService;
+﻿using Toyer.Logic.Services.EmailService;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
 namespace Toyer.Logic.Services.Repositories.Classes;

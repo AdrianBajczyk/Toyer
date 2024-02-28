@@ -1,22 +1,25 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Azure.Security.KeyVault.Secrets;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Toyer.Logic.Services.Authorization.AuthorizationHandlers;
 using Toyer.Logic.Services.Authorization.Token;
 
-namespace Toyer.API.Extensions.WebAppBuilder;
+namespace Toyer.API.Extensions;
 
 public static class SecurityServicesExtensions
 {
     public static IServiceCollection AddCustomSecurityServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var client = services.BuildServiceProvider().GetRequiredService<SecretClient>();
+
         //JWT
         services.AddScoped<ITokenService, TokenService>();
 
         var issuer = configuration["TokenValidationParameters:Issuer"];
         var audience = configuration["TokenValidationParameters:Audience"];
-        var issuerSigningKey = configuration["IssuerSigningKey"];
+        var issuerSigningKey = client.GetSecret("IssuerSigningKey").Value.Value.ToString();
 
         if (string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience) || string.IsNullOrEmpty(issuerSigningKey))
         {

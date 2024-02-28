@@ -1,5 +1,4 @@
 ﻿using MimeKit;
-using MailKit.Net.Smtp;
 
 
 namespace Toyer.Logic.Services.EmailService;

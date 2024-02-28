@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using System.Security.Claims;
-using Toyer.Data.Entities;
 
 namespace Toyer.Logic.Services.Authorization.AuthorizationHandlers;
 

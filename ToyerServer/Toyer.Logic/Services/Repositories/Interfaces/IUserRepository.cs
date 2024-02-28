@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using Toyer.Data.Entities;
-using Toyer.Logic.Dtos.User;
+﻿using Toyer.Data.Entities;
 using Toyer.Logic.Responses;
 
 namespace Toyer.Logic.Services.Repositories.Interfaces;

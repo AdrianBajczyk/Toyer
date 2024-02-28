@@ -1,6 +1,4 @@
 ﻿using Toyer.Data.Entities;
-using Toyer.Logic.Responses;
-using Toyer.Logic.Dtos.Device;
 
 namespace Toyer.Logic.Services.Repositories.Interfaces;
 

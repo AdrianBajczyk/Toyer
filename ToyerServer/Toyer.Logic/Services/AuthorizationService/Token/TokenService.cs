@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Toyer.Data.Entities;
-using System.Linq;
+using Azure.Security.KeyVault.Secrets;
 
 namespace Toyer.Logic.Services.Authorization.Token;
 
@@ -15,10 +15,12 @@ public class TokenService : ITokenService
 
     private const int ExpirationMinutes = 10;
     private readonly IConfiguration _configuration;
+    private readonly SecretClient _client;
 
-    public TokenService(IConfiguration configuration)
+    public TokenService(IConfiguration configuration, SecretClient client)
     {
         _configuration = configuration;
+        _client = client;
     }
 
     public string GenerateAccessToken(User user, List<string> roles)
@@ -43,7 +45,7 @@ public class TokenService : ITokenService
             ValidateAudience = true,
             ValidateIssuer = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["IssuerSigningKey"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_client.GetSecret("IssuerSigningKey").Value.Value.ToString())),
             ValidateLifetime = false,
             ValidAudience = _configuration["TokenValidationParameters:Audience"],
             ValidIssuer = _configuration["TokenValidationParameters:Issuer"]
@@ -104,7 +106,7 @@ public class TokenService : ITokenService
     {
         return new SigningCredentials(
             new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["IssuerSigningKey"])
+                Encoding.UTF8.GetBytes(_client.GetSecret("IssuerSigningKey").Value.Value.ToString())
             ),
             SecurityAlgorithms.HmacSha256
         );

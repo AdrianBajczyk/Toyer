@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Toyer.Logic.Dtos.Order;
+﻿namespace Toyer.Logic.Dtos.Order;
 
 public record OrderPresentDto
 {

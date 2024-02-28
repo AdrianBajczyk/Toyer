@@ -1,9 +1,9 @@
-﻿using Microsoft.Azure.Devices.Client;
+﻿using Azure.Security.KeyVault.Secrets;
+using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Common.Exceptions;
 using Microsoft.Azure.Devices.Provisioning.Client;
 using Microsoft.Azure.Devices.Provisioning.Client.Transport;
 using Microsoft.Azure.Devices.Shared;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,22 +13,22 @@ namespace Toyer.Logic.Services.DeviceProvisioningService;
 public class DpsClient : IDpsClient
 {
 
-    private readonly IConfiguration _configuration;
+    private readonly SecretClient _client;
     private readonly ILogger<DpsClient> _logger;
 
-    public DpsClient(ILogger<DpsClient> logger, IConfiguration configuration)
+    public DpsClient(ILogger<DpsClient> logger, SecretClient client)
     {
         _logger = logger;
-        _configuration = configuration;
+        _client = client;
     }
 
     public async Task RegisterDevice(string desiredDeviceId, string pkSubsection)
     {
         _logger.LogInformation("Initializing the device provisioning client...");
 
-        string dpsEnrollmentPrimaryKey = _configuration[$"DpsConfig:PrimaryKey:{pkSubsection}"];
-        string dpsGlobalEndpoint = _configuration["DpsConfig:GlobalEndpoint"];
-        string dpsIdScope = _configuration["DpsConfig:IdScope"];
+        string dpsEnrollmentPrimaryKey = _client.GetSecret($"DpsConfigPrimaryKey{pkSubsection}").Value.Value.ToString();
+        string dpsGlobalEndpoint = _client.GetSecret("DpsConfigGlobalEndpoint").Value.Value.ToString();
+        string dpsIdScope = _client.GetSecret("DpsConfigIdScope").Value.Value.ToString();
 
         var derivedKey = ComputeDerivedSymmetricKey(Convert.FromBase64String(dpsEnrollmentPrimaryKey), desiredDeviceId);
 

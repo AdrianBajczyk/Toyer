@@ -2,7 +2,7 @@
 using Toyer.Logic.Services.Repositories.Classes;
 using Toyer.Logic.Services.Repositories.Interfaces;
 
-namespace Toyer.API.Extensions.WebAppBuilder;
+namespace Toyer.API.Extensions;
 
 public static class RepositoryServicesExtensions
 {

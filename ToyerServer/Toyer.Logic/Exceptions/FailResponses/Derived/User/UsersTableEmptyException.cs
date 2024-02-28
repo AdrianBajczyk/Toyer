@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using Toyer.Logic.Exceptions.FailResponses.Abstract;
+﻿using Toyer.Logic.Exceptions.FailResponses.Abstract;
 
 namespace Toyer.Logic.Exceptions.FailResponses.Derived.User;
 

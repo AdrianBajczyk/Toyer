@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Toyer.Data.Entities;
-using Toyer.Logic.Responses;
+﻿using Toyer.Data.Entities;
 
 namespace Toyer.Logic.Services.Repositories.Interfaces
 {

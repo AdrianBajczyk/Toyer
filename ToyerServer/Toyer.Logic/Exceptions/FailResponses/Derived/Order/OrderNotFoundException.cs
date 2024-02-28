@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Toyer.Logic.Exceptions.FailResponses.Abstract;
+﻿using Toyer.Logic.Exceptions.FailResponses.Abstract;
 
 namespace Toyer.Logic.Exceptions.FailResponses.Derived.Order;
 

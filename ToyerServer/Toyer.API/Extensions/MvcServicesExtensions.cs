@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Toyer.Logic.Exceptions;
 
-namespace Toyer.API.Extensions.WebAppBuilder;
+namespace Toyer.API.Extensions;
 
 public static class MvcServicesExtensions
 {

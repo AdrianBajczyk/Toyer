@@ -1,6 +1,6 @@
 ﻿using Toyer.Logic.Services.EmailService;
 
-namespace Toyer.API.Extensions.WebAppBuilder;
+namespace Toyer.API.Extensions;
 
 public static class EmailServiceExtensions
 {

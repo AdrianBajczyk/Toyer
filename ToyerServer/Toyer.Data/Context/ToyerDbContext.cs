@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Toyer.Data.Entities;
-using Toyer.Data.Extensions;
 
 namespace Toyer.Data.Context;
 
