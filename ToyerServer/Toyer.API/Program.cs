@@ -41,7 +41,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(app.Environment.IsDevelopment() ? "AllowLocalHost" : "Production");
+app.UseCors(app.Environment.IsDevelopment() ? "AllowLocalHost" : "AllowProduction");
+
 
 app.UseAuthentication();
 app.UseAuthorization();

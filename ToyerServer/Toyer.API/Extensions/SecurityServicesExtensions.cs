@@ -58,7 +58,7 @@ public static class SecurityServicesExtensions
             options.AddPolicy("AllowLocalHost",
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:5173")
+                    builder.WithOrigins("http://localhost:8080")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials(); // Allow cookies
