@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  background-image: url(/src/Asserts/Images/ToyerBackground.jpg);
+  background-image: url("https://i.postimg.cc/8CccTPWm/Toyer-Background.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

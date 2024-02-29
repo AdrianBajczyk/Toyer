@@ -4,6 +4,7 @@ const excludedStatusCodes = [422, 401];
 
 export async function get(urlRoute, signal) {
   try {
+    console.log(urlRoute)
     const response = await axios.get(urlRoute, {} ,{ signal: signal } );
     return response.data;
   } catch (error) {

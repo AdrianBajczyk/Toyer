@@ -50,17 +50,23 @@ export default function DeviceDetials({ id }) {
           <div className={classes.blurredText}>
             <h2>{deviceDetails.name}</h2>
             <p>{deviceDetails.description}</p>
-            <h3>Awailable commands:</h3>
+            <h3>Available commands:</h3>
             <table>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-                {deviceDetails.orders.map((order) => {
-                  return <tr key={`order-${order.id}`}><td>{order.name}</td><td>{order.description}</td></tr>;
-                })}
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {deviceDetails.orders.map((order) => (
+                  <tr key={`order-${order.id}`}>
+                    <td>{order.name}</td>
+                    <td>{order.description}</td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
-
           </div>
         )
       )}

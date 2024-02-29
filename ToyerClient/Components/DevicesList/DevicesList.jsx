@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import classes from "./DevicesList.module.css";
 import DeviceDetials from "../../Pages/DeviceDetails/DeviceDetails";
-import { Navigate, Outlet } from "react-router-dom";
 
 const renderDelay = 700
 

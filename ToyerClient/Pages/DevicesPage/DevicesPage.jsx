@@ -6,6 +6,8 @@ import classes from './DevicesPage.module.css'
 export default function DevicesPage() {
   const deviceTypes = useLoaderData();
 
+  console.log(deviceTypes)
+
   return (
     <div className={classes.cardsContainer}>
       <DevicesList deviceTypes={deviceTypes}></DevicesList>
